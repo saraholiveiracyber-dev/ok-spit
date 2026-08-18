@@ -4,6 +4,10 @@
 // OK.SPIT — PAINEL ADMINISTRATIVO
 // ============================================================
 
+// ============================================================
+// ELEMENTOS
+// ============================================================
+
 const totalHoje =
     document.getElementById("totalHoje");
 
@@ -11,19 +15,13 @@ const totalMes =
     document.getElementById("totalMes");
 
 const totalAniversariantes =
-    document.getElementById(
-        "totalAniversariantes"
-    );
+    document.getElementById("totalAniversariantes");
 
 const tabelaDivulgacoes =
-    document.getElementById(
-        "tabelaDivulgacoes"
-    );
+    document.getElementById("tabelaDivulgacoes");
 
 const tabelaAniversariantes =
-    document.getElementById(
-        "tabelaAniversariantes"
-    );
+    document.getElementById("tabelaAniversariantes");
 
 const busca =
     document.getElementById("busca");
@@ -32,6 +30,8 @@ const atualizar =
     document.getElementById("atualizar");
 
 let divulgacoes = [];
+
+let aniversariantes = [];
 
 
 // ============================================================
@@ -57,8 +57,7 @@ function verificarSupabase() {
 
 function inicioHoje() {
 
-    const data =
-        new Date();
+    const data = new Date();
 
     data.setHours(
         0,
@@ -74,8 +73,7 @@ function inicioHoje() {
 
 function inicioMes() {
 
-    const data =
-        new Date();
+    const data = new Date();
 
     data.setDate(1);
 
@@ -91,22 +89,172 @@ function inicioMes() {
 }
 
 
+function fimMes() {
+
+    const data = new Date();
+
+    data.setMonth(
+        data.getMonth() + 1,
+        0
+    );
+
+    data.setHours(
+        23,
+        59,
+        59,
+        999
+    );
+
+    return data.toISOString();
+
+}
+
+
+// ============================================================
+// DATA DE HOJE
+// ============================================================
+
+function dataAtual() {
+
+    const hoje = new Date();
+
+    return {
+
+        dia: hoje.getDate(),
+
+        mes: hoje.getMonth() + 1,
+
+        ano: hoje.getFullYear()
+
+    };
+
+}
+
+
 // ============================================================
 // FORMATAR DATA
 // ============================================================
 
-function formatarData(
-    data
-) {
+function formatarData(data) {
 
-    if (!data) return "-";
+    if (!data)
+        return "-";
 
+    const dataObj =
+        new Date(data);
 
-    return new Date(
-        data
-    ).toLocaleString(
+    if (isNaN(dataObj))
+        return "-";
+
+    return dataObj.toLocaleString(
         "pt-BR"
     );
+
+}
+
+
+// ============================================================
+// FORMATAR NASCIMENTO
+// ============================================================
+
+function formatarNascimento(data) {
+
+    if (!data)
+        return "-";
+
+    const partes =
+        String(data).split("-");
+
+    if (partes.length !== 3)
+        return data;
+
+    return (
+        partes[2] +
+        "/" +
+        partes[1] +
+        "/" +
+        partes[0]
+    );
+
+}
+
+
+// ============================================================
+// PEGAR DIA DO NASCIMENTO
+// ============================================================
+
+function pegarDiaNascimento(data) {
+
+    if (!data)
+        return null;
+
+    const partes =
+        String(data).split("-");
+
+    if (partes.length !== 3)
+        return null;
+
+    return Number(partes[2]);
+
+}
+
+
+// ============================================================
+// PEGAR MÊS DO NASCIMENTO
+// ============================================================
+
+function pegarMesNascimento(data) {
+
+    if (!data)
+        return null;
+
+    const partes =
+        String(data).split("-");
+
+    if (partes.length !== 3)
+        return null;
+
+    return Number(partes[1]);
+
+}
+
+
+// ============================================================
+// VERIFICAR SE É ANIVERSÁRIO HOJE
+// ============================================================
+
+function aniversarioHoje(data) {
+
+    const atual =
+        dataAtual();
+
+    const dia =
+        pegarDiaNascimento(data);
+
+    const mes =
+        pegarMesNascimento(data);
+
+    return (
+        dia === atual.dia &&
+        mes === atual.mes
+    );
+
+}
+
+
+// ============================================================
+// VERIFICAR SE É DO MÊS ATUAL
+// ============================================================
+
+function aniversarioEsteMes(data) {
+
+    const atual =
+        dataAtual();
+
+    const mes =
+        pegarMesNascimento(data);
+
+    return mes === atual.mes;
 
 }
 
@@ -119,6 +267,9 @@ async function carregarEstatisticas() {
 
     verificarSupabase();
 
+    // --------------------------------------------------------
+    // PARTICIPAÇÕES HOJE
+    // --------------------------------------------------------
 
     const hoje =
         await window.supabaseClient
@@ -136,6 +287,10 @@ async function carregarEstatisticas() {
             );
 
 
+    // --------------------------------------------------------
+    // PARTICIPAÇÕES DO MÊS
+    // --------------------------------------------------------
+
     const mes =
         await window.supabaseClient
             .from("divulgacoes")
@@ -152,40 +307,50 @@ async function carregarEstatisticas() {
             );
 
 
-    const aniversariantes =
-        await window.supabaseClient
-            .from("aniversariantes")
-            .select(
-                "id",
-                {
-                    count: "exact",
-                    head: true
-                }
-            );
-
-
     if (hoje.error)
         throw hoje.error;
-
 
     if (mes.error)
         throw mes.error;
 
 
-    if (aniversariantes.error)
-        throw aniversariantes.error;
-
-
     totalHoje.textContent =
         hoje.count || 0;
-
 
     totalMes.textContent =
         mes.count || 0;
 
 
+    // --------------------------------------------------------
+    // ANIVERSARIANTES
+    // --------------------------------------------------------
+
+    const {
+        data,
+        error
+    } =
+        await window.supabaseClient
+            .from("aniversariantes")
+            .select(
+                "id,nome,telefone,nascimento,criado_em"
+            );
+
+
+    if (error)
+        throw error;
+
+
+    const aniversariantesMes =
+        (data || []).filter(
+            item =>
+                aniversarioEsteMes(
+                    item.nascimento
+                )
+        );
+
+
     totalAniversariantes.textContent =
-        aniversariantes.count || 0;
+        aniversariantesMes.length;
 
 }
 
@@ -198,21 +363,17 @@ async function carregarDivulgacoes() {
 
     verificarSupabase();
 
-
     const {
         data,
         error
     } =
         await window.supabaseClient
             .from("divulgacoes")
-            .select(
-                "*"
-            )
+            .select("*")
             .order(
                 "data_participacao",
                 {
-                    ascending:
-                        false
+                    ascending: false
                 }
             )
             .limit(500);
@@ -254,16 +415,14 @@ function renderizarDivulgacoes() {
             item => {
 
                 const nome =
-                    (
-                        item.nome ||
-                        ""
+                    String(
+                        item.nome || ""
                     ).toLowerCase();
 
 
                 const telefone =
-                    (
-                        item.telefone ||
-                        ""
+                    String(
+                        item.telefone || ""
                     ).toLowerCase();
 
 
@@ -288,9 +447,13 @@ function renderizarDivulgacoes() {
 
                 <td
                     colspan="4"
-                    style="text-align:center;padding:30px"
+                    style="
+                        text-align:center;
+                        padding:30px;
+                    "
                 >
                     Nenhuma participação encontrada.
+
                 </td>
 
             </tr>
@@ -345,7 +508,7 @@ function renderizarDivulgacoes() {
 
 
 // ============================================================
-// ANIVERSARIANTES
+// CARREGAR ANIVERSARIANTES
 // ============================================================
 
 async function carregarAniversariantes() {
@@ -358,28 +521,69 @@ async function carregarAniversariantes() {
         error
     } =
         await window.supabaseClient
-            .from(
-                "aniversariantes"
-            )
-            .select("*")
-            .order(
-                "nascimento",
-                {
-                    ascending:
-                        true
-                }
-            );
+            .from("aniversariantes")
+            .select("*");
 
 
     if (error)
         throw error;
 
 
+    aniversariantes =
+        data || [];
+
+
+    renderizarAniversariantes();
+
+}
+
+
+// ============================================================
+// RENDERIZAR ANIVERSARIANTES
+// ============================================================
+
+function renderizarAniversariantes() {
+
+    if (!tabelaAniversariantes)
+        return;
+
+
+    const atual =
+        dataAtual();
+
+
+    // --------------------------------------------------------
+    // SOMENTE ANIVERSARIANTES DO MÊS ATUAL
+    // --------------------------------------------------------
+
+    const lista =
+        aniversariantes
+            .filter(
+                item =>
+                    aniversarioEsteMes(
+                        item.nascimento
+                    )
+            )
+            .sort(
+                (a, b) =>
+                    pegarDiaNascimento(
+                        a.nascimento
+                    ) -
+                    pegarDiaNascimento(
+                        b.nascimento
+                    )
+            );
+
+
     tabelaAniversariantes.innerHTML =
         "";
 
 
-    if (!data?.length) {
+    // --------------------------------------------------------
+    // NENHUM ANIVERSARIANTE
+    // --------------------------------------------------------
+
+    if (!lista.length) {
 
         tabelaAniversariantes.innerHTML = `
 
@@ -387,9 +591,14 @@ async function carregarAniversariantes() {
 
                 <td
                     colspan="4"
-                    style="text-align:center;padding:30px"
+                    style="
+                        text-align:center;
+                        padding:35px;
+                    "
                 >
-                    Nenhum aniversariante cadastrado.
+                    🎂 Nenhum aniversariante
+                    neste mês.
+
                 </td>
 
             </tr>
@@ -401,8 +610,18 @@ async function carregarAniversariantes() {
     }
 
 
-    data.forEach(
+    // --------------------------------------------------------
+    // RENDERIZAR
+    // --------------------------------------------------------
+
+    lista.forEach(
         item => {
+
+            const hoje =
+                aniversarioHoje(
+                    item.nascimento
+                );
+
 
             const tr =
                 document.createElement(
@@ -410,26 +629,72 @@ async function carregarAniversariantes() {
                 );
 
 
+            // Destaque visual para aniversário de hoje
+
+            if (hoje) {
+
+                tr.classList.add(
+                    "aniversario-hoje"
+                );
+
+            }
+
+
             tr.innerHTML = `
 
                 <td>
-                    ${escapar(item.nome)}
+
+                    <strong>
+
+                        ${escapar(
+                            item.nome
+                        )}
+
+                    </strong>
+
+                    ${
+                        hoje
+                            ? `
+                                <span
+                                    class="badge-hoje"
+                                >
+                                    🎉 HOJE
+                                </span>
+                              `
+                            : ""
+                    }
+
                 </td>
 
-                <td>
-                    ${escapar(item.telefone)}
-                </td>
 
                 <td>
-                    ${formatarNascimento(
-                        item.nascimento
+
+                    ${escapar(
+                        item.telefone
                     )}
+
                 </td>
 
+
                 <td>
+
+                    <strong>
+
+                        ${formatarNascimento(
+                            item.nascimento
+                        )}
+
+                    </strong>
+
+                </td>
+
+
+                <td>
+
                     ${formatarData(
                         item.criado_em
                     )}
+
                 </td>
 
             `;
@@ -446,43 +711,10 @@ async function carregarAniversariantes() {
 
 
 // ============================================================
-// FORMATAR NASCIMENTO
-// ============================================================
-
-function formatarNascimento(
-    data
-) {
-
-    if (!data)
-        return "-";
-
-
-    const partes =
-        data.split("-");
-
-
-    if (partes.length !== 3)
-        return data;
-
-
-    return (
-        partes[2] +
-        "/" +
-        partes[1] +
-        "/" +
-        partes[0]
-    );
-
-}
-
-
-// ============================================================
 // ESCAPAR HTML
 // ============================================================
 
-function escapar(
-    texto
-) {
+function escapar(texto) {
 
     return String(
         texto ?? ""
@@ -579,7 +811,18 @@ if (atualizar) {
 // INICIAR
 // ============================================================
 
-document.addEventListener(
-    "DOMContentLoaded",
-    carregarTudo
-);
+if (
+    document.readyState ===
+    "loading"
+) {
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        carregarTudo
+    );
+
+} else {
+
+    carregarTudo();
+
+}

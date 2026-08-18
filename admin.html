@@ -224,83 +224,69 @@
     </section>
 
 
+<!-- =====================================================
+     ANIVERSARIANTES DO DIA
+====================================================== -->
 
-    <!-- =====================================================
-         ANIVERSARIANTES
-    ====================================================== -->
+<section class="admin-section aniversariantes-hoje">
 
-    <section class="admin-section">
+    <div class="section-top">
 
-        <div class="section-top">
+        <div>
+            <span>🎂 ANIVERSARIANTES DE HOJE</span>
 
-            <div>
+            <h2>
+                Quem faz aniversário hoje
+            </h2>
 
-                <span>
-                    🎂 ANIVERSARIANTES
-                </span>
-
-                <h2>
-                    Cadastros
-                </h2>
-
-            </div>
-
+            <p class="section-description">
+                Pessoas que fazem aniversário neste dia.
+            </p>
         </div>
 
+    </div>
 
-        <div class="table-container">
+    <div
+        id="aniversariantesHoje"
+        class="birthday-grid"
+    >
+        <!-- Preenchido pelo admin.js -->
+    </div>
 
-            <table>
-
-                <thead>
-
-                    <tr>
-
-                        <th>
-                            Nome
-                        </th>
-
-                        <th>
-                            WhatsApp
-                        </th>
-
-                        <th>
-                            Nascimento
-                        </th>
-
-                        <th>
-                            Criado em
-                        </th>
-
-                    </tr>
-
-                </thead>
+</section>
 
 
-                <tbody
-                    id="tabelaAniversariantes"
-                >
+<!-- =====================================================
+     ANIVERSARIANTES DO MÊS
+====================================================== -->
 
-                </tbody>
+<section class="admin-section aniversariantes-mes">
 
-            </table>
+    <div class="section-top">
 
+        <div>
+            <span>📅 ANIVERSARIANTES DO MÊS</span>
+
+            <h2>
+                Aniversariantes de <span id="nomeMes"></span>
+            </h2>
+
+            <p class="section-description">
+                Confira todos os aniversariantes deste mês.
+            </p>
         </div>
 
-    </section>
+    </div>
 
 
-</main>
+    <div
+        id="aniversariantesMes"
+        class="birthday-grid"
+    >
+        <!-- Preenchido pelo admin.js -->
+    </div>
 
-
-
-<script
-    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
-></script>
-
-<script src="supabase.js"></script>
-
-<script src="admin.js"></script>
+</section>
 
 
 </body>
