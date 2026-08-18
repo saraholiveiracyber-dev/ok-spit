@@ -1,0 +1,435 @@
+:root {
+
+    --laranja: #ff6a00;
+    --laranja-escuro: #e65300;
+
+    --preto: #111111;
+
+    --cinza:
+        #666666;
+
+    --fundo:
+        #f5f5f5;
+
+    --branco:
+        #ffffff;
+
+}
+
+
+* {
+
+    margin: 0;
+
+    padding: 0;
+
+    box-sizing: border-box;
+
+}
+
+
+body {
+
+    font-family:
+        'Montserrat',
+        sans-serif;
+
+    background:
+        var(--fundo);
+
+    color:
+        var(--preto);
+
+}
+
+
+.admin-header {
+
+    min-height: 75px;
+
+    padding:
+        0 5%;
+
+    background:
+        var(--preto);
+
+    color:
+        white;
+
+    display: flex;
+
+    justify-content:
+        space-between;
+
+    align-items:
+        center;
+
+}
+
+
+.admin-header span {
+
+    display: block;
+
+    color:
+        var(--laranja);
+
+    font-size:
+        24px;
+
+    font-weight:
+        900;
+
+}
+
+
+.admin-header small {
+
+    color:
+        #aaa;
+
+}
+
+
+.voltar {
+
+    color:
+        white;
+
+    text-decoration:
+        none;
+
+    font-weight:
+        700;
+
+}
+
+
+.admin-container {
+
+    width:
+        min(1200px, 92%);
+
+    margin:
+        45px auto;
+
+}
+
+
+.admin-title span {
+
+    color:
+        var(--laranja);
+
+    font-size:
+        13px;
+
+    font-weight:
+        900;
+
+}
+
+
+.admin-title h1 {
+
+    font-size:
+        42px;
+
+    margin:
+        5px 0;
+
+}
+
+
+.admin-title p {
+
+    color:
+        var(--cinza);
+
+}
+
+
+.stats {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap:
+        20px;
+
+    margin:
+        35px 0;
+
+}
+
+
+.stat-card {
+
+    background:
+        white;
+
+    padding:
+        25px;
+
+    border-radius:
+        20px;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.06);
+
+}
+
+
+.stat-card span {
+
+    font-size:
+        25px;
+
+}
+
+
+.stat-card strong {
+
+    display:
+        block;
+
+    color:
+        var(--laranja);
+
+    font-size:
+        38px;
+
+    margin:
+        10px 0 0;
+
+}
+
+
+.stat-card small {
+
+    color:
+        var(--cinza);
+
+}
+
+
+.admin-section {
+
+    background:
+        white;
+
+    padding:
+        30px;
+
+    border-radius:
+        20px;
+
+    margin-bottom:
+        30px;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.05);
+
+}
+
+
+.section-top {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        20px;
+
+    margin-bottom:
+        25px;
+
+}
+
+
+.section-top span {
+
+    color:
+        var(--laranja);
+
+    font-size:
+        12px;
+
+    font-weight:
+        900;
+
+}
+
+
+.section-top h2 {
+
+    font-size:
+        25px;
+
+}
+
+
+.btn {
+
+    border:
+        0;
+
+    background:
+        var(--laranja);
+
+    color:
+        white;
+
+    padding:
+        12px 18px;
+
+    border-radius:
+        10px;
+
+    cursor:
+        pointer;
+
+    font-weight:
+        800;
+
+}
+
+
+.filtros {
+
+    margin-bottom:
+        20px;
+
+}
+
+
+.filtros input {
+
+    width:
+        100%;
+
+    height:
+        50px;
+
+    border:
+        1px solid #ddd;
+
+    border-radius:
+        10px;
+
+    padding:
+        0 15px;
+
+    outline:
+        none;
+
+}
+
+
+.table-container {
+
+    overflow-x:
+        auto;
+
+}
+
+
+table {
+
+    width:
+        100%;
+
+    border-collapse:
+        collapse;
+
+}
+
+
+th {
+
+    background:
+        #fff4ec;
+
+    color:
+        var(--laranja);
+
+    text-align:
+        left;
+
+    padding:
+        15px;
+
+    font-size:
+        12px;
+
+}
+
+
+td {
+
+    padding:
+        15px;
+
+    border-bottom:
+        1px solid #eee;
+
+    font-size:
+        13px;
+
+}
+
+
+tr:hover td {
+
+    background:
+        #fffaf7;
+
+}
+
+
+@media (max-width: 700px) {
+
+    .stats {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .admin-title h1 {
+
+        font-size:
+            32px;
+
+    }
+
+
+    .section-top {
+
+        flex-direction:
+            column;
+
+        align-items:
+            flex-start;
+
+    }
+
+
+    .admin-section {
+
+        padding:
+            20px;
+
+    }
+
+}

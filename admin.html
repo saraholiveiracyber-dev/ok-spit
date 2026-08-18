@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>OK.SPIT | Painel de Controle</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="admin.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<header class="admin-header">
+
+    <div>
+
+        <span>
+            OK.SPIT
+        </span>
+
+        <small>
+            Painel de Controle
+        </small>
+
+    </div>
+
+
+    <a
+        href="index.html"
+        class="voltar"
+    >
+        ← Site
+    </a>
+
+</header>
+
+
+
+<main class="admin-container">
+
+
+    <!-- =====================================================
+         TOPO
+    ====================================================== -->
+
+    <section class="admin-title">
+
+        <span>
+            📊 CONTROLE
+        </span>
+
+        <h1>
+            Painel de divulgações
+        </h1>
+
+        <p>
+            Acompanhe as participações e os aniversariantes.
+        </p>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         ESTATÍSTICAS
+    ====================================================== -->
+
+    <section class="stats">
+
+
+        <div class="stat-card">
+
+            <span>
+                🎁
+            </span>
+
+            <strong id="totalHoje">
+                0
+            </strong>
+
+            <small>
+                Participações hoje
+            </small>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <span>
+                📅
+            </span>
+
+            <strong id="totalMes">
+                0
+            </strong>
+
+            <small>
+                Participações no mês
+            </small>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <span>
+                🎂
+            </span>
+
+            <strong id="totalAniversariantes">
+                0
+            </strong>
+
+            <small>
+                Aniversariantes
+            </small>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         PARTICIPAÇÕES
+    ====================================================== -->
+
+    <section class="admin-section">
+
+        <div class="section-top">
+
+            <div>
+
+                <span>
+                    🎁 PARTICIPAÇÕES
+                </span>
+
+                <h2>
+                    Divulgações recentes
+                </h2>
+
+            </div>
+
+
+            <button
+                id="atualizar"
+                class="btn"
+            >
+                🔄 Atualizar
+            </button>
+
+        </div>
+
+
+        <div class="filtros">
+
+            <input
+                type="text"
+                id="busca"
+                placeholder="🔎 Buscar nome ou WhatsApp..."
+            >
+
+        </div>
+
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Nome
+                        </th>
+
+                        <th>
+                            WhatsApp
+                        </th>
+
+                        <th>
+                            Onde
+                        </th>
+
+                        <th>
+                            Data
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody
+                    id="tabelaDivulgacoes"
+                >
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         ANIVERSARIANTES
+    ====================================================== -->
+
+    <section class="admin-section">
+
+        <div class="section-top">
+
+            <div>
+
+                <span>
+                    🎂 ANIVERSARIANTES
+                </span>
+
+                <h2>
+                    Cadastros
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Nome
+                        </th>
+
+                        <th>
+                            WhatsApp
+                        </th>
+
+                        <th>
+                            Nascimento
+                        </th>
+
+                        <th>
+                            Criado em
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody
+                    id="tabelaAniversariantes"
+                >
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+
+<script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+></script>
+
+<script src="supabase.js"></script>
+
+<script src="admin.js"></script>
+
+
+</body>
+
+</html>
