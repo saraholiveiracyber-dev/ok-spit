@@ -2,7 +2,6 @@
 <html lang="pt-BR">
 
 <head>
-
     <meta charset="UTF-8">
 
     <meta
@@ -17,70 +16,44 @@
         content="Compartilhe, marque a OK.SPIT e participe dos nossos sorteios semanais."
     >
 
-    <meta
-        name="theme-color"
-        content="#ff6a00"
-    >
-
-    <!-- ========================================================
-         FONTES
-    ========================================================= -->
+    <meta name="theme-color" content="#ff6a00">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
-
-    <link
-        rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossorigin
-    >
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap"
         rel="stylesheet"
     >
 
-
-    <!-- ========================================================
-         CSS
-    ========================================================= -->
-
-    <link
-        rel="stylesheet"
-        href="style.css"
-    >
-
+    <link rel="stylesheet" href="style.css">
 </head>
-
 
 <body>
 
-
-<!-- ============================================================
-     HEADER
-============================================================ -->
-
 <header class="header">
-
     <div class="container nav">
 
-        <a
-            href="#inicio"
-            class="logo"
-            aria-label="OK.SPIT - Início"
-        >
-
+        <a href="index.html" class="logo" aria-label="OK.SPIT - Início">
             <img
                 src="img/logo-ok-spit.png"
                 alt="Logo OK.SPIT"
                 onerror="this.style.display='none'"
             >
-
-            <span>
-                OK.SPIT
-            </span>
-
+            <span>OK.SPIT</span>
         </a>
 
+        <nav class="main-menu" aria-label="Menu principal">
+
+    <a href="index.html" class="active">
+        Início
+    </a>
+
+    <a href="aniversariantes.html">
+        🎂 Aniversariantes do Mês
+    </a>
+
+</nav>
 
         <a
             href="https://www.instagram.com/ok.spit/"
@@ -89,83 +62,52 @@
             class="instagram-link"
             aria-label="Instagram da OK.SPIT"
         >
-
-            <span>
-                @OK.SPIT
-            </span>
-
-            <span aria-hidden="true">
-                ↗
-            </span>
-
+            <span>@OK.SPIT</span>
+            <span aria-hidden="true">↗</span>
         </a>
 
     </div>
-
 </header>
 
-
-
 <main id="inicio">
-
-
-<!-- ============================================================
-     HERO
-============================================================ -->
 
 <section class="hero">
 
     <div class="container hero-content">
 
         <div class="hero-badge">
-
-            <span>
-                🎁
-            </span>
-
+            <span>🎁</span>
             SORTEIOS TODA SEMANA
-
         </div>
 
-
         <h1>
-
             Compartilhe.
             <br>
-
             <span>Marque.</span>
             <br>
-
             Concorra.
-
         </h1>
 
-
         <p class="hero-description">
-
             Compartilhe nossas publicações,
             marque <strong>@OK.SPIT</strong>
             e participe dos nossos
             <strong>sorteios semanais.</strong>
-
         </p>
-
 
         <div class="hero-buttons">
 
-            <a
-                href="#participar"
+            <button
+                type="button"
                 class="btn btn-primary"
+                id="abrirParticipacao"
+                aria-haspopup="dialog"
+                aria-controls="participar"
             >
-
                 <span>🎁</span>
-
-                PARTICIPAR
-
+                PARTICIPAR DO SORTEIO
                 <span>→</span>
-
-            </a>
-
+            </button>
 
             <a
                 href="https://www.instagram.com/ok.spit/"
@@ -173,205 +115,98 @@
                 rel="noopener noreferrer"
                 class="btn btn-outline"
             >
-
                 <span>📸</span>
-
                 VER INSTAGRAM
-
             </a>
 
         </div>
 
-
-        <!-- MINI INFORMAÇÕES -->
-
         <div class="hero-info">
 
             <div>
-
-                <strong>
-                    01
-                </strong>
-
-                <span>
-                    participação
-                    por dia
-                </span>
-
+                <strong>01</strong>
+                <span>participação<br>por dia</span>
             </div>
-
 
             <div class="hero-divider"></div>
 
-
             <div>
-
-                <strong>
-                    🎁
-                </strong>
-
-                <span>
-                    sorteios
-                    semanais
-                </span>
-
+                <strong>🎁</strong>
+                <span>sorteios<br>semanais</span>
             </div>
-
 
             <div class="hero-divider"></div>
 
-
             <div>
-
-                <strong>
-                    ❤️
-                </strong>
-
-                <span>
-                    participação
-                    gratuita
-                </span>
-
+                <strong>❤️</strong>
+                <span>participação<br>gratuita</span>
             </div>
 
         </div>
 
     </div>
 
-
-    <div
-        class="hero-glow hero-glow-one"
-        aria-hidden="true"
-    ></div>
-
-
-    <div
-        class="hero-glow hero-glow-two"
-        aria-hidden="true"
-    ></div>
+    <div class="hero-glow hero-glow-one" aria-hidden="true"></div>
+    <div class="hero-glow hero-glow-two" aria-hidden="true"></div>
 
 </section>
-
-
-
-<!-- ============================================================
-     COMO PARTICIPAR
-============================================================ -->
 
 <section class="como-section">
 
     <div class="container">
 
         <div class="section-heading">
+            <span>COMO PARTICIPAR</span>
 
-            <span>
-                COMO PARTICIPAR
-            </span>
-
-            <h2>
-                É muito simples.
-            </h2>
+            <h2>É muito simples.</h2>
 
             <p>
                 Em poucos passos você já estará
                 participando dos nossos sorteios.
             </p>
-
         </div>
-
 
         <div class="passos">
 
-
             <article class="passo">
-
-                <div class="numero">
-                    01
-                </div>
-
-                <div class="passo-icon">
-                    📲
-                </div>
-
-                <h3>
-                    Compartilhe
-                </h3>
-
+                <div class="numero">01</div>
+                <div class="passo-icon">📲</div>
+                <h3>Compartilhe</h3>
                 <p>
                     Compartilhe uma publicação da
                     OK.SPIT no seu Status ou Instagram.
                 </p>
-
             </article>
 
-
-
             <article class="passo">
-
-                <div class="numero">
-                    02
-                </div>
-
-                <div class="passo-icon">
-                    🏷️
-                </div>
-
-                <h3>
-                    Marque
-                </h3>
-
+                <div class="numero">02</div>
+                <div class="passo-icon">🏷️</div>
+                <h3>Marque</h3>
                 <p>
                     Marque o perfil
                     <strong>@OK.SPIT</strong>
                     na sua publicação.
                 </p>
-
             </article>
 
-
-
             <article class="passo">
-
-                <div class="numero">
-                    03
-                </div>
-
-                <div class="passo-icon">
-                    📝
-                </div>
-
-                <h3>
-                    Cadastre
-                </h3>
-
+                <div class="numero">03</div>
+                <div class="passo-icon">📝</div>
+                <h3>Cadastre</h3>
                 <p>
                     Informe seu nome, WhatsApp
                     e onde realizou a divulgação.
                 </p>
-
             </article>
 
-
-
             <article class="passo">
-
-                <div class="numero">
-                    04
-                </div>
-
-                <div class="passo-icon">
-                    🎁
-                </div>
-
-                <h3>
-                    Concorra
-                </h3>
-
+                <div class="numero">04</div>
+                <div class="passo-icon">🎁</div>
+                <h3>Concorra</h3>
                 <p>
                     Sua participação será registrada
                     para os sorteios semanais.
                 </p>
-
             </article>
 
         </div>
@@ -380,183 +215,119 @@
 
 </section>
 
-
-
-<!-- ============================================================
-     PARTICIPAÇÃO DIÁRIA
-============================================================ -->
-
+<!-- MODAL DE PARTICIPAÇÃO -->
 <section
-    class="participacao-section"
+    class="participacao-modal"
     id="participar"
+    aria-hidden="true"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="tituloParticipacao"
 >
 
-    <div class="container">
+    <div
+        class="participacao-modal-backdrop"
+        data-fechar-participacao
+    ></div>
+
+    <div class="participacao-modal-container">
+
+        <button
+            type="button"
+            class="participacao-modal-close"
+            id="fecharParticipacao"
+            aria-label="Fechar participação"
+        >
+            ×
+        </button>
 
         <div class="participacao-card">
 
-
-            <!-- ==================================================
-                 INFORMAÇÕES
-            ================================================== -->
-
             <div class="participacao-info">
 
-
                 <div class="participacao-badge">
-
                     <span class="badge-dot"></span>
-
                     PARTICIPAÇÃO DIÁRIA
-
                 </div>
 
-
-                <h2>
-
+                <h2 id="tituloParticipacao">
                     Participe do
                     <span>sorteio.</span>
-
                 </h2>
 
-
                 <p class="participacao-subtitle">
-
                     Compartilhou uma publicação da
                     <strong>@OK.SPIT</strong> hoje?
-
                     Registre sua divulgação e concorra
                     aos nossos sorteios semanais.
-
                 </p>
 
-
-
-                <!-- REGRA -->
-
                 <div class="regra-box">
-
-                    <div class="regra-icon">
-                        🔥
-                    </div>
-
+                    <div class="regra-icon">🔥</div>
 
                     <div class="regra-content">
-
                         <span class="regra-label">
                             REGRA DA PARTICIPAÇÃO
                         </span>
 
-
                         <strong>
                             Uma participação por dia
                         </strong>
-
 
                         <p>
                             Depois de participar hoje,
                             <span>volte amanhã</span>
                             para concorrer novamente.
                         </p>
-
                     </div>
-
                 </div>
-
-
-
-                <!-- CONTADOR -->
 
                 <div class="contador-box">
 
-                    <div class="contador-icon">
-                        👥
-                    </div>
-
+                    <div class="contador-icon">👥</div>
 
                     <div class="contador-content">
-
                         <span>
                             PARTICIPAÇÕES REGISTRADAS HOJE
                         </span>
 
-
-                        <strong id="contadorHoje">
-                            0
-                        </strong>
-
+                        <strong id="contadorHoje">0</strong>
                     </div>
 
-
                     <div class="contador-live">
-
                         <span></span>
-
                         AO VIVO
-
                     </div>
 
                 </div>
 
-
-
-                <!-- BENEFÍCIOS -->
-
                 <div class="participacao-beneficios">
 
-
                     <div class="beneficio-item">
-
-                        <div class="beneficio-icon">
-                            🎁
-                        </div>
+                        <div class="beneficio-icon">🎁</div>
 
                         <div>
-
-                            <strong>
-                                Sorteios semanais
-                            </strong>
-
+                            <strong>Sorteios semanais</strong>
                             <span>
                                 Novas oportunidades toda semana.
                             </span>
-
                         </div>
-
                     </div>
 
-
-
                     <div class="beneficio-item">
-
-                        <div class="beneficio-icon">
-                            🔥
-                        </div>
+                        <div class="beneficio-icon">🔥</div>
 
                         <div>
-
-                            <strong>
-                                Participação gratuita
-                            </strong>
-
+                            <strong>Participação gratuita</strong>
                             <span>
                                 Basta divulgar e registrar.
                             </span>
-
                         </div>
-
                     </div>
-
 
                 </div>
 
             </div>
-
-
-
-            <!-- ==================================================
-                 FORMULÁRIO
-            ================================================== -->
 
             <form
                 id="participacaoForm"
@@ -564,18 +335,15 @@
                 autocomplete="on"
             >
 
-
                 <div class="form-header">
 
                     <span class="form-label">
                         PARTICIPAÇÃO
                     </span>
 
-
                     <h3>
                         Registre sua divulgação
                     </h3>
-
 
                     <p>
                         Preencha os dados abaixo para
@@ -584,23 +352,15 @@
 
                 </div>
 
-
-
-                <!-- NOME -->
-
                 <div class="campo">
 
                     <label for="nome">
                         Seu nome
                     </label>
 
-
                     <div class="input-wrapper">
 
-                        <span class="input-icon">
-                            👤
-                        </span>
-
+                        <span class="input-icon">👤</span>
 
                         <input
                             type="text"
@@ -615,23 +375,15 @@
 
                 </div>
 
-
-
-                <!-- WHATSAPP -->
-
                 <div class="campo">
 
                     <label for="telefone">
                         WhatsApp
                     </label>
 
-
                     <div class="input-wrapper">
 
-                        <span class="input-icon">
-                            📱
-                        </span>
-
+                        <span class="input-icon">📱</span>
 
                         <input
                             type="tel"
@@ -646,23 +398,15 @@
 
                 </div>
 
-
-
-                <!-- PLATAFORMA -->
-
                 <div class="campo">
 
                     <label for="plataforma">
                         Onde você compartilhou?
                     </label>
 
-
                     <div class="input-wrapper select-wrapper">
 
-                        <span class="input-icon">
-                            📢
-                        </span>
-
+                        <span class="input-icon">📢</span>
 
                         <select
                             id="plataforma"
@@ -674,11 +418,9 @@
                                 Selecione uma opção
                             </option>
 
-
                             <option value="WhatsApp">
                                 📱 WhatsApp
                             </option>
-
 
                             <option value="Instagram">
                                 📸 Instagram
@@ -690,10 +432,6 @@
 
                 </div>
 
-
-
-                <!-- CONFIRMAÇÃO -->
-
                 <label class="checkbox">
 
                     <input
@@ -703,46 +441,23 @@
                         required
                     >
 
-
                     <span>
-
                         Confirmo que compartilhei uma
                         publicação e marquei
                         <strong>@OK.SPIT</strong>.
-
                     </span>
 
                 </label>
-
-
-
-                <!-- BOTÃO -->
 
                 <button
                     type="submit"
                     class="btn btn-primary btn-full"
                     id="btnParticipar"
                 >
-
-                    <span>
-                        🎁
-                    </span>
-
-
-                    <span>
-                        PARTICIPAR DO SORTEIO
-                    </span>
-
-
-                    <span class="btn-arrow">
-                        →
-                    </span>
-
+                    <span>🎁</span>
+                    <span>PARTICIPAR DO SORTEIO</span>
+                    <span class="btn-arrow">→</span>
                 </button>
-
-
-
-                <!-- MENSAGEM -->
 
                 <div
                     id="mensagem"
@@ -751,23 +466,14 @@
                     aria-live="polite"
                 ></div>
 
-
-
-                <!-- SEGURANÇA -->
-
                 <div class="form-security">
-
-                    <span>
-                        🔒
-                    </span>
-
+                    <span>🔒</span>
 
                     <p>
                         Seus dados são utilizados apenas
                         para registrar sua participação
                         nas ações da OK.SPIT.
                     </p>
-
                 </div>
 
             </form>
@@ -778,420 +484,22 @@
 
 </section>
 
-
-
-<!-- ============================================================
-     ANIVERSARIANTE DO MÊS — PREMIUM
-============================================================ -->
-
-<section
-    class="aniversario-section"
-    id="aniversario"
->
-
-    <div class="aniversario-bg-circle aniversario-circle-one"></div>
-    <div class="aniversario-bg-circle aniversario-circle-two"></div>
-
-    <div class="container">
-
-        <!-- TOPO -->
-        <div class="aniversario-top">
-
-            <div class="aniversario-label">
-                <span class="label-line"></span>
-
-                <span>EXPERIÊNCIA EXCLUSIVA OK.SPIT</span>
-
-                <span class="label-line"></span>
-            </div>
-
-            <div class="aniversario-mini-badge">
-                🎂 ANIVERSARIANTE DO MÊS
-            </div>
-
-        </div>
-
-
-        <div class="aniversario-grid">
-
-
-            <!-- ==================================================
-                 LADO ESQUERDO
-            ================================================== -->
-
-            <div class="aniversario-info">
-
-
-                <div class="aniversario-crown">
-                    ✦
-                </div>
-
-
-                <h2>
-
-                    Seu aniversário
-                    <span>merece ser especial.</span>
-
-                </h2>
-
-
-                <p class="aniversario-description">
-
-                    Cadastre sua data de nascimento e faça parte
-                    da nossa experiência especial para
-                    <strong>aniversariantes OK.SPIT.</strong>
-
-                </p>
-
-
-                <!-- DESTAQUE -->
-                <div class="aniversario-highlight">
-
-                    <div class="highlight-icon">
-                        🎁
-                    </div>
-
-                    <div class="highlight-content">
-
-                        <span>
-                            PRESENTE ESPECIAL
-                        </span>
-
-                        <strong>
-                            Você pode ser o nosso
-                            aniversariante destaque.
-                        </strong>
-
-                        <p>
-                            Acompanhe nossas ações e fique atento
-                            às novidades durante o seu mês.
-                        </p>
-
-                    </div>
-
-                </div>
-
-
-                <!-- BENEFÍCIOS -->
-                <div class="aniversario-beneficios">
-
-
-                    <div class="aniversario-beneficio">
-
-                        <div class="beneficio-premium-icon">
-                            🎁
-                        </div>
-
-                        <div>
-                            <strong>
-                                Brindes especiais
-                            </strong>
-
-                            <span>
-                                Surpresas exclusivas.
-                            </span>
-                        </div>
-
-                    </div>
-
-
-                    <div class="aniversario-beneficio">
-
-                        <div class="beneficio-premium-icon">
-                            ⭐
-                        </div>
-
-                        <div>
-                            <strong>
-                                Destaque especial
-                            </strong>
-
-                            <span>
-                                Seu momento pode ganhar destaque.
-                            </span>
-                        </div>
-
-                    </div>
-
-
-                    <div class="aniversario-beneficio">
-
-                        <div class="beneficio-premium-icon">
-                            ❤️
-                        </div>
-
-                        <div>
-                            <strong>
-                                Experiência OK.SPIT
-                            </strong>
-
-                            <span>
-                                Faça parte das nossas ações.
-                            </span>
-                        </div>
-
-                    </div>
-
-
-                </div>
-
-
-                <div class="aniversario-frase">
-
-                    <span>“</span>
-
-                    Porque quem faz parte da
-                    <strong>OK.SPIT</strong>
-                    merece ser lembrado.
-
-                    <span>”</span>
-
-                </div>
-
-            </div>
-
-
-
-            <!-- ==================================================
-                 FORMULÁRIO PREMIUM
-            ================================================== -->
-
-            <div class="birthday-card">
-
-
-                <div class="birthday-card-glow"></div>
-
-
-                <div class="birthday-card-header">
-
-
-                    <div class="birthday-icon-box">
-                        🎂
-                    </div>
-
-
-                    <div>
-
-                        <span class="birthday-form-label">
-                            CADASTRO EXCLUSIVO
-                        </span>
-
-                        <h3>
-                            Aniversariante
-                            <span>do mês</span>
-                        </h3>
-
-                    </div>
-
-                </div>
-
-
-                <div class="birthday-divider"></div>
-
-
-                <p class="birthday-card-description">
-
-                    Informe seus dados para participar
-                    das ações especiais da OK.SPIT.
-
-                </p>
-
-
-                <form
-                    id="birthdayForm"
-                    class="birthday-form"
-                    autocomplete="on"
-                >
-
-
-                    <!-- NOME -->
-                    <div class="birthday-field">
-
-                        <label for="nomeAniversario">
-                            Seu nome
-                        </label>
-
-                        <div class="birthday-input">
-
-                            <span>
-                                👤
-                            </span>
-
-                            <input
-                                type="text"
-                                id="nomeAniversario"
-                                name="nomeAniversario"
-                                placeholder="Como podemos te chamar?"
-                                autocomplete="name"
-                                required
-                            >
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- WHATSAPP -->
-                    <div class="birthday-field">
-
-                        <label for="telefoneAniversario">
-                            WhatsApp
-                        </label>
-
-                        <div class="birthday-input">
-
-                            <span>
-                                📱
-                            </span>
-
-                            <input
-                                type="tel"
-                                id="telefoneAniversario"
-                                name="telefoneAniversario"
-                                placeholder="(61) 99999-9999"
-                                autocomplete="tel"
-                                required
-                            >
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- DATA -->
-                    <div class="birthday-field">
-
-                        <label for="nascimento">
-                            Data de nascimento
-                        </label>
-
-                        <div class="birthday-input">
-
-                            <span>
-                                📅
-                            </span>
-
-                            <input
-                                type="date"
-                                id="nascimento"
-                                name="nascimento"
-                                required
-                            >
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- CONSENTIMENTO -->
-                    <label class="birthday-checkbox">
-
-                        <input
-                            type="checkbox"
-                            id="consentimentoAniversario"
-                            name="consentimentoAniversario"
-                            required
-                        >
-
-                        <span class="birthday-checkmark"></span>
-
-                        <span class="birthday-checkbox-text">
-
-                            Concordo com o cadastro dos meus dados
-                            para participar das ações especiais
-                            de aniversário da OK.SPIT.
-
-                        </span>
-
-                    </label>
-
-
-                    <!-- BOTÃO -->
-                    <button
-                        type="submit"
-                        class="birthday-submit"
-                    >
-
-                        <span class="submit-gift">
-                            🎁
-                        </span>
-
-                        <span>
-                            QUERO PARTICIPAR
-                        </span>
-
-                        <span class="submit-arrow">
-                            →
-                        </span>
-
-                    </button>
-
-
-                    <!-- MENSAGEM -->
-                    <div
-                        id="birthdayMessage"
-                        class="mensagem"
-                        role="alert"
-                        aria-live="polite"
-                    ></div>
-
-
-                    <!-- SEGURANÇA -->
-                    <div class="birthday-security">
-
-                        <span>
-                            🔒
-                        </span>
-
-                        <span>
-                            Seus dados são utilizados somente
-                            para as ações da OK.SPIT.
-                        </span>
-
-                    </div>
-
-                </form>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- ============================================================
-     AVISO
-============================================================ -->
-
 <section class="aviso-section">
 
     <div class="container">
 
         <div class="aviso">
 
-
-            <div class="aviso-icon">
-                📢
-            </div>
-
+            <div class="aviso-icon">📢</div>
 
             <div>
-
-                <strong>
-                    Importante
-                </strong>
-
+                <strong>Importante</strong>
 
                 <p>
-
                     A equipe da OK.SPIT poderá conferir
                     as divulgações realizadas antes de
                     validar a participação no sorteio.
-
                 </p>
-
             </div>
 
         </div>
@@ -1200,29 +508,19 @@
 
 </section>
 
-
 </main>
-
-
-
-<!-- ============================================================
-     FOOTER
-============================================================ -->
 
 <footer class="footer">
 
     <div class="container">
 
-
         <div class="footer-brand">
             OK.SPIT
         </div>
 
-
         <p class="footer-description">
             Sorteios, novidades e muito mais.
         </p>
-
 
         <a
             href="https://www.instagram.com/ok.spit/"
@@ -1230,14 +528,10 @@
             rel="noopener noreferrer"
             class="footer-instagram"
         >
-
             📸 Instagram: @OK.SPIT
-
         </a>
 
-
         <div class="footer-line"></div>
-
 
         <div class="copyright">
 
@@ -1246,15 +540,9 @@
                 Todos os direitos reservados.
             </span>
 
-
             <span class="created-by">
-
                 Criado por
-
-                <strong>
-                    iDigital Agência
-                </strong>
-
+                <strong>iDigital Agência</strong>
             </span>
 
         </div>
@@ -1263,21 +551,65 @@
 
 </footer>
 
-
-
-<!-- ============================================================
-     SUPABASE
-============================================================ -->
-
-<script
-    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
-></script>
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase.js"></script>
-
 <script src="script.js"></script>
 
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    const abrir = document.getElementById("abrirParticipacao");
+    const fechar = document.getElementById("fecharParticipacao");
+    const modal = document.getElementById("participar");
+    const backdrop = document.querySelector("[data-fechar-participacao]");
+
+    if (!abrir || !modal) return;
+
+    let ultimoFoco = null;
+
+    function abrirModal() {
+        ultimoFoco = document.activeElement;
+
+        modal.classList.add("ativo");
+        modal.setAttribute("aria-hidden", "false");
+        document.body.classList.add("modal-aberto");
+
+        setTimeout(() => {
+            const campo = document.getElementById("nome");
+            if (campo) campo.focus();
+        }, 120);
+    }
+
+    function fecharModal() {
+        modal.classList.remove("ativo");
+        modal.setAttribute("aria-hidden", "true");
+        document.body.classList.remove("modal-aberto");
+
+        if (ultimoFoco) ultimoFoco.focus();
+    }
+
+    abrir.addEventListener("click", abrirModal);
+
+    if (fechar) {
+        fechar.addEventListener("click", fecharModal);
+    }
+
+    if (backdrop) {
+        backdrop.addEventListener("click", fecharModal);
+    }
+
+    document.addEventListener("keydown", event => {
+        if (
+            event.key === "Escape" &&
+            modal.classList.contains("ativo")
+        ) {
+            fecharModal();
+        }
+    });
+
+});
+
+</script>
 
 </body>
-
 </html>

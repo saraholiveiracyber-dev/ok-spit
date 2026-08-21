@@ -1,6 +1,7 @@
-﻿/* ============================================================
-   OK.SPIT — PREMIUM DESIGN
-   ============================================================ */
+/* ============================================================
+   OK.SPIT — STYLE PRINCIPAL
+   Página inicial + sorteios
+============================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');
 
@@ -8,6 +9,7 @@
     --orange: #ff6a00;
     --orange-light: #ff8a2a;
     --orange-dark: #d94f00;
+    --gold: #ffb700;
 
     --black: #090909;
     --black-2: #111111;
@@ -15,7 +17,6 @@
 
     --white: #ffffff;
     --gray: #a8a8a8;
-    --gray-light: #eeeeee;
 
     --success: #20c76a;
     --danger: #ef4444;
@@ -42,6 +43,10 @@ body {
     line-height: 1.6;
 }
 
+body.modal-aberto {
+    overflow: hidden;
+}
+
 button,
 input,
 select {
@@ -59,20 +64,21 @@ a {
 
 .container {
     width: min(1120px, calc(100% - 40px));
-    margin: auto;
+    margin-inline: auto;
 }
 
 /* ============================================================
    HEADER
-   ============================================================ */
+============================================================ */
 
 .header {
     position: sticky;
     top: 0;
     z-index: 1000;
 
-    background: rgba(9, 9, 9, .92);
+    background: rgba(9, 9, 9, .94);
     backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
 
     border-bottom: 1px solid rgba(255,255,255,.08);
 }
@@ -83,6 +89,7 @@ a {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 22px;
 }
 
 .logo {
@@ -90,11 +97,11 @@ a {
     align-items: center;
     gap: 10px;
 
-    color: white;
-
+    color: #fff;
     font-size: 22px;
     font-weight: 900;
     letter-spacing: -.5px;
+    flex-shrink: 0;
 }
 
 .logo img {
@@ -103,18 +110,54 @@ a {
     object-fit: contain;
 }
 
-.instagram-link {
-    color: white;
+.main-menu {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    flex: 1;
+}
 
-    font-size: 13px;
+.main-menu a {
+    color: rgba(255,255,255,.68);
+    padding: 10px 12px;
+    border-radius: 10px;
+
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .4px;
+    text-transform: uppercase;
+
+    transition: var(--transition);
+}
+
+.main-menu a:hover,
+.main-menu a.active {
+    color: #fff;
+    background: rgba(255,106,0,.12);
+}
+
+.main-menu a.active {
+    color: var(--orange-light);
+}
+
+.instagram-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+
+    color: #fff;
+
+    font-size: 12px;
     font-weight: 700;
 
-    padding: 10px 17px;
+    padding: 10px 15px;
 
     border: 1px solid rgba(255,255,255,.15);
     border-radius: 50px;
 
     transition: var(--transition);
+    flex-shrink: 0;
 }
 
 .instagram-link:hover {
@@ -125,10 +168,11 @@ a {
 
 /* ============================================================
    HERO
-   ============================================================ */
+============================================================ */
 
 .hero {
     position: relative;
+    overflow: hidden;
 
     padding: 115px 0 120px;
 
@@ -144,9 +188,7 @@ a {
             #151515
         );
 
-    color: white;
-
-    overflow: hidden;
+    color: #fff;
 }
 
 .hero::before {
@@ -161,79 +203,193 @@ a {
     top: -160px;
 
     background: var(--orange);
-
     opacity: .08;
 
     border-radius: 50%;
-
     filter: blur(5px);
 }
 
-.hero .container {
+.hero-content {
     position: relative;
     z-index: 2;
 }
 
-.eyebrow {
+.hero-badge {
     display: inline-flex;
-
     align-items: center;
     gap: 8px;
 
-    color: var(--orange-light);
+    margin-bottom: 22px;
+    padding: 9px 15px;
 
-    font-size: 12px;
-    font-weight: 800;
+    border: 1px solid rgba(255,106,0,.28);
+    border-radius: 50px;
 
-    letter-spacing: 1.8px;
+    background: rgba(255,106,0,.07);
 
-    text-transform: uppercase;
+    color: #ff9a52;
 
-    margin-bottom: 18px;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 1.6px;
 }
 
 .hero h1 {
     max-width: 760px;
 
-    font-size: clamp(48px, 7vw, 86px);
-
-    line-height: .98;
-
-    letter-spacing: -4px;
-
-    font-weight: 900;
-
     margin-bottom: 28px;
+
+    font-size: clamp(48px, 7vw, 86px);
+    line-height: .98;
+    letter-spacing: -4px;
+    font-weight: 900;
 }
 
 .hero h1 span {
     color: var(--orange);
 }
 
-.hero p {
+.hero-description {
     max-width: 680px;
 
     color: #c8c8c8;
 
     font-size: 18px;
-
     line-height: 1.8;
 }
 
-.hero strong {
-    color: white;
+.hero-description strong {
+    color: #fff;
+}
+
+.hero-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 34px;
+}
+
+.btn {
+    min-height: 56px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+
+    border: 0;
+    border-radius: 14px;
+
+    padding: 0 22px;
+
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: .6px;
+
+    transition: var(--transition);
+}
+
+.btn-primary {
+    color: #fff;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--orange-light),
+            var(--orange-dark)
+        );
+
+    box-shadow:
+        0 14px 35px rgba(255,106,0,.25);
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 20px 45px rgba(255,106,0,.34);
+}
+
+.btn-outline {
+    color: #fff;
+
+    border: 1px solid rgba(255,255,255,.18);
+
+    background: rgba(255,255,255,.03);
+}
+
+.btn-outline:hover {
+    border-color: var(--orange);
+    background: rgba(255,106,0,.10);
+    transform: translateY(-3px);
+}
+
+.hero-info {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+
+    margin-top: 55px;
+}
+
+.hero-info > div:not(.hero-divider) {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.hero-info strong {
+    color: var(--orange);
+    font-size: 19px;
+    font-weight: 900;
+}
+
+.hero-info span {
+    color: #999;
+    font-size: 9px;
+    line-height: 1.45;
+    text-transform: uppercase;
+    letter-spacing: .7px;
+}
+
+.hero-divider {
+    width: 1px;
+    height: 28px;
+    background: rgba(255,255,255,.13);
+}
+
+.hero-glow {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    filter: blur(2px);
+}
+
+.hero-glow-one {
+    width: 260px;
+    height: 260px;
+    right: 8%;
+    bottom: -170px;
+    border: 1px solid rgba(255,106,0,.14);
+}
+
+.hero-glow-two {
+    width: 160px;
+    height: 160px;
+    left: 5%;
+    top: 12%;
+    border: 1px solid rgba(255,183,0,.08);
 }
 
 /* ============================================================
-   SEÇÕES
-   ============================================================ */
+   COMO PARTICIPAR
+============================================================ */
 
-section {
-    position: relative;
-}
+.como-section {
+    padding: 110px 0;
 
-.divulgacao-section {
-    padding: 100px 0;
+    background: #090909;
+    color: #fff;
 }
 
 .section-heading {
@@ -243,317 +399,41 @@ section {
 .section-heading > span {
     display: block;
 
+    margin-bottom: 10px;
+
     color: var(--orange);
 
-    font-size: 12px;
-    font-weight: 800;
-
-    letter-spacing: 1.8px;
-
-    text-transform: uppercase;
-
-    margin-bottom: 10px;
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 2px;
 }
 
 .section-heading h2 {
-    font-size: clamp(34px, 5vw, 54px);
-
-    line-height: 1.05;
-
-    letter-spacing: -2px;
-
-    font-weight: 900;
-
     margin-bottom: 15px;
+
+    font-size: clamp(34px, 5vw, 54px);
+    line-height: 1.05;
+    letter-spacing: -2px;
+    font-weight: 900;
 }
 
 .section-heading p {
-    color: #777;
-
     max-width: 600px;
-
-    font-size: 16px;
-}
-
-.center {
-    text-align: center;
-}
-
-.center p {
-    margin-inline: auto;
-}
-
-/* ============================================================
-   CARD PARTICIPAÇÃO
-   ============================================================ */
-
-.participacao-card {
-    background: white;
-
-    border-radius: 30px;
-
-    padding: 42px;
-
-    box-shadow: var(--shadow);
-
-    border: 1px solid #eeeeee;
-}
-
-.participacao-card h3 {
-    font-size: 24px;
-
-    font-weight: 800;
-
-    margin-bottom: 8px;
-}
-
-.participacao-card > p {
     color: #777;
-
-    margin-bottom: 30px;
-}
-
-/* ============================================================
-   FORMULÁRIO
-   ============================================================ */
-
-.form-grid {
-    display: grid;
-
-    grid-template-columns: repeat(2, 1fr);
-
-    gap: 20px;
-}
-
-.campo {
-    display: flex;
-    flex-direction: column;
-
-    gap: 8px;
-}
-
-.campo-full {
-    grid-column: 1 / -1;
-}
-
-.campo label {
-    font-size: 12px;
-
-    font-weight: 800;
-
-    color: #444;
-
-    text-transform: uppercase;
-
-    letter-spacing: .7px;
-}
-
-.campo input,
-.campo select {
-    width: 100%;
-
-    height: 56px;
-
-    border: 1px solid #dedede;
-
-    border-radius: 14px;
-
-    padding: 0 17px;
-
-    outline: none;
-
-    background: #fafafa;
-
-    color: #111;
-
     font-size: 15px;
-
-    transition: var(--transition);
-}
-
-.campo input:focus,
-.campo select:focus {
-    border-color: var(--orange);
-
-    background: white;
-
-    box-shadow:
-        0 0 0 4px rgba(255,106,0,.10);
-}
-
-/* ============================================================
-   CHECKBOX
-   ============================================================ */
-
-.consentimento {
-    display: flex;
-
-    align-items: flex-start;
-
-    gap: 12px;
-
-    margin: 24px 0;
-
-    color: #666;
-
-    font-size: 13px;
-
-    line-height: 1.6;
-
-    cursor: pointer;
-}
-
-.consentimento input {
-    width: 18px;
-    height: 18px;
-
-    accent-color: var(--orange);
-
-    flex-shrink: 0;
-}
-
-/* ============================================================
-   BOTÕES
-   ============================================================ */
-
-.btn {
-    min-height: 58px;
-
-    border: none;
-
-    border-radius: 14px;
-
-    padding: 0 25px;
-
-    font-size: 13px;
-
-    font-weight: 900;
-
-    letter-spacing: .3px;
-
-    transition: var(--transition);
-
-    display: inline-flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    gap: 8px;
-}
-
-.btn-primary {
-    background:
-        linear-gradient(
-            135deg,
-            var(--orange-light),
-            var(--orange-dark)
-        );
-
-    color: white;
-
-    box-shadow:
-        0 12px 28px rgba(255,106,0,.25);
-}
-
-.btn-primary:hover {
-    transform: translateY(-3px);
-
-    box-shadow:
-        0 18px 35px rgba(255,106,0,.32);
-}
-
-.btn-full {
-    width: 100%;
-}
-
-/* ============================================================
-   MENSAGENS
-   ============================================================ */
-
-.mensagem,
-.form-message {
-    margin-top: 18px;
-
-    padding: 15px 18px;
-
-    border-radius: 14px;
-
-    font-size: 13px;
-
-    font-weight: 700;
-
-    display: none;
-}
-
-.mensagem.info,
-.form-message.info {
-    display: block;
-
-    background: #fff5ec;
-
-    color: var(--orange-dark);
-
-    border: 1px solid #ffd9bd;
-}
-
-.mensagem.sucesso,
-.form-message.sucesso {
-    display: block;
-
-    background: #ecfff4;
-
-    color: #128349;
-
-    border: 1px solid #b9efd0;
-}
-
-.mensagem.erro,
-.form-message.erro {
-    display: block;
-
-    background: #fff0f0;
-
-    color: #c53030;
-
-    border: 1px solid #ffc8c8;
-}
-
-/* ============================================================
-   COMO PARTICIPAR
-   ============================================================ */
-
-.como-section {
-    padding: 110px 0;
-
-    background: var(--black);
-
-    color: white;
-}
-
-.como-section .section-heading > span {
-    color: var(--orange-light);
-}
-
-.como-section .section-heading h2 {
-    color: white;
 }
 
 .passos {
     display: grid;
-
-    grid-template-columns:
-        repeat(4, 1fr);
-
+    grid-template-columns: repeat(4, 1fr);
     gap: 18px;
 }
 
 .passo {
     position: relative;
 
-    padding: 30px;
-
     min-height: 230px;
+    padding: 30px;
 
     border-radius: 22px;
 
@@ -571,9 +451,7 @@ section {
 
 .passo:hover {
     transform: translateY(-8px);
-
-    border-color:
-        rgba(255,106,0,.45);
+    border-color: rgba(255,106,0,.45);
 }
 
 .numero {
@@ -581,339 +459,760 @@ section {
     height: 48px;
 
     display: flex;
-
     align-items: center;
     justify-content: center;
+
+    margin-bottom: 25px;
 
     border-radius: 14px;
 
     background: rgba(255,106,0,.12);
-
     color: var(--orange);
 
     font-size: 14px;
-
     font-weight: 900;
+}
 
-    margin-bottom: 25px;
+.passo-icon {
+    margin-bottom: 13px;
+    font-size: 24px;
 }
 
 .passo h3 {
-    font-size: 19px;
-
     margin-bottom: 8px;
+    font-size: 19px;
 }
 
 .passo p {
     color: #929292;
-
-    font-size: 14px;
+    font-size: 13px;
+    line-height: 1.65;
 }
 
 /* ============================================================
-   ANIVERSÁRIO
-   ============================================================ */
+   MODAL DE PARTICIPAÇÃO
+============================================================ */
 
-.aniversario {
-    padding: 110px 0;
+.participacao-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 5000;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 24px;
+
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+
+    transition:
+        opacity .28s ease,
+        visibility .28s ease;
+}
+
+.participacao-modal.ativo {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.participacao-modal-backdrop {
+    position: absolute;
+    inset: 0;
 
     background:
         radial-gradient(
-            circle at 10% 20%,
-            rgba(255,106,0,.10),
+            circle at 50% 20%,
+            rgba(255,106,0,.12),
             transparent 35%
         ),
-        #f7f7f7;
+        rgba(0,0,0,.86);
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
 }
 
-.aniversario-grid {
-    display: grid;
+.participacao-modal-container {
+    position: relative;
+    z-index: 2;
 
-    grid-template-columns:
-        1fr 1fr;
+    width: min(1080px, 100%);
+    max-height: calc(100dvh - 48px);
 
-    gap: 80px;
+    overflow-y: auto;
+    overflow-x: hidden;
 
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,183,0,.5) transparent;
+
+    transform: translateY(28px) scale(.97);
+
+    transition:
+        transform .32s cubic-bezier(.2,.8,.2,1);
+}
+
+.participacao-modal.ativo
+.participacao-modal-container {
+    transform: translateY(0) scale(1);
+}
+
+.participacao-modal-container::-webkit-scrollbar {
+    width: 5px;
+}
+
+.participacao-modal-container::-webkit-scrollbar-thumb {
+    background: rgba(255,183,0,.45);
+    border-radius: 50px;
+}
+
+.participacao-modal-close {
+    position: absolute;
+    z-index: 20;
+
+    top: 14px;
+    right: 14px;
+
+    width: 43px;
+    height: 43px;
+
+    display: flex;
     align-items: center;
-}
+    justify-content: center;
 
-.aniversario-text h2 {
-    font-size: clamp(38px, 5vw, 60px);
+    border: 1px solid rgba(255,255,255,.13);
+    border-radius: 50%;
 
+    background: rgba(0,0,0,.58);
+    color: #fff;
+
+    font-size: 29px;
+    font-weight: 300;
     line-height: 1;
 
-    letter-spacing: -2px;
-
-    font-weight: 900;
-
-    margin-bottom: 20px;
+    transition: var(--transition);
 }
 
-.aniversario-text > p {
-    color: #666;
-
-    font-size: 16px;
-
-    line-height: 1.8;
-
-    max-width: 520px;
+.participacao-modal-close:hover {
+    transform: rotate(90deg) scale(1.06);
+    background: var(--orange);
+    border-color: var(--orange);
 }
 
-.aniversario-text strong {
-    color: var(--orange-dark);
+.participacao-card {
+    display: grid;
+    grid-template-columns: 1fr 430px;
+    gap: 45px;
+
+    padding: 45px;
+
+    border-radius: 30px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #171717,
+            #0d0d0d
+        );
+
+    border: 1px solid rgba(255,255,255,.09);
+
+    box-shadow:
+        0 35px 100px rgba(0,0,0,.55);
 }
 
-.aniversario-destaque {
-    display: flex;
+.participacao-info {
+    color: #fff;
+}
 
+.participacao-badge {
+    display: inline-flex;
     align-items: center;
+    gap: 8px;
 
-    gap: 18px;
+    color: #ff9a52;
 
-    margin: 30px 0;
-
-    padding: 22px;
-
-    border-radius: 20px;
-
-    background: white;
-
-    border: 1px solid #eeeeee;
-
-    box-shadow: 0 15px 40px rgba(0,0,0,.06);
-
-    font-size: 30px;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 1.8px;
 }
 
-.aniversario-destaque strong {
+.badge-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--orange);
+    box-shadow: 0 0 14px rgba(255,106,0,.8);
+}
+
+.participacao-info h2 {
+    margin: 14px 0 16px;
+
+    font-size: clamp(42px, 5vw, 64px);
+    line-height: .98;
+    letter-spacing: -3px;
+    font-weight: 900;
+}
+
+.participacao-info h2 span {
+    color: var(--orange);
+}
+
+.participacao-subtitle {
+    max-width: 510px;
+
+    color: #aaa;
+    font-size: 14px;
+    line-height: 1.75;
+}
+
+.participacao-subtitle strong {
+    color: #fff;
+}
+
+.regra-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+
+    margin-top: 28px;
+    padding: 18px;
+
+    border-radius: 19px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,183,0,.12),
+            rgba(255,183,0,.035)
+        );
+
+    border: 1px solid rgba(255,183,0,.16);
+}
+
+.regra-icon {
+    width: 44px;
+    height: 44px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 13px;
+    background: rgba(255,183,0,.12);
+
+    font-size: 19px;
+}
+
+.regra-label {
     display: block;
 
-    color: #111;
+    margin-bottom: 4px;
 
+    color: #ffbd25;
+
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: 1.2px;
+}
+
+.regra-content strong {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: #fff;
+    font-size: 14px;
+}
+
+.regra-content p {
+    color: #777;
+    font-size: 10px;
+    line-height: 1.55;
+}
+
+.regra-content p span {
+    color: var(--orange);
+    font-weight: 800;
+}
+
+.contador-box {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+
+    margin-top: 16px;
+    padding: 15px;
+
+    border-radius: 17px;
+
+    background: rgba(255,255,255,.025);
+    border: 1px solid rgba(255,255,255,.07);
+}
+
+.contador-icon {
+    font-size: 20px;
+}
+
+.contador-content {
+    flex: 1;
+}
+
+.contador-content span {
+    display: block;
+
+    color: #666;
+
+    font-size: 8px;
+    font-weight: 800;
+    letter-spacing: .7px;
+}
+
+.contador-content strong {
+    color: #fff;
+    font-size: 23px;
+}
+
+.contador-live {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    color: #55df91;
+
+    font-size: 8px;
+    font-weight: 900;
+    letter-spacing: .5px;
+}
+
+.contador-live span {
+    width: 6px;
+    height: 6px;
+
+    border-radius: 50%;
+    background: #20c76a;
+
+    box-shadow: 0 0 10px rgba(32,199,106,.7);
+}
+
+.participacao-beneficios {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+
+    margin-top: 16px;
+}
+
+.beneficio-item {
+    display: flex;
+    gap: 10px;
+
+    padding: 14px;
+
+    border-radius: 15px;
+
+    background: rgba(255,255,255,.025);
+    border: 1px solid rgba(255,255,255,.06);
+}
+
+.beneficio-icon {
+    font-size: 18px;
+}
+
+.beneficio-item strong {
+    display: block;
+
+    color: #fff;
+    font-size: 10px;
+}
+
+.beneficio-item span {
+    display: block;
+
+    margin-top: 3px;
+
+    color: #666;
+    font-size: 8px;
+    line-height: 1.4;
+}
+
+/* FORMULÁRIO */
+
+.participacao-form {
+    padding: 28px;
+
+    border-radius: 23px;
+
+    background: #111;
+    border: 1px solid rgba(255,255,255,.08);
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.03);
+}
+
+.form-header {
+    margin-bottom: 22px;
+}
+
+.form-label {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #ff8535;
+
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: 2px;
+}
+
+.form-header h3 {
+    margin-bottom: 6px;
+
+    color: #fff;
+    font-size: 22px;
+    font-weight: 900;
+}
+
+.form-header p {
+    color: #666;
+    font-size: 10px;
+    line-height: 1.6;
+}
+
+.campo {
+    margin-bottom: 16px;
+}
+
+.campo label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #d0d0d0;
+
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.input-wrapper {
+    display: flex;
+    align-items: center;
+
+    min-height: 51px;
+
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 13px;
+
+    background: rgba(0,0,0,.25);
+
+    transition: var(--transition);
+}
+
+.input-wrapper:focus-within {
+    border-color: var(--orange);
+
+    box-shadow:
+        0 0 0 3px rgba(255,106,0,.08);
+}
+
+.input-icon {
+    width: 45px;
+
+    text-align: center;
     font-size: 15px;
 }
 
-.aniversario-destaque span {
-    display: block;
+.input-wrapper input,
+.input-wrapper select {
+    width: 100%;
+    height: 49px;
 
-    color: #888;
+    border: 0;
+    outline: 0;
 
-    font-size: 13px;
+    background: transparent;
+    color: #fff;
 
-    margin-top: 4px;
+    font-size: 12px;
 }
 
-.aniversario-info {
+.input-wrapper input::placeholder {
     color: #555;
-
-    font-size: 14px;
-
-    line-height: 2;
 }
 
-/* ============================================================
-   FORMULÁRIO ANIVERSÁRIO
-   ============================================================ */
-
-.birthday-form {
-    background: white;
-
-    padding: 38px;
-
-    border-radius: 28px;
-
-    box-shadow: var(--shadow);
-
-    border: 1px solid #eeeeee;
+.input-wrapper select {
+    padding-right: 12px;
 }
 
-.form-title {
-    margin-bottom: 28px;
+.input-wrapper select option {
+    background: #111;
+    color: #fff;
 }
 
-.form-title span {
-    color: var(--orange);
+.checkbox {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
 
+    margin: 19px 0;
+
+    color: rgba(255,255,255,.48);
+
+    font-size: 9px;
+    line-height: 1.55;
+
+    cursor: pointer;
+}
+
+.checkbox input {
+    width: 16px;
+    height: 16px;
+
+    flex-shrink: 0;
+
+    accent-color: var(--gold);
+}
+
+.checkbox strong {
+    color: #fff;
+}
+
+.btn-full {
+    width: 100%;
+}
+
+.btn-arrow {
+    font-size: 18px;
+    transition: var(--transition);
+}
+
+.btn-primary:hover .btn-arrow {
+    transform: translateX(4px);
+}
+
+.form-security {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+
+    margin-top: 17px;
+    padding-top: 15px;
+
+    border-top: 1px solid rgba(255,255,255,.06);
+}
+
+.form-security span {
     font-size: 11px;
-
-    font-weight: 900;
-
-    letter-spacing: 1.5px;
 }
 
-.form-title h3 {
-    font-size: 27px;
+.form-security p {
+    color: rgba(255,255,255,.28);
 
-    font-weight: 900;
-
-    margin: 6px 0;
+    font-size: 8px;
+    line-height: 1.5;
 }
 
-.form-title p {
-    color: #888;
+.mensagem {
+    margin-top: 14px;
+    padding: 12px 14px;
 
-    font-size: 13px;
+    border-radius: 12px;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    display: none;
+}
+
+.mensagem.sucesso {
+    display: block;
+    color: #5ee58c;
+    background: rgba(32,199,106,.08);
+    border: 1px solid rgba(32,199,106,.18);
+}
+
+.mensagem.erro {
+    display: block;
+    color: #ff8585;
+    background: rgba(239,68,68,.08);
+    border: 1px solid rgba(239,68,68,.18);
+}
+
+.mensagem.info {
+    display: block;
+    color: #ffca55;
+    background: rgba(255,183,0,.08);
+    border: 1px solid rgba(255,183,0,.18);
 }
 
 /* ============================================================
    AVISO
-   ============================================================ */
+============================================================ */
+
+.aviso-section {
+    padding: 30px 0 70px;
+    background: #090909;
+}
 
 .aviso {
-    margin-top: 28px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
 
-    padding: 22px;
+    max-width: 900px;
+    margin-inline: auto;
 
-    border-radius: 18px;
+    padding: 20px;
 
-    background: #fff8f2;
+    border-radius: 17px;
 
-    border: 1px solid #ffe1ca;
+    background: rgba(255,106,0,.05);
+    border: 1px solid rgba(255,106,0,.13);
+
+    color: #fff;
+}
+
+.aviso-icon {
+    font-size: 20px;
 }
 
 .aviso strong {
-    color: var(--orange-dark);
-
-    font-size: 14px;
+    color: #ff9a52;
+    font-size: 12px;
 }
 
 .aviso p {
-    margin-top: 7px;
-
+    margin-top: 5px;
     color: #777;
-
-    font-size: 13px;
+    font-size: 11px;
+    line-height: 1.6;
 }
 
 /* ============================================================
-   RODAPÉ
-   ============================================================ */
+   FOOTER
+============================================================ */
 
 .footer {
     padding: 55px 0;
 
     background: #070707;
-
-    color: white;
-
+    color: #fff;
     text-align: center;
 }
 
 .footer-brand {
-    font-size: 25px;
-
-    font-weight: 900;
-
     margin-bottom: 10px;
+
+    font-size: 25px;
+    font-weight: 900;
 }
 
-.footer p {
+.footer-description {
     color: #777;
-
     font-size: 13px;
 }
 
-.footer a {
-    color: var(--orange);
+.footer-instagram {
+    display: inline-block;
+    margin-top: 12px;
 
-    font-weight: 700;
+    color: var(--orange);
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.footer-line {
+    width: 100%;
+    height: 1px;
+
+    margin: 25px 0;
+
+    background: rgba(255,255,255,.07);
+}
+
+.copyright {
+    color: #777;
+    font-size: 11px;
+    line-height: 1.8;
+}
+
+.created-by {
+    display: block;
+    margin-top: 4px;
+    color: #999;
+}
+
+.created-by strong {
+    color: var(--orange);
 }
 
 /* ============================================================
    RESPONSIVO
-   ============================================================ */
+============================================================ */
 
-@media (max-width: 900px) {
+@media (max-width: 1000px) {
 
-    .passos {
-        grid-template-columns:
-            repeat(2, 1fr);
+    .main-menu {
+        gap: 2px;
     }
 
-    .aniversario-grid {
-        grid-template-columns: 1fr;
+    .main-menu a {
+        padding: 9px 8px;
+        font-size: 9px;
+    }
 
-        gap: 45px;
+    .participacao-card {
+        grid-template-columns: 1fr;
+    }
+
+    .participacao-info {
+        max-width: 700px;
     }
 
 }
 
-@media (max-width: 650px) {
+@media (max-width: 800px) {
+
+    .nav {
+        flex-wrap: wrap;
+        padding: 10px 0;
+    }
+
+    .main-menu {
+        order: 3;
+        width: 100%;
+        overflow-x: auto;
+        justify-content: flex-start;
+        padding-bottom: 2px;
+    }
+
+    .instagram-link {
+        margin-left: auto;
+    }
+
+    .hero {
+        padding: 85px 0 90px;
+    }
+
+    .passos {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+@media (max-width: 600px) {
 
     .container {
-        width: min(
-            100% - 28px,
-            560px
-        );
+        width: min(100% - 28px, 560px);
     }
 
     .nav {
         min-height: 68px;
-    }
-
-    .instagram-link {
-        font-size: 11px;
-
-        padding: 8px 12px;
-    }
-
-    .hero {
-        padding: 80px 0 85px;
-    }
-
-    .hero h1 {
-        font-size: 50px;
-
-        letter-spacing: -2.5px;
-    }
-
-    .hero p {
-        font-size: 15px;
-    }
-
-    .divulgacao-section,
-    .aniversario,
-    .como-section {
-        padding: 75px 0;
-    }
-
-    .section-heading {
-        margin-bottom: 30px;
-    }
-
-    .participacao-card,
-    .birthday-form {
-        padding: 25px;
-
-        border-radius: 22px;
-    }
-
-    .form-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .campo-full {
-        grid-column: auto;
-    }
-
-    .passos {
-        grid-template-columns: 1fr;
-    }
-
-    .passo {
-        min-height: auto;
-    }
-
-    .aniversario-text h2 {
-        font-size: 42px;
-    }
-
-}
-
-@media (max-width: 420px) {
-
-    .hero h1 {
-        font-size: 43px;
     }
 
     .logo {
@@ -925,2389 +1224,143 @@ section {
         height: 36px;
     }
 
-    .participacao-card,
-    .birthday-form {
-        padding: 20px;
+    .instagram-link {
+        padding: 8px 11px;
+        font-size: 10px;
     }
 
-}
-
-.copyright {
-    text-align: center;
-    color: #777;
-    font-size: 13px;
-    line-height: 1.8;
-}
-
-.created-by {
-    display: block;
-    margin-top: 5px;
-    color: #999;
-}
-
-.created-by strong {
-    color: #ff6a00;
-    font-weight: 800;
-}
-
-/* ============================================================
-   INFORMAÇÕES — PARTICIPAÇÃO
-============================================================ */
-
-.participacao-info {
-    max-width: 560px;
-}
-
-.participacao-info h2 {
-    margin: 14px 0 16px;
-}
-
-.participacao-descricao {
-    color: #aaa;
-    font-size: 16px;
-    line-height: 1.75;
-    max-width: 500px;
-}
-
-.participacao-descricao strong {
-    color: #fff;
-}
-
-
-/* ============================================================
-   REGRA — 1 PARTICIPAÇÃO POR DIA
-============================================================ */
-
-.regra-box {
-    position: relative;
-
-    display: flex;
-    align-items: flex-start;
-
-    gap: 16px;
-
-    margin-top: 32px;
-    padding: 20px;
-
-    border-radius: 20px;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(245,196,0,.12),
-            rgba(245,196,0,.035)
-        );
-
-    border: 1px solid rgba(245,196,0,.22);
-
-    box-shadow:
-        0 12px 35px rgba(0,0,0,.18);
-
-    overflow: hidden;
-}
-
-
-/* brilho lateral */
-
-.regra-box::before {
-    content: "";
-
-    position: absolute;
-
-    left: 0;
-    top: 0;
-    bottom: 0;
-
-    width: 4px;
-
-    background: #f5c400;
-}
-
-
-/* ícone */
-
-.regra-icon {
-    width: 48px;
-    height: 48px;
-
-    flex-shrink: 0;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 15px;
-
-    background: rgba(245,196,0,.14);
-
-    font-size: 21px;
-
-    box-shadow:
-        inset 0 0 0 1px rgba(245,196,0,.12);
-}
-
-
-/* conteúdo */
-
-.regra-content {
-    display: flex;
-    flex-direction: column;
-
-    gap: 4px;
-}
-
-.regra-label {
-    font-size: 9px;
-    font-weight: 900;
-
-    letter-spacing: 1.8px;
-
-    color: #f5c400;
-}
-
-.regra-content strong {
-    color: #fff;
-
-    font-size: 17px;
-    font-weight: 800;
-}
-
-.regra-content p {
-    margin: 3px 0 0;
-
-    color: #999;
-
-    font-size: 12px;
-    line-height: 1.6;
-}
-
-.regra-content p span {
-    color: #d0d0d0;
-}
-
-
-/* ============================================================
-   DESTAQUE
-============================================================ */
-
-.participacao-destaque {
-    display: flex;
-    align-items: center;
-
-    gap: 14px;
-
-    margin-top: 15px;
-
-    padding: 16px 18px;
-
-    border-radius: 18px;
-
-    background: rgba(255,255,255,.035);
-
-    border: 1px solid rgba(255,255,255,.07);
-}
-
-.destaque-icon {
-    width: 42px;
-    height: 42px;
-
-    flex-shrink: 0;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 13px;
-
-    background: rgba(255,255,255,.06);
-
-    font-size: 18px;
-}
-
-.participacao-destaque > div:last-child {
-    display: flex;
-    flex-direction: column;
-
-    gap: 3px;
-}
-
-.participacao-destaque strong {
-    color: #fff;
-
-    font-size: 13px;
-}
-
-.participacao-destaque span {
-    color: #888;
-
-    font-size: 11px;
-
-    line-height: 1.5;
-}
-
-
-/* ============================================================
-   MOBILE
-============================================================ */
-
-@media (max-width: 600px) {
-
-    .participacao-info {
-        max-width: 100%;
+    .hero {
+        padding: 72px 0 78px;
     }
 
-    .participacao-descricao {
+    .hero h1 {
+        font-size: 50px;
+        letter-spacing: -2.5px;
+    }
+
+    .hero-description {
         font-size: 14px;
     }
 
-    .regra-box {
-        padding: 17px;
-
-        gap: 13px;
+    .hero-buttons {
+        flex-direction: column;
     }
 
-    .regra-icon {
-        width: 43px;
-        height: 43px;
-
-        border-radius: 13px;
+    .hero-buttons .btn {
+        width: 100%;
     }
 
-    .regra-content strong {
+    .hero-info {
+        gap: 12px;
+        justify-content: space-between;
+    }
+
+    .hero-divider {
+        height: 22px;
+    }
+
+    .hero-info strong {
         font-size: 15px;
     }
 
-    .regra-content p {
-        font-size: 11px;
+    .hero-info span {
+        font-size: 7px;
     }
 
-    .participacao-destaque {
-        padding: 14px;
-    }
-
-}
-
-/* ============================================================
-   PARTICIPAÇÃO DIÁRIA — PREMIUM
-============================================================ */
-
-.participacao-section {
-    position: relative;
-    padding: 120px 0;
-
-    background:
-        radial-gradient(
-            circle at 15% 20%,
-            rgba(255, 106, 0, .12),
-            transparent 32%
-        ),
-        radial-gradient(
-            circle at 90% 80%,
-            rgba(255, 183, 0, .07),
-            transparent 30%
-        ),
-        #080808;
-
-    overflow: hidden;
-}
-
-
-/* brilho decorativo */
-
-.participacao-section::before {
-    content: "";
-
-    position: absolute;
-
-    width: 500px;
-    height: 500px;
-
-    top: -250px;
-    right: -180px;
-
-    border-radius: 50%;
-
-    background: rgba(255, 106, 0, .07);
-
-    filter: blur(90px);
-
-    pointer-events: none;
-}
-
-
-.participacao-section::after {
-    content: "";
-
-    position: absolute;
-
-    width: 350px;
-    height: 350px;
-
-    bottom: -180px;
-    left: -150px;
-
-    border-radius: 50%;
-
-    background: rgba(255, 183, 0, .05);
-
-    filter: blur(80px);
-
-    pointer-events: none;
-}
-
-
-
-/* ============================================================
-   CARD PRINCIPAL
-============================================================ */
-
-.participacao-card {
-
-    position: relative;
-    z-index: 2;
-
-    display: grid;
-
-    grid-template-columns: 1fr 1fr;
-
-    gap: 75px;
-
-    align-items: center;
-
-    padding: 70px;
-
-    border-radius: 34px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(255,255,255,.075),
-            rgba(255,255,255,.025)
-        );
-
-    border: 1px solid rgba(255,255,255,.09);
-
-    box-shadow:
-        0 35px 100px rgba(0,0,0,.55),
-        inset 0 1px 0 rgba(255,255,255,.05);
-
-    overflow: hidden;
-}
-
-
-/* linha dourada superior */
-
-.participacao-card::before {
-
-    content: "";
-
-    position: absolute;
-
-    top: 0;
-    left: 12%;
-    right: 12%;
-
-    height: 1px;
-
-    background:
-        linear-gradient(
-            90deg,
-            transparent,
-            rgba(255,183,0,.8),
-            transparent
-        );
-}
-
-
-
-/* ============================================================
-   INFORMAÇÕES
-============================================================ */
-
-.participacao-info {
-    position: relative;
-    z-index: 2;
-}
-
-
-.participacao-badge {
-
-    display: inline-flex;
-
-    align-items: center;
-
-    gap: 9px;
-
-    padding: 9px 14px;
-
-    margin-bottom: 22px;
-
-    border-radius: 50px;
-
-    background:
-        rgba(255,183,0,.08);
-
-    border: 1px solid
-        rgba(255,183,0,.18);
-
-    color: #ffb700;
-
-    font-size: 9px;
-
-    font-weight: 900;
-
-    letter-spacing: 1.8px;
-}
-
-
-.badge-dot {
-
-    width: 7px;
-    height: 7px;
-
-    border-radius: 50%;
-
-    background: #ffb700;
-
-    box-shadow:
-        0 0 12px rgba(255,183,0,.8);
-
-    animation: pulseDot 1.8s infinite;
-}
-
-
-@keyframes pulseDot {
-
-    0%, 100% {
-        opacity: 1;
-        transform: scale(1);
-    }
-
-    50% {
-        opacity: .45;
-        transform: scale(.75);
-    }
-
-}
-
-
-
-.participacao-info h2 {
-
-    max-width: 500px;
-
-    margin-bottom: 20px;
-
-    color: #fff;
-
-    font-size: clamp(
-        42px,
-        5vw,
-        62px
-    );
-
-    line-height: 1;
-
-    letter-spacing: -3px;
-
-    font-weight: 900;
-}
-
-
-.participacao-info h2 span {
-
-    color: #ffb700;
-
-}
-
-
-
-.participacao-subtitle {
-
-    max-width: 520px;
-
-    margin-bottom: 30px;
-
-    color:
-        rgba(255,255,255,.58);
-
-    font-size: 15px;
-
-    line-height: 1.8;
-}
-
-
-.participacao-subtitle strong {
-
-    color: #fff;
-
-}
-
-
-
-/* ============================================================
-   REGRA
-============================================================ */
-
-.regra-box {
-
-    position: relative;
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 16px;
-
-    padding: 19px;
-
-    margin-bottom: 15px;
-
-    border-radius: 20px;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255,183,0,.11),
-            rgba(255,183,0,.035)
-        );
-
-    border: 1px solid
-        rgba(255,183,0,.20);
-
-    overflow: hidden;
-}
-
-
-.regra-box::before {
-
-    content: "";
-
-    position: absolute;
-
-    left: 0;
-    top: 0;
-    bottom: 0;
-
-    width: 3px;
-
-    background:
-        linear-gradient(
-            180deg,
-            #ffb700,
-            #ff6a00
-        );
-}
-
-
-.regra-icon {
-
-    width: 48px;
-    height: 48px;
-
-    flex-shrink: 0;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 15px;
-
-    background:
-        rgba(255,183,0,.12);
-
-    font-size: 21px;
-}
-
-
-.regra-content {
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 3px;
-}
-
-
-.regra-label {
-
-    color: #ffb700;
-
-    font-size: 8px;
-
-    font-weight: 900;
-
-    letter-spacing: 1.5px;
-}
-
-
-.regra-content strong {
-
-    color: #fff;
-
-    font-size: 14px;
-
-    font-weight: 800;
-}
-
-
-.regra-content p {
-
-    margin: 0;
-
-    color:
-        rgba(255,255,255,.43);
-
-    font-size: 11px;
-
-    line-height: 1.5;
-}
-
-
-.regra-content p span {
-
-    color: #ffb700;
-
-    font-weight: 700;
-}
-
-
-
-/* ============================================================
-   CONTADOR
-============================================================ */
-
-.contador-box {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 15px;
-
-    padding: 18px;
-
-    margin-bottom: 25px;
-
-    border-radius: 20px;
-
-    background:
-        rgba(255,255,255,.035);
-
-    border: 1px solid
-        rgba(255,255,255,.07);
-}
-
-
-.contador-icon {
-
-    width: 48px;
-    height: 48px;
-
-    flex-shrink: 0;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 15px;
-
-    background:
-        rgba(255,255,255,.06);
-
-    font-size: 19px;
-}
-
-
-.contador-content {
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 3px;
-
-    flex: 1;
-}
-
-
-.contador-content span {
-
-    color:
-        rgba(255,255,255,.35);
-
-    font-size: 8px;
-
-    font-weight: 800;
-
-    letter-spacing: 1px;
-}
-
-
-.contador-content strong {
-
-    color: #fff;
-
-    font-size: 30px;
-
-    line-height: 1;
-
-    font-weight: 900;
-}
-
-
-.contador-live {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 6px;
-
-    color:
-        rgba(255,255,255,.35);
-
-    font-size: 8px;
-
-    font-weight: 900;
-
-    letter-spacing: 1px;
-}
-
-
-.contador-live span {
-
-    width: 6px;
-    height: 6px;
-
-    border-radius: 50%;
-
-    background: #35d46b;
-
-    box-shadow:
-        0 0 12px rgba(53,212,107,.9);
-}
-
-
-
-/* ============================================================
-   BENEFÍCIOS
-============================================================ */
-
-.participacao-beneficios {
-
-    display: grid;
-
-    gap: 12px;
-}
-
-
-.beneficio-item {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 12px;
-}
-
-
-.beneficio-icon {
-
-    width: 38px;
-    height: 38px;
-
-    flex-shrink: 0;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 12px;
-
-    background:
-        rgba(255,255,255,.045);
-
-    font-size: 15px;
-}
-
-
-.beneficio-item div:last-child {
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 2px;
-}
-
-
-.beneficio-item strong {
-
-    color: #fff;
-
-    font-size: 11px;
-}
-
-
-.beneficio-item span {
-
-    color:
-        rgba(255,255,255,.35);
-
-    font-size: 10px;
-}
-
-
-
-/* ============================================================
-   FORMULÁRIO
-============================================================ */
-
-.participacao-form {
-
-    position: relative;
-
-    z-index: 3;
-
-    padding: 38px;
-
-    border-radius: 26px;
-
-    background:
-        rgba(255,255,255,.055);
-
-    border: 1px solid
-        rgba(255,255,255,.09);
-
-    box-shadow:
-        0 25px 60px rgba(0,0,0,.25);
-
-    backdrop-filter: blur(22px);
-}
-
-
-.form-header {
-
-    margin-bottom: 28px;
-}
-
-
-.form-label {
-
-    color: #ffb700;
-
-    font-size: 9px;
-
-    font-weight: 900;
-
-    letter-spacing: 2px;
-}
-
-
-.form-header h3 {
-
-    margin: 7px 0;
-
-    color: #fff;
-
-    font-size: 25px;
-
-    font-weight: 900;
-}
-
-
-.form-header p {
-
-    margin: 0;
-
-    color:
-        rgba(255,255,255,.4);
-
-    font-size: 11px;
-}
-
-
-
-/* ============================================================
-   CAMPOS
-============================================================ */
-
-.campo {
-
-    margin-bottom: 18px;
-}
-
-
-.campo label {
-
-    display: block;
-
-    margin-bottom: 8px;
-
-    color:
-        rgba(255,255,255,.7);
-
-    font-size: 10px;
-
-    font-weight: 800;
-
-    letter-spacing: .3px;
-}
-
-
-.input-wrapper {
-
-    position: relative;
-}
-
-
-.input-icon {
-
-    position: absolute;
-
-    left: 15px;
-    top: 50%;
-
-    transform:
-        translateY(-50%);
-
-    opacity: .6;
-
-    pointer-events: none;
-
-    z-index: 2;
-}
-
-
-.input-wrapper input,
-.input-wrapper select {
-
-    width: 100%;
-
-    height: 55px;
-
-    padding:
-        0 16px 0 45px;
-
-    border-radius: 14px;
-
-    border: 1px solid
-        rgba(255,255,255,.09);
-
-    outline: none;
-
-    background:
-        rgba(0,0,0,.28);
-
-    color: #fff;
-
-    font-size: 13px;
-
-    transition:
-        border .25s,
-        box-shadow .25s,
-        background .25s;
-}
-
-
-.input-wrapper input::placeholder {
-
-    color:
-        rgba(255,255,255,.28);
-}
-
-
-.input-wrapper input:focus,
-.input-wrapper select:focus {
-
-    border-color:
-        rgba(255,183,0,.7);
-
-    background:
-        rgba(0,0,0,.4);
-
-    box-shadow:
-        0 0 0 3px
-        rgba(255,183,0,.08);
-}
-
-
-.input-wrapper select {
-
-    appearance: none;
-
-    cursor: pointer;
-}
-
-
-.input-wrapper select option {
-
-    background: #151515;
-
-    color: #fff;
-}
-
-
-.select-wrapper::after {
-
-    content: "⌄";
-
-    position: absolute;
-
-    right: 16px;
-    top: 50%;
-
-    transform:
-        translateY(-50%);
-
-    color:
-        rgba(255,255,255,.4);
-
-    pointer-events: none;
-}
-
-
-
-/* ============================================================
-   CHECKBOX
-============================================================ */
-
-.checkbox {
-
-    display: flex;
-
-    align-items: flex-start;
-
-    gap: 10px;
-
-    margin: 20px 0;
-
-    color:
-        rgba(255,255,255,.48);
-
-    font-size: 10px;
-
-    line-height: 1.55;
-
-    cursor: pointer;
-}
-
-
-.checkbox input {
-
-    width: 16px;
-    height: 16px;
-
-    flex-shrink: 0;
-
-    margin-top: 1px;
-
-    accent-color: #ffb700;
-}
-
-
-.checkbox strong {
-
-    color: #fff;
-}
-
-
-
-/* ============================================================
-   BOTÃO
-============================================================ */
-
-#btnParticipar {
-
-    min-height: 58px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    gap: 10px;
-
-    border-radius: 15px;
-
-    border: 0;
-
-    font-size: 11px;
-
-    font-weight: 900;
-
-    letter-spacing: .5px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #ffb700,
-            #ff6a00
-        );
-
-    box-shadow:
-        0 15px 35px
-        rgba(255,106,0,.20);
-
-    transition:
-        transform .25s,
-        box-shadow .25s;
-}
-
-
-#btnParticipar:hover {
-
-    transform:
-        translateY(-3px);
-
-    box-shadow:
-        0 20px 45px
-        rgba(255,106,0,.32);
-}
-
-
-#btnParticipar:active {
-
-    transform:
-        translateY(0);
-}
-
-
-.btn-arrow {
-
-    font-size: 18px;
-
-    transition:
-        transform .25s;
-}
-
-
-#btnParticipar:hover .btn-arrow {
-
-    transform:
-        translateX(4px);
-}
-
-
-
-/* ============================================================
-   SEGURANÇA
-============================================================ */
-
-.form-security {
-
-    display: flex;
-
-    align-items: flex-start;
-
-    gap: 9px;
-
-    margin-top: 18px;
-
-    padding-top: 16px;
-
-    border-top:
-        1px solid
-        rgba(255,255,255,.06);
-}
-
-
-.form-security span {
-
-    font-size: 12px;
-}
-
-
-.form-security p {
-
-    margin: 0;
-
-    color:
-        rgba(255,255,255,.28);
-
-    font-size: 8px;
-
-    line-height: 1.5;
-}
-
-
-
-/* ============================================================
-   MENSAGEM
-============================================================ */
-
-.participacao-form .mensagem {
-
-    margin-top: 15px;
-
-    padding: 13px 15px;
-
-    border-radius: 12px;
-
-    font-size: 11px;
-
-    font-weight: 700;
-
-    display: none;
-}
-
-
-.participacao-form .mensagem.sucesso {
-
-    display: block;
-
-    color: #5ee58c;
-
-    background:
-        rgba(32,199,106,.08);
-
-    border:
-        1px solid
-        rgba(32,199,106,.18);
-}
-
-
-.participacao-form .mensagem.erro {
-
-    display: block;
-
-    color: #ff8585;
-
-    background:
-        rgba(239,68,68,.08);
-
-    border:
-        1px solid
-        rgba(239,68,68,.18);
-}
-
-
-.participacao-form .mensagem.info {
-
-    display: block;
-
-    color: #ffca55;
-
-    background:
-        rgba(255,183,0,.08);
-
-    border:
-        1px solid
-        rgba(255,183,0,.18);
-}
-
-
-
-/* ============================================================
-   RESPONSIVO
-============================================================ */
-
-@media (max-width: 950px) {
-
-    .participacao-card {
-
-        grid-template-columns: 1fr;
-
-        gap: 45px;
-
-        padding: 50px 40px;
-    }
-
-}
-
-
-@media (max-width: 600px) {
-
-    .participacao-section {
-
+    .como-section {
         padding: 75px 0;
     }
 
-
-    .participacao-card {
-
-        padding: 28px 18px;
-
-        border-radius: 25px;
-
-        gap: 35px;
+    .section-heading {
+        margin-bottom: 30px;
     }
 
+    .passos {
+        grid-template-columns: 1fr;
+    }
+
+    .passo {
+        min-height: auto;
+    }
+
+    .participacao-modal {
+        align-items: flex-start;
+        padding: 10px;
+    }
+
+    .participacao-modal-container {
+        max-height: calc(100dvh - 20px);
+        margin-top: 10px;
+    }
+
+    .participacao-card {
+        padding: 28px 18px;
+        gap: 30px;
+        border-radius: 24px;
+    }
+
+    .participacao-modal-close {
+        top: 9px;
+        right: 9px;
+        width: 39px;
+        height: 39px;
+    }
 
     .participacao-info h2 {
-
         font-size: 42px;
-
         letter-spacing: -2px;
     }
 
-
     .participacao-subtitle {
-
-        font-size: 13px;
-
-        line-height: 1.7;
+        font-size: 12px;
     }
 
-
-    .regra-box {
-
-        align-items: flex-start;
-
-        padding: 16px;
-
-        gap: 12px;
+    .participacao-beneficios {
+        grid-template-columns: 1fr;
     }
 
-
-    .regra-icon {
-
-        width: 42px;
-        height: 42px;
-
-        font-size: 18px;
+    .participacao-form {
+        padding: 22px 16px;
     }
-
-
-    .regra-content strong {
-
-        font-size: 13px;
-    }
-
-
-    .contador-box {
-
-        padding: 16px;
-    }
-
 
     .contador-live {
-
         display: none;
     }
 
-
-    .participacao-form {
-
-        padding: 23px 17px;
-
-        border-radius: 20px;
-    }
-
-
-    .form-header h3 {
-
-        font-size: 22px;
-    }
-
-
-    .input-wrapper input,
-    .input-wrapper select {
-
-        height: 53px;
+    .aviso {
+        padding: 16px;
     }
 
 }
-
 
 @media (max-width: 380px) {
 
-    .participacao-info h2 {
+    .hero h1 {
+        font-size: 43px;
+    }
 
+    .main-menu a {
+        font-size: 8px;
+        padding: 8px 7px;
+    }
+
+    .participacao-info h2 {
         font-size: 37px;
     }
 
+}
 
-    .participacao-card {
+@media (prefers-reduced-motion: reduce) {
 
-        padding: 24px 15px;
+    html {
+        scroll-behavior: auto;
     }
 
-
-    .participacao-form {
-
-        padding: 20px 14px;
-    }
-
-}
-
-/* ============================================================
-   ANIVERSARIANTE DO MÊS — PREMIUM
-============================================================ */
-
-.aniversario-section {
-    position: relative;
-    overflow: hidden;
-    padding: 110px 0;
-    background:
-        radial-gradient(
-            circle at 15% 50%,
-            rgba(255, 106, 0, 0.16),
-            transparent 32%
-        ),
-        radial-gradient(
-            circle at 85% 30%,
-            rgba(255, 106, 0, 0.12),
-            transparent 28%
-        ),
-        #090909;
-    color: #fff;
-}
-
-
-/* CÍRCULOS DECORATIVOS */
-
-.aniversario-bg-circle {
-    position: absolute;
-    border-radius: 50%;
-    pointer-events: none;
-    filter: blur(2px);
-}
-
-.aniversario-circle-one {
-    width: 420px;
-    height: 420px;
-    right: -220px;
-    top: 100px;
-    border: 1px solid rgba(255, 106, 0, 0.18);
-}
-
-.aniversario-circle-two {
-    width: 260px;
-    height: 260px;
-    left: -150px;
-    bottom: 80px;
-    border: 1px solid rgba(255, 106, 0, 0.12);
-}
-
-
-/* TOPO */
-
-.aniversario-top {
-    position: relative;
-    z-index: 2;
-    text-align: center;
-    margin-bottom: 65px;
-}
-
-.aniversario-label {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 14px;
-    margin-bottom: 18px;
-}
-
-.aniversario-label span:not(.label-line) {
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: 3px;
-    color: #ff8a3d;
-}
-
-.label-line {
-    width: 45px;
-    height: 1px;
-    background: linear-gradient(
-        90deg,
-        transparent,
-        #ff6a00
-    );
-}
-
-.label-line:last-child {
-    background: linear-gradient(
-        90deg,
-        #ff6a00,
-        transparent
-    );
-}
-
-.aniversario-mini-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 9px 18px;
-    border: 1px solid rgba(255, 106, 0, 0.35);
-    border-radius: 100px;
-    background: rgba(255, 106, 0, 0.08);
-    color: #ff9a52;
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: 1px;
-}
-
-
-/* GRID */
-
-.aniversario-grid {
-    position: relative;
-    z-index: 2;
-    display: grid;
-    grid-template-columns: 1fr 480px;
-    gap: 80px;
-    align-items: center;
-}
-
-
-/* LADO ESQUERDO */
-
-.aniversario-info {
-    max-width: 620px;
-}
-
-.aniversario-crown {
-    width: 50px;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 22px;
-    border-radius: 15px;
-    border: 1px solid rgba(255, 106, 0, 0.35);
-    background: linear-gradient(
-        145deg,
-        rgba(255, 106, 0, 0.18),
-        rgba(255, 106, 0, 0.04)
-    );
-    color: #ff7a20;
-    font-size: 23px;
-    box-shadow:
-        0 0 30px rgba(255, 106, 0, 0.10);
-}
-
-.aniversario-info h2 {
-    margin: 0;
-    font-size: clamp(42px, 5vw, 68px);
-    line-height: 0.98;
-    letter-spacing: -2px;
-    font-weight: 900;
-}
-
-.aniversario-info h2 span {
-    display: block;
-    color: #ff6a00;
-    margin-top: 8px;
-}
-
-.aniversario-description {
-    max-width: 560px;
-    margin: 25px 0 35px;
-    color: #a8a8a8;
-    font-size: 16px;
-    line-height: 1.8;
-}
-
-.aniversario-description strong {
-    color: #fff;
-}
-
-
-/* HIGHLIGHT */
-
-.aniversario-highlight {
-    position: relative;
-    display: flex;
-    gap: 18px;
-    padding: 22px;
-    margin-bottom: 28px;
-    border: 1px solid rgba(255, 106, 0, 0.24);
-    border-radius: 20px;
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255, 106, 0, 0.13),
-            rgba(255, 255, 255, 0.025)
-        );
-    box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.05);
-}
-
-.highlight-icon {
-    flex-shrink: 0;
-    width: 52px;
-    height: 52px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 15px;
-    background: #ff6a00;
-    font-size: 23px;
-    box-shadow:
-        0 10px 30px rgba(255, 106, 0, 0.25);
-}
-
-.highlight-content span {
-    display: block;
-    margin-bottom: 6px;
-    color: #ff8a3d;
-    font-size: 10px;
-    font-weight: 900;
-    letter-spacing: 2px;
-}
-
-.highlight-content strong {
-    display: block;
-    margin-bottom: 7px;
-    color: #fff;
-    font-size: 15px;
-}
-
-.highlight-content p {
-    margin: 0;
-    color: #909090;
-    font-size: 12px;
-    line-height: 1.6;
-}
-
-
-/* BENEFÍCIOS */
-
-.aniversario-beneficios {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-}
-
-.aniversario-beneficio {
-    padding: 17px 14px;
-    border: 1px solid rgba(255,255,255,0.07);
-    border-radius: 16px;
-    background: rgba(255,255,255,0.025);
-    transition: 0.3s ease;
-}
-
-.aniversario-beneficio:hover {
-    transform: translateY(-4px);
-    border-color: rgba(255,106,0,0.3);
-    background: rgba(255,106,0,0.06);
-}
-
-.beneficio-premium-icon {
-    margin-bottom: 10px;
-    font-size: 20px;
-}
-
-.aniversario-beneficio strong {
-    display: block;
-    margin-bottom: 5px;
-    font-size: 12px;
-    color: #fff;
-}
-
-.aniversario-beneficio span {
-    display: block;
-    color: #777;
-    font-size: 10px;
-    line-height: 1.4;
-}
-
-
-/* FRASE */
-
-.aniversario-frase {
-    margin-top: 30px;
-    color: #737373;
-    font-size: 13px;
-    font-style: italic;
-}
-
-.aniversario-frase span {
-    color: #ff6a00;
-    font-size: 24px;
-}
-
-.aniversario-frase strong {
-    color: #aaa;
-}
-
-
-/* ============================================================
-   CARD DO FORMULÁRIO
-============================================================ */
-
-.birthday-card {
-    position: relative;
-    padding: 34px;
-    border: 1px solid rgba(255, 106, 0, 0.28);
-    border-radius: 28px;
-    background:
-        linear-gradient(
-            145deg,
-            rgba(255,255,255,0.07),
-            rgba(255,255,255,0.025)
-        );
-    box-shadow:
-        0 30px 80px rgba(0,0,0,0.45),
-        0 0 60px rgba(255,106,0,0.07);
-    backdrop-filter: blur(18px);
-}
-
-.birthday-card-glow {
-    position: absolute;
-    width: 160px;
-    height: 160px;
-    right: -80px;
-    top: -80px;
-    border-radius: 50%;
-    background: rgba(255,106,0,0.14);
-    filter: blur(55px);
-    pointer-events: none;
-}
-
-.birthday-card-header {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-}
-
-.birthday-icon-box {
-    width: 58px;
-    height: 58px;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 17px;
-    background: linear-gradient(
-        145deg,
-        #ff7b24,
-        #e95500
-    );
-    font-size: 25px;
-    box-shadow:
-        0 12px 30px rgba(255,106,0,0.25);
-}
-
-.birthday-form-label {
-    display: block;
-    margin-bottom: 5px;
-    color: #ff8535;
-    font-size: 9px;
-    font-weight: 900;
-    letter-spacing: 2px;
-}
-
-.birthday-card-header h3 {
-    margin: 0;
-    font-size: 24px;
-    font-weight: 900;
-}
-
-.birthday-card-header h3 span {
-    color: #ff6a00;
-}
-
-.birthday-divider {
-    height: 1px;
-    margin: 25px 0 20px;
-    background: linear-gradient(
-        90deg,
-        rgba(255,106,0,0.4),
-        rgba(255,255,255,0.04),
-        transparent
-    );
-}
-
-.birthday-card-description {
-    margin: 0 0 25px;
-    color: #858585;
-    font-size: 12px;
-    line-height: 1.7;
-}
-
-
-/* CAMPOS */
-
-.birthday-field {
-    margin-bottom: 18px;
-}
-
-.birthday-field label {
-    display: block;
-    margin-bottom: 8px;
-    color: #d0d0d0;
-    font-size: 11px;
-    font-weight: 700;
-}
-
-.birthday-input {
-    display: flex;
-    align-items: center;
-    min-height: 52px;
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 13px;
-    background: rgba(0,0,0,0.25);
-    transition: 0.3s ease;
-}
-
-.birthday-input:focus-within {
-    border-color: #ff6a00;
-    box-shadow:
-        0 0 0 3px rgba(255,106,0,0.08);
-}
-
-.birthday-input span {
-    width: 48px;
-    text-align: center;
-    font-size: 16px;
-    opacity: 0.8;
-}
-
-.birthday-input input {
-    width: 100%;
-    height: 50px;
-    border: 0;
-    outline: 0;
-    background: transparent;
-    color: #fff;
-    font-family: inherit;
-    font-size: 13px;
-}
-
-.birthday-input input::placeholder {
-    color: #555;
-}
-
-.birthday-input input::-webkit-calendar-picker-indicator {
-    filter: invert(1);
-    opacity: 0.5;
-}
-
-
-/* CHECKBOX */
-
-.birthday-checkbox {
-    position: relative;
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    margin: 22px 0;
-    cursor: pointer;
-}
-
-.birthday-checkbox input {
-    position: absolute;
-    opacity: 0;
-}
-
-.birthday-checkmark {
-    position: relative;
-    flex-shrink: 0;
-    width: 19px;
-    height: 19px;
-    border: 1px solid #555;
-    border-radius: 6px;
-    background: #111;
-    transition: 0.25s ease;
-}
-
-.birthday-checkbox input:checked + .birthday-checkmark {
-    border-color: #ff6a00;
-    background: #ff6a00;
-}
-
-.birthday-checkbox input:checked + .birthday-checkmark::after {
-    content: "✓";
-    position: absolute;
-    left: 4px;
-    top: 0px;
-    color: #fff;
-    font-size: 13px;
-    font-weight: 900;
-}
-
-.birthday-checkbox-text {
-    color: #777;
-    font-size: 10px;
-    line-height: 1.6;
-}
-
-
-/* BOTÃO */
-
-.birthday-submit {
-    position: relative;
-    width: 100%;
-    min-height: 58px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    overflow: hidden;
-    border: 0;
-    border-radius: 14px;
-    background: linear-gradient(
-        135deg,
-        #ff7a1a,
-        #ef5500
-    );
-    color: #fff;
-    font-family: inherit;
-    font-size: 12px;
-    font-weight: 900;
-    letter-spacing: 1px;
-    cursor: pointer;
-    box-shadow:
-        0 14px 35px rgba(255,106,0,0.25);
-    transition: 0.3s ease;
-}
-
-.birthday-submit:hover {
-    transform: translateY(-3px);
-    box-shadow:
-        0 18px 40px rgba(255,106,0,0.35);
-}
-
-.submit-gift {
-    font-size: 18px;
-}
-
-.submit-arrow {
-    position: absolute;
-    right: 20px;
-    font-size: 18px;
-}
-
-
-/* SEGURANÇA */
-
-.birthday-security {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    margin-top: 18px;
-    color: #555;
-    font-size: 9px;
-    line-height: 1.4;
-    text-align: center;
-}
-
-
-/* ============================================================
-   RESPONSIVO
-============================================================ */
-
-@media (max-width: 1000px) {
-
-    .aniversario-grid {
-        grid-template-columns: 1fr;
-        gap: 55px;
-        max-width: 700px;
-        margin: 0 auto;
-    }
-
-    .aniversario-info {
-        max-width: 100%;
-        text-align: center;
-    }
-
-    .aniversario-crown {
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    .aniversario-description {
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    .aniversario-beneficios {
-        text-align: left;
-    }
-
-    .birthday-card {
-        max-width: 500px;
-        width: 100%;
-        margin: 0 auto;
-    }
-}
-
-
-@media (max-width: 600px) {
-
-    .aniversario-section {
-        padding: 75px 0;
-    }
-
-    .aniversario-top {
-        margin-bottom: 45px;
-    }
-
-    .aniversario-label {
-        gap: 8px;
-    }
-
-    .aniversario-label span:not(.label-line) {
-        font-size: 8px;
-        letter-spacing: 1.5px;
-    }
-
-    .label-line {
-        width: 25px;
-    }
-
-    .aniversario-mini-badge {
-        font-size: 9px;
-        padding: 8px 13px;
-    }
-
-    .aniversario-info h2 {
-        font-size: 42px;
-        letter-spacing: -1.5px;
-    }
-
-    .aniversario-description {
-        font-size: 14px;
-    }
-
-    .aniversario-highlight {
-        text-align: left;
-        padding: 18px;
-    }
-
-    .aniversario-beneficios {
-        grid-template-columns: 1fr;
-    }
-
-    .aniversario-beneficio {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 14px;
-    }
-
-    .beneficio-premium-icon {
-        margin: 0;
-    }
-
-    .birthday-card {
-        padding: 24px 18px;
-        border-radius: 22px;
-    }
-
-    .birthday-card-header h3 {
-        font-size: 21px;
-    }
-
-    .birthday-icon-box {
-        width: 52px;
-        height: 52px;
-    }
-
-    .birthday-submit {
-        min-height: 55px;
-    }
-
-}
-
-/* ============================================================
-   ANIVERSARIANTES — PAINEL ADMIN
-============================================================ */
-
-.section-description {
-    margin-top: 8px;
-    color: #888;
-    font-size: 13px;
-}
-
-
-/* ============================================================
-   GRID DE ANIVERSARIANTES
-============================================================ */
-
-.birthday-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 18px;
-}
-
-
-/* ============================================================
-   CARD ANIVERSARIANTE
-============================================================ */
-
-.birthday-admin-card {
-    position: relative;
-
-    padding: 25px;
-
-    border-radius: 22px;
-
-    background:
-        linear-gradient(
-            145deg,
-            #181818,
-            #0e0e0e
-        );
-
-    border: 1px solid rgba(255, 255, 255, .08);
-
-    box-shadow:
-        0 20px 50px rgba(0, 0, 0, .25);
-
-    overflow: hidden;
-
-    transition: .3s ease;
-}
-
-
-.birthday-admin-card:hover {
-    transform: translateY(-5px);
-
-    border-color: rgba(255, 106, 0, .4);
-
-    box-shadow:
-        0 25px 60px rgba(0, 0, 0, .35);
-}
-
-
-/* brilho */
-
-.birthday-admin-card::before {
-    content: "";
-
-    position: absolute;
-
-    width: 120px;
-    height: 120px;
-
-    right: -50px;
-    top: -50px;
-
-    border-radius: 50%;
-
-    background: rgba(255, 106, 0, .15);
-
-    filter: blur(25px);
-
-    pointer-events: none;
-}
-
-
-/* ============================================================
-   ÍCONE
-============================================================ */
-
-.birthday-admin-icon {
-    width: 52px;
-    height: 52px;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    margin-bottom: 18px;
-
-    border-radius: 16px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #ffb700,
-            #ff6a00
-        );
-
-    font-size: 24px;
-
-    box-shadow:
-        0 10px 25px rgba(255, 106, 0, .25);
-}
-
-
-/* ============================================================
-   NOME
-============================================================ */
-
-.birthday-admin-card h3 {
-    position: relative;
-
-    margin: 0 0 8px;
-
-    color: #fff;
-
-    font-size: 18px;
-
-    font-weight: 800;
-}
-
-
-/* ============================================================
-   DATA
-============================================================ */
-
-.birthday-date {
-    display: inline-flex;
-
-    align-items: center;
-
-    gap: 7px;
-
-    padding: 7px 11px;
-
-    margin-bottom: 14px;
-
-    border-radius: 50px;
-
-    background: rgba(255, 183, 0, .1);
-
-    border: 1px solid rgba(255, 183, 0, .18);
-
-    color: #ffb700;
-
-    font-size: 11px;
-
-    font-weight: 800;
-}
-
-
-/* ============================================================
-   WHATSAPP
-============================================================ */
-
-.birthday-whatsapp {
-    display: block;
-
-    color: #999;
-
-    font-size: 12px;
-}
-
-
-/* ============================================================
-   CARD DE HOJE
-============================================================ */
-
-.birthday-today {
-    border-color: rgba(255, 183, 0, .5);
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(255, 183, 0, .12),
-            #111
-        );
-
-    box-shadow:
-        0 0 35px rgba(255, 183, 0, .08);
-}
-
-
-.birthday-today .birthday-admin-icon {
-    animation: birthdayPulse 2s infinite;
-}
-
-
-@keyframes birthdayPulse {
-
-    0%,
-    100% {
-        transform: scale(1);
-    }
-
-    50% {
-        transform: scale(1.06);
-    }
-
-}
-
-
-/* ============================================================
-   BADGE HOJE
-============================================================ */
-
-.today-badge {
-    position: absolute;
-
-    top: 18px;
-    right: 18px;
-
-    padding: 6px 10px;
-
-    border-radius: 50px;
-
-    background: #ff6a00;
-
-    color: #fff;
-
-    font-size: 9px;
-
-    font-weight: 900;
-
-    letter-spacing: .8px;
-
-    text-transform: uppercase;
-}
-
-
-/* ============================================================
-   SEM RESULTADOS
-============================================================ */
-
-.empty-birthday {
-
-    grid-column: 1 / -1;
-
-    padding: 45px 20px;
-
-    text-align: center;
-
-    border-radius: 20px;
-
-    background: rgba(255, 255, 255, .03);
-
-    border: 1px dashed rgba(255, 255, 255, .1);
-
-    color: #777;
-
-}
-
-
-.empty-birthday strong {
-    display: block;
-
-    margin-bottom: 6px;
-
-    color: #aaa;
-
-    font-size: 15px;
-}
-
-
-/* ============================================================
-   RESPONSIVO
-============================================================ */
-
-@media (max-width: 900px) {
-
-    .birthday-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-}
-
-
-@media (max-width: 600px) {
-
-    .birthday-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .birthday-admin-card {
-        padding: 22px;
-    }
-
-    .birthday-admin-card h3 {
-        font-size: 17px;
+    *,
+    *::before,
+    *::after {
+        transition: none !important;
+        animation: none !important;
     }
 
 }
