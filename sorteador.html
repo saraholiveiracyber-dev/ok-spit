@@ -1,0 +1,275 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>OK.SPIT | Sorteador</title>
+
+    <meta
+        name="description"
+        content="Painel de sorteios semanais da OK.SPIT."
+    >
+
+    <meta name="theme-color" content="#ff6a00">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet"
+    >
+
+    <link rel="stylesheet" href="sorteador.css">
+</head>
+
+<body>
+
+<header class="topo">
+
+    <div class="topo-container">
+
+        <a href="index.html" class="logo">
+            <img
+                src="img/logo-ok-spit.png"
+                alt="OK.SPIT"
+                onerror="this.style.display='none'"
+            >
+            <span>OK.SPIT</span>
+        </a>
+
+        <div class="topo-titulo">
+            PAINEL DE SORTEIO
+        </div>
+
+        <a href="index.html" class="voltar">
+            ← Voltar
+        </a>
+
+    </div>
+
+</header>
+
+<main class="painel">
+
+    <section class="cabecalho">
+
+        <span class="badge">
+            🎁 SORTEIO DO MÊS
+        </span>
+
+        <h1>
+            Sorteie o próximo
+            <span>ganhador.</span>
+        </h1>
+
+        <p>
+            Os participantes são carregados automaticamente
+            do Supabase. Quem já ganhou neste mês fica fora
+            dos próximos sorteios.
+        </p>
+
+    </section>
+
+    <section class="estatisticas">
+
+        <div class="estatistica">
+            <span>👥</span>
+
+            <div>
+                <small>PARTICIPANTES</small>
+                <strong id="totalParticipantes">0</strong>
+            </div>
+        </div>
+
+        <div class="estatistica">
+            <span>🏆</span>
+
+            <div>
+                <small>JÁ GANHARAM</small>
+                <strong id="totalBloqueados">0</strong>
+            </div>
+        </div>
+
+        <div class="estatistica">
+            <span>🎯</span>
+
+            <div>
+                <small>ELEGÍVEIS</small>
+                <strong id="totalElegiveis">0</strong>
+            </div>
+        </div>
+
+    </section>
+
+    <section class="sorteador-card">
+
+        <div class="sorteador-header">
+
+            <div>
+                <span>🎲 SORTEADOR</span>
+
+                <h2>
+                    Quem será o ganhador?
+                </h2>
+            </div>
+
+            <button
+                type="button"
+                class="btn-atualizar"
+                id="atualizar"
+            >
+                ↻ Atualizar
+            </button>
+
+        </div>
+
+        <div
+            class="resultado"
+            id="resultado"
+        >
+
+            <div class="resultado-icon">
+                🎁
+            </div>
+
+            <span>
+                PRONTO PARA SORTEAR
+            </span>
+
+            <strong>
+                Boa sorte!
+            </strong>
+
+        </div>
+
+        <button
+            type="button"
+            class="btn-sortear"
+            id="sortear"
+        >
+
+            <span class="btn-icon">
+                🎁
+            </span>
+
+            <strong>
+                REALIZAR SORTEIO
+            </strong>
+
+            <span>
+                →
+            </span>
+
+        </button>
+
+        <div
+            class="mensagem"
+            id="mensagem"
+            role="alert"
+            aria-live="polite"
+        ></div>
+
+    </section>
+
+    <section class="bloqueados-card">
+
+        <div class="bloqueados-header">
+
+            <span class="mini-label">
+                CONTROLE DE GANHADORES
+            </span>
+
+            <h2>
+                Quem não será sorteado
+            </h2>
+
+            <p>
+                Adicione aqui as pessoas que já ganharam
+                neste mês. Elas ficarão automaticamente
+                fora dos próximos sorteios.
+            </p>
+
+        </div>
+
+        <form
+            class="form-bloqueado"
+            id="formBloqueado"
+        >
+
+            <input
+                type="text"
+                id="nomeBloqueado"
+                name="nome"
+                placeholder="Nome do ganhador"
+                autocomplete="name"
+                required
+            >
+
+            <input
+                type="tel"
+                id="telefoneBloqueado"
+                name="telefone"
+                placeholder="WhatsApp"
+                autocomplete="tel"
+            >
+
+            <button type="submit">
+                + Adicionar
+            </button>
+
+        </form>
+
+        <div
+            class="lista-bloqueados"
+            id="listaBloqueados"
+        >
+
+            <div class="lista-vazia">
+                Nenhum ganhador bloqueado neste mês.
+            </div>
+
+        </div>
+
+        <div class="aviso">
+
+            <span>📢</span>
+
+            <div>
+
+                <strong>
+                    Importante
+                </strong>
+
+                <p>
+                    Depois de realizar o sorteio, confirme
+                    o ganhador adicionando o nome acima.
+                    Assim ele não participará novamente
+                    neste mês.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+<footer>
+    <strong>OK.SPIT</strong>
+    <span>| Painel de Sorteios © 2026</span>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script src="sorteador.js"></script>
+
+</body>
+</html>
