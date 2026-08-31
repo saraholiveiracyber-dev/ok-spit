@@ -1,6 +1,10 @@
 ﻿/* =========================================================
-   OK.SPIT | ADMIN
-========================================================= */
+   OK.SPIT | ADMIN PREMIUM
+   ========================================================= */
+
+/* =========================================================
+   RESET
+   ========================================================= */
 
 * {
     margin: 0;
@@ -8,22 +12,56 @@
     box-sizing: border-box;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: "Montserrat", Arial, sans-serif;
+    background: #f4f4f4;
+    color: #111;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+}
+
+button,
+input {
+    font-family: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+a {
+    color: inherit;
+}
+
+
+/* =========================================================
+   VARIÁVEIS
+   ========================================================= */
+
 :root {
 
     --orange: #ff6a00;
     --orange-dark: #e85f00;
     --orange-light: #fff1e8;
+    --orange-border: #ffd0b0;
 
-    --black: #111;
+    --black: #111111;
     --black-soft: #181818;
+    --black-card: #202020;
 
-    --white: #fff;
+    --white: #ffffff;
 
+    --gray-50: #fafafa;
     --gray-100: #f7f7f7;
     --gray-200: #ededed;
-    --gray-300: #ddd;
-    --gray-500: #777;
-    --gray-600: #666;
+    --gray-300: #dddddd;
+    --gray-400: #bbbbbb;
+    --gray-500: #777777;
+    --gray-600: #666666;
 
     --green: #169447;
     --red: #d93025;
@@ -31,35 +69,293 @@
     --radius: 16px;
 
     --shadow:
-        0 8px 30px rgba(0,0,0,.05);
+        0 8px 30px rgba(0, 0, 0, .05);
+
+    --shadow-premium:
+        0 20px 60px rgba(0, 0, 0, .12);
 }
 
-body {
 
-    font-family:
-        "Montserrat",
-        Arial,
-        sans-serif;
+/* =========================================================
+   LOGIN
+   ========================================================= */
 
-    background: #f4f4f4;
+.login {
+
+    min-height: 100vh;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 25px;
+
+    background:
+        radial-gradient(
+            circle at 20% 20%,
+            rgba(255, 106, 0, .16),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at 80% 80%,
+            rgba(255, 106, 0, .08),
+            transparent 35%
+        ),
+        linear-gradient(
+            135deg,
+            #080808,
+            #171717
+        );
+}
+
+.login-card {
+
+    width: min(430px, 100%);
+
+    padding: 42px 32px;
+
+    background: rgba(255, 255, 255, .98);
+
+    border: 1px solid rgba(255, 255, 255, .2);
+
+    border-radius: 24px;
+
+    box-shadow:
+        0 30px 90px rgba(0, 0, 0, .35);
+
+    text-align: center;
+
+    animation:
+        loginEntrada .5s ease;
+}
+
+@keyframes loginEntrada {
+
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.login-logo {
+
+    width: 70px;
+    height: 70px;
+
+    margin: 0 auto 18px;
+
+    display: grid;
+    place-items: center;
+
+    background: var(--black);
+
+    border-radius: 20px;
+
+    color: var(--orange);
+
+    font-size: 19px;
+
+    font-weight: 900;
+
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, .2);
+}
+
+.logo {
+
+    color: var(--orange);
+
+    font-size: 34px;
+
+    font-weight: 900;
+
+    letter-spacing: -2px;
+
+    margin-bottom: 8px;
+}
+
+.login-card h1 {
+
+    font-size: 23px;
+
+    font-weight: 900;
+
+    letter-spacing: -.5px;
+}
+
+.login-card p {
+
+    margin-top: 8px;
+    margin-bottom: 25px;
+
+    color: var(--gray-500);
+
+    font-size: 12px;
+
+    line-height: 1.5;
+}
+
+.login-card input {
+
+    width: 100%;
+
+    height: 53px;
+
+    margin-bottom: 12px;
+
+    padding: 0 16px;
+
+    border:
+        1px solid var(--gray-300);
+
+    border-radius: 12px;
+
+    outline: none;
+
+    background: #fff;
 
     color: var(--black);
 
-    min-height: 100vh;
+    font-size: 12px;
+
+    transition: .2s;
+}
+
+.login-card input::placeholder {
+    color: #aaa;
+}
+
+.login-card input:focus {
+
+    border-color: var(--orange);
+
+    box-shadow:
+        0 0 0 4px rgba(255, 106, 0, .08);
+}
+
+.login-card .btn-primary {
+
+    margin-top: 5px;
+}
+
+.login-seguranca {
+
+    margin-top: 18px;
+
+    color: #999;
+
+    font-size: 9px;
+}
+
+.login-erro {
+
+    min-height: 18px;
+
+    margin-top: 12px;
+
+    color: var(--red);
+
+    font-size: 11px;
+
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   BOTÕES GERAIS
+   ========================================================= */
+
+.btn {
+
+    border: none;
+
+    font-family: inherit;
+
+    font-weight: 800;
+
+    transition:
+        transform .2s ease,
+        background .2s ease,
+        box-shadow .2s ease;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn-primary {
+
+    width: 100%;
+
+    min-height: 53px;
+
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--orange),
+            #ff7b20
+        );
+
+    color: white;
+
+    font-size: 11px;
+
+    box-shadow:
+        0 10px 25px rgba(255, 106, 0, .22);
+}
+
+.btn-primary:hover {
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--orange-dark),
+            var(--orange)
+        );
+
+    box-shadow:
+        0 14px 30px rgba(255, 106, 0, .28);
+}
+
+
+/* =========================================================
+   PAINEL
+   ========================================================= */
+
+.admin {
+    display: none;
 }
 
 
 /* =========================================================
    HEADER
-========================================================= */
+   ========================================================= */
 
 .admin-header {
 
-    height: 78px;
+    min-height: 78px;
 
     padding: 0 5%;
 
-    background: var(--black);
+    background:
+        linear-gradient(
+            135deg,
+            #0d0d0d,
+            #191919
+        );
 
     border-bottom:
         3px solid var(--orange);
@@ -69,6 +365,14 @@ body {
     align-items: center;
 
     justify-content: space-between;
+
+    gap: 20px;
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 100;
 }
 
 .brand {
@@ -111,17 +415,27 @@ body {
 
 .brand-info span {
 
-    color: #999;
+    color: #888;
 
-    font-size: 10px;
+    font-size: 9px;
 }
 
 
 /* =========================================================
-   BOTÃO SITE
-========================================================= */
+   AÇÕES HEADER
+   ========================================================= */
 
-.btn-site {
+.header-actions {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+}
+
+.btn-site,
+.btn-sair {
 
     display: inline-flex;
 
@@ -131,7 +445,7 @@ body {
 
     min-height: 40px;
 
-    padding: 0 17px;
+    padding: 0 16px;
 
     border: 1px solid #3b3b3b;
 
@@ -143,7 +457,7 @@ body {
 
     text-decoration: none;
 
-    font-size: 11px;
+    font-size: 10px;
 
     font-weight: 800;
 
@@ -159,10 +473,17 @@ body {
     transform: translateY(-1px);
 }
 
+.btn-sair:hover {
+
+    background: #292929;
+
+    border-color: #555;
+}
+
 
 /* =========================================================
    CONTAINER
-========================================================= */
+   ========================================================= */
 
 .admin-container {
 
@@ -178,7 +499,7 @@ body {
 
 /* =========================================================
    TÍTULO
-========================================================= */
+   ========================================================= */
 
 .admin-title {
 
@@ -189,16 +510,16 @@ body {
 
     color: var(--orange);
 
-    font-size: 11px;
+    font-size: 10px;
 
     font-weight: 900;
 
-    letter-spacing: 1.5px;
-
-    margin-bottom: 8px;
+    letter-spacing: 1.8px;
 }
 
 .admin-title h1 {
+
+    margin-top: 8px;
 
     font-size: 35px;
 
@@ -213,13 +534,15 @@ body {
 
     color: var(--gray-600);
 
-    font-size: 13px;
+    font-size: 12px;
+
+    line-height: 1.6;
 }
 
 
 /* =========================================================
    ESTATÍSTICAS
-========================================================= */
+   ========================================================= */
 
 .stats {
 
@@ -252,6 +575,16 @@ body {
     align-items: center;
 
     gap: 17px;
+
+    transition: .2s;
+}
+
+.stat-card:hover {
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 15px 40px rgba(0, 0, 0, .08);
 }
 
 .stat-icon {
@@ -288,9 +621,9 @@ body {
 
     color: var(--gray-500);
 
-    font-size: 10px;
+    font-size: 9px;
 
-    font-weight: 700;
+    font-weight: 800;
 
     text-transform: uppercase;
 }
@@ -305,7 +638,7 @@ body {
 
 /* =========================================================
    SEÇÕES
-========================================================= */
+   ========================================================= */
 
 .admin-section {
 
@@ -341,11 +674,11 @@ body {
 
     color: var(--orange);
 
-    font-size: 10px;
+    font-size: 9px;
 
     font-weight: 900;
 
-    letter-spacing: 1px;
+    letter-spacing: 1.2px;
 }
 
 .section-header h2 {
@@ -353,6 +686,8 @@ body {
     font-size: 20px;
 
     font-weight: 900;
+
+    letter-spacing: -.5px;
 }
 
 .section-header p {
@@ -368,24 +703,93 @@ body {
 
 
 /* =========================================================
-   SORTEIO
-========================================================= */
+   ÁREA DO SORTEIO
+   ========================================================= */
+
+.sorteio-area {
+
+    position: relative;
+
+    overflow: hidden;
+
+    padding: 35px;
+
+    border-radius: 18px;
+
+    background:
+        radial-gradient(
+            circle at 50% 0%,
+            rgba(255, 106, 0, .20),
+            transparent 45%
+        ),
+        linear-gradient(
+            135deg,
+            #0b0b0b,
+            #202020
+        );
+
+    color: white;
+
+    text-align: center;
+
+    box-shadow:
+        0 20px 50px rgba(0, 0, 0, .15);
+}
+
+.sorteio-area::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 200px;
+    height: 200px;
+
+    top: -100px;
+    right: -70px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(255, 106, 0, .08);
+}
+
+.sorteio-status {
+
+    color: #aaa;
+
+    font-size: 9px;
+
+    font-weight: 900;
+
+    letter-spacing: 2px;
+}
 
 .ganhador-selecionado {
 
+    min-height: 130px;
+
+    margin: 20px 0;
+
     padding: 22px;
 
-    background: var(--orange-light);
+    background:
+        rgba(255, 255, 255, .05);
 
-    border: 1px solid #ffc7a4;
+    border:
+        1px solid rgba(255, 255, 255, .08);
 
-    border-radius: 14px;
+    border-radius: 15px;
 
     display: flex;
 
     align-items: center;
 
+    justify-content: center;
+
     gap: 16px;
+
+    transition: .3s;
 }
 
 .ganhador-icon {
@@ -398,7 +802,7 @@ body {
 
     border-radius: 15px;
 
-    background: white;
+    background: var(--orange);
 
     display: flex;
 
@@ -407,6 +811,9 @@ body {
     justify-content: center;
 
     font-size: 27px;
+
+    box-shadow:
+        0 10px 30px rgba(255, 106, 0, .25);
 }
 
 .ganhador-info {
@@ -414,6 +821,8 @@ body {
     display: flex;
 
     flex-direction: column;
+
+    align-items: flex-start;
 
     gap: 5px;
 }
@@ -431,10 +840,65 @@ body {
 
 .ganhador-info strong {
 
-    font-size: 18px;
+    color: white;
+
+    font-size: clamp(20px, 4vw, 32px);
 
     font-weight: 900;
 }
+
+
+/* =========================================================
+   EFEITO DE SORTEIO
+   ========================================================= */
+
+.sorteando .ganhador-selecionado {
+
+    border-color:
+        rgba(255, 106, 0, .5);
+
+    box-shadow:
+        0 0 0 1px rgba(255, 106, 0, .1),
+        0 0 40px rgba(255, 106, 0, .15);
+
+    animation:
+        pulsarSorteio .7s infinite alternate;
+}
+
+.sorteando .ganhador-info strong {
+
+    color: var(--orange);
+
+    animation:
+        nomeSorteando .12s infinite alternate;
+}
+
+@keyframes pulsarSorteio {
+
+    from {
+        transform: scale(1);
+    }
+
+    to {
+        transform: scale(1.015);
+    }
+}
+
+@keyframes nomeSorteando {
+
+    from {
+        opacity: .7;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+
+/* =========================================================
+   BOTÕES DO SORTEIO
+   ========================================================= */
 
 .acoes-ganhador {
 
@@ -454,26 +918,30 @@ body {
 
     padding: 0 18px;
 
-    border: none;
-
     border-radius: 9px;
 
-    font-family: inherit;
-
-    font-size: 11px;
+    font-size: 10px;
 
     font-weight: 800;
-
-    cursor: pointer;
 
     transition: .2s;
 }
 
 .btn-registrar {
 
-    background: var(--orange);
+    border: none;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--orange),
+            #ff7b20
+        );
 
     color: white;
+
+    box-shadow:
+        0 8px 20px rgba(255, 106, 0, .18);
 }
 
 .btn-registrar:hover:not(:disabled) {
@@ -496,7 +964,8 @@ body {
 
     color: var(--gray-600);
 
-    border: 1px solid var(--gray-200);
+    border:
+        1px solid var(--gray-200);
 }
 
 .btn-limpar:hover {
@@ -504,7 +973,14 @@ body {
     background: var(--gray-200);
 }
 
+
+/* =========================================================
+   MENSAGENS
+   ========================================================= */
+
 .mensagem {
+
+    min-height: 18px;
 
     margin-top: 12px;
 
@@ -514,19 +990,17 @@ body {
 }
 
 .mensagem.sucesso {
-
     color: var(--green);
 }
 
 .mensagem.erro {
-
     color: var(--red);
 }
 
 
 /* =========================================================
    GANHADORES
-========================================================= */
+   ========================================================= */
 
 .ganhadores-grid {
 
@@ -544,7 +1018,8 @@ body {
 
     background: #fffaf7;
 
-    border: 1px solid #ffd3b5;
+    border:
+        1px solid #ffd3b5;
 
     border-radius: 13px;
 
@@ -553,6 +1028,16 @@ body {
     align-items: center;
 
     gap: 13px;
+
+    transition: .2s;
+}
+
+.ganhador-card:hover {
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 8px 25px rgba(255, 106, 0, .08);
 }
 
 .ganhador-card-icon {
@@ -610,7 +1095,7 @@ body {
 
 /* =========================================================
    BUSCA
-========================================================= */
+   ========================================================= */
 
 .search-box {
 
@@ -622,7 +1107,8 @@ body {
 
     background: #fafafa;
 
-    border: 1px solid var(--gray-200);
+    border:
+        1px solid var(--gray-200);
 
     border-radius: 9px;
 
@@ -631,6 +1117,16 @@ body {
     align-items: center;
 
     gap: 10px;
+
+    transition: .2s;
+}
+
+.search-box:focus-within {
+
+    border-color: var(--orange);
+
+    box-shadow:
+        0 0 0 4px rgba(255, 106, 0, .06);
 }
 
 .search-box input {
@@ -653,7 +1149,7 @@ body {
 
 /* =========================================================
    TABELA
-========================================================= */
+   ========================================================= */
 
 .table-wrapper {
 
@@ -661,7 +1157,8 @@ body {
 
     overflow-x: auto;
 
-    border: 1px solid var(--gray-200);
+    border:
+        1px solid var(--gray-200);
 
     border-radius: 10px;
 }
@@ -676,7 +1173,6 @@ table {
 }
 
 thead {
-
     background: var(--gray-100);
 }
 
@@ -701,7 +1197,8 @@ td {
 
     padding: 15px 16px;
 
-    border-top: 1px solid var(--gray-200);
+    border-top:
+        1px solid var(--gray-200);
 
     color: #444;
 
@@ -715,6 +1212,11 @@ td strong {
     font-weight: 800;
 }
 
+tbody tr {
+
+    transition: .15s;
+}
+
 tbody tr:hover {
 
     background: #fffaf7;
@@ -723,7 +1225,7 @@ tbody tr:hover {
 
 /* =========================================================
    ANIVERSARIANTES
-========================================================= */
+   ========================================================= */
 
 .birthday-grid {
 
@@ -739,9 +1241,12 @@ tbody tr:hover {
 
     padding: 18px;
 
-    border: 1px solid var(--gray-200);
+    border:
+        1px solid var(--gray-200);
 
     border-radius: 13px;
+
+    background: white;
 
     display: flex;
 
@@ -757,6 +1262,9 @@ tbody tr:hover {
     border-color: #ffc7a4;
 
     transform: translateY(-2px);
+
+    box-shadow:
+        0 10px 25px rgba(0, 0, 0, .05);
 }
 
 .birthday-icon {
@@ -821,7 +1329,7 @@ tbody tr:hover {
 
 /* =========================================================
    BADGES
-========================================================= */
+   ========================================================= */
 
 .today-badge,
 .month-badge {
@@ -859,7 +1367,7 @@ tbody tr:hover {
 
 /* =========================================================
    BOTÃO ATUALIZAR
-========================================================= */
+   ========================================================= */
 
 .btn-refresh {
 
@@ -877,26 +1385,30 @@ tbody tr:hover {
 
     font-family: inherit;
 
-    font-size: 11px;
+    font-size: 10px;
 
     font-weight: 800;
 
     cursor: pointer;
+
+    transition: .2s;
 }
 
 .btn-refresh:hover {
 
     background: var(--orange);
+
+    transform: translateY(-1px);
 }
 
 
 /* =========================================================
-   LOADING / VAZIO
-========================================================= */
+   LOADING
+   ========================================================= */
 
-.loading,
-.loading-card,
-.empty-birthday {
+.loading {
+
+    padding: 35px !important;
 
     text-align: center;
 
@@ -905,10 +1417,31 @@ tbody tr:hover {
     font-size: 11px;
 }
 
-.loading {
+.loading::before {
 
-    padding: 35px !important;
+    content: "⏳";
+
+    display: block;
+
+    margin-bottom: 8px;
+
+    font-size: 20px;
+
+    animation:
+        girar .8s linear infinite;
 }
+
+@keyframes girar {
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* =========================================================
+   VAZIO
+   ========================================================= */
 
 .loading-card,
 .empty-birthday {
@@ -920,6 +1453,12 @@ tbody tr:hover {
     background: var(--gray-100);
 
     border-radius: 12px;
+
+    text-align: center;
+
+    color: var(--gray-500);
+
+    font-size: 11px;
 }
 
 .empty-birthday strong {
@@ -936,15 +1475,23 @@ tbody tr:hover {
 
 /* =========================================================
    FOOTER
-========================================================= */
+   ========================================================= */
 
 footer {
 
     padding: 25px;
 
-    background: var(--black);
+    background:
+        linear-gradient(
+            135deg,
+            #0d0d0d,
+            #191919
+        );
 
-    color: #999;
+    border-top:
+        1px solid #292929;
+
+    color: #777;
 
     text-align: center;
 
@@ -960,8 +1507,8 @@ footer strong {
 
 
 /* =========================================================
-   RESPONSIVO
-========================================================= */
+   RESPONSIVO — TABLET
+   ========================================================= */
 
 @media (max-width: 1000px) {
 
@@ -975,11 +1522,15 @@ footer strong {
 }
 
 
+/* =========================================================
+   RESPONSIVO — CELULAR
+   ========================================================= */
+
 @media (max-width: 650px) {
 
     .admin-header {
 
-        height: 70px;
+        min-height: 70px;
 
         padding: 0 4%;
     }
@@ -1023,9 +1574,21 @@ footer strong {
         width: 100%;
     }
 
+    .sorteio-area {
+
+        padding: 22px 16px;
+    }
+
     .ganhador-selecionado {
 
-        align-items: flex-start;
+        flex-direction: column;
+
+        text-align: center;
+    }
+
+    .ganhador-info {
+
+        align-items: center;
     }
 
     .acoes-ganhador {
@@ -1038,4 +1601,45 @@ footer strong {
 
         width: 100%;
     }
+
+    .header-actions {
+
+        gap: 5px;
+    }
+
+    .btn-site,
+    .btn-sair {
+
+        padding: 0 11px;
+
+        font-size: 9px;
+    }
 }
+
+
+/* =========================================================
+   ACESSIBILIDADE
+   ========================================================= */
+
+button:focus-visible,
+input:focus-visible,
+a:focus-visible {
+
+    outline:
+        3px solid rgba(255, 106, 0, .35);
+
+    outline-offset: 2px;
+}
+
+
+/* =========================================================
+   SELEÇÃO
+   ========================================================= */
+
+::selection {
+
+    background: var(--orange);
+
+    color: white;
+}
+

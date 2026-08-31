@@ -1,752 +1,2693 @@
 ﻿<!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<meta name="theme-color" content="#ff6a00">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<meta
+    name="theme-color"
+    content="#ff6a00"
+>
+
 <title>OK.SPIT | Administração</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+>
+
+<link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+>
+
+<link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet"
+>
+
+<link
+    rel="stylesheet"
+    href="./admin.css"
+>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:Montserrat,Arial,sans-serif;background:#f5f5f5;color:#111;min-height:100vh}
-.login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:linear-gradient(135deg,#111,#222)}
-.login-card{width:min(420px,100%);background:#fff;border-radius:24px;padding:40px 30px;box-shadow:0 20px 60px rgba(0,0,0,.25);text-align:center}
-.logo{font-size:34px;font-weight:900;color:#ff6a00;margin-bottom:8px}
-.login-card h1{font-size:24px;font-weight:900;margin-bottom:8px}
-.login-card p{color:#777;font-size:13px;margin-bottom:25px}
-input{outline:none;font-family:inherit}
-.login-card input,.buscar,.quantidade{width:100%;height:52px;border:1px solid #ddd;border-radius:12px;padding:0 15px;margin-bottom:12px}
-.login-card input:focus,.buscar:focus,.quantidade:focus{border-color:#ff6a00}
-.btn{border:0;border-radius:12px;min-height:52px;padding:0 20px;font-family:inherit;font-weight:800;cursor:pointer}
-.btn-primary{width:100%;background:#ff6a00;color:#fff}
-.btn-primary:hover,.btn-sortear:hover{background:#e85d00}
-.login-erro{color:#dc3545;font-size:12px;font-weight:700;margin-top:12px}
-.admin{display:none}
-header{background:#111;color:#fff;padding:20px 4%;display:flex;justify-content:space-between;align-items:center;gap:20px}
-.brand{display:flex;align-items:center;gap:15px}
-.brand-logo{color:#ff6a00;font-size:25px;font-weight:900}
-.brand-info strong{display:block;font-size:14px}
-.brand-info span{display:block;color:#999;font-size:10px;margin-top:3px}
-.btn-sair{background:#222;border:1px solid #444;color:#fff;padding:10px 16px;border-radius:10px;cursor:pointer;font-family:inherit;font-weight:700}
-.container{width:min(1150px,92%);margin:auto;padding:45px 0 70px}
-.titulo{margin-bottom:30px}
-.titulo span,.card-label{color:#ff6a00;font-size:10px;font-weight:900;letter-spacing:2px}
-.titulo h1{font-size:40px;font-weight:900;margin:8px 0}
-.titulo p,.card p{color:#777;font-size:14px;line-height:1.6}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:25px}
-.stat{background:#fff;border:1px solid #e7e7e7;border-radius:18px;padding:22px;display:flex;align-items:center;gap:15px}
-.stat-icon{width:50px;height:50px;display:grid;place-items:center;background:#fff1e8;border-radius:14px;font-size:23px}
-.stat span{display:block;color:#888;font-size:10px;font-weight:800}
-.stat strong{display:block;font-size:28px;font-weight:900;margin-top:3px}
-.card{background:#fff;border:1px solid #e7e7e7;border-radius:22px;padding:28px;margin-bottom:25px;box-shadow:0 10px 35px rgba(0,0,0,.05)}
-.card h2{font-size:24px;font-weight:900;margin:7px 0}
-.card p{margin-bottom:20px}
-.sorteio-box{background:linear-gradient(135deg,#111,#252525);color:#fff;border-radius:18px;padding:30px;text-align:center}
-.sorteio-box span{color:#aaa;font-size:10px;font-weight:800;letter-spacing:2px}
-.sorteio-box strong{display:block;color:#ff6a00;font-size:clamp(28px,5vw,48px);font-weight:900;margin:10px 0 20px}
-.btn-sortear{width:100%;min-height:60px;border:0;border-radius:13px;background:#ff6a00;color:#fff;font-family:inherit;font-weight:900;font-size:15px;cursor:pointer}
-.btn-sortear:disabled{opacity:.6;cursor:not-allowed}
-.config-sorteio{display:grid;grid-template-columns:180px 1fr;gap:12px;margin-bottom:15px}
-.quantidade{margin:0;text-align:center;font-size:18px;font-weight:900}
-.acoes{display:flex;gap:10px;margin-top:15px}
-.btn-sec{flex:1;border:1px solid #ddd;background:#fff;padding:13px;border-radius:10px;font-family:inherit;font-weight:800;cursor:pointer}
-.btn-sec:hover{border-color:#ff6a00;color:#ff6a00}
-.btn-danger{background:#222;color:#fff}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-.item{border:1px solid #e5e5e5;border-radius:14px;padding:15px;display:flex;align-items:center;gap:12px}
-.item-icon{width:43px;height:43px;display:grid;place-items:center;border-radius:11px;background:#fff1e8;flex:none}
-.item-info{flex:1;min-width:0}
-.item strong{display:block;font-size:13px}
-.item small{display:block;color:#888;font-size:10px;margin-top:4px}
-.btn-ganhou{border:0;background:#fff1e8;color:#ff6a00;border-radius:9px;padding:9px 11px;font-family:inherit;font-size:10px;font-weight:900;cursor:pointer;white-space:nowrap}
-.btn-ganhou:hover{background:#ff6a00;color:#fff}
-.btn-remover{border:0;background:#222;color:#fff;border-radius:8px;padding:7px 9px;font-family:inherit;font-size:10px;font-weight:800;cursor:pointer}
-.btn-remover:hover{background:#dc3545}
-.buscar{margin-bottom:15px}
-.mensagem{text-align:center;min-height:20px;margin-top:15px;font-size:12px;font-weight:800}
-.aniversariante-sorteio{background:#fff7f1;border:1px solid #ffd9bf;border-radius:15px;padding:18px;margin-top:15px}
-.aniversariante-sorteio h3{font-size:15px;margin-bottom:10px}
-.resultados{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
-.resultado-item{background:#ff6a00;color:#fff;padding:9px 14px;border-radius:20px;font-size:12px;font-weight:900}
-footer{background:#111;color:#999;text-align:center;padding:25px;font-size:11px}
-footer strong{color:#fff}
-@media(max-width:700px){
-.stats,.grid{grid-template-columns:1fr}
-.config-sorteio{grid-template-columns:1fr}
-.acoes{flex-direction:column}
-.titulo h1{font-size:32px}
-.card{padding:20px}
-.brand-info{display:none}
-.item{align-items:flex-start;flex-wrap:wrap}
-.btn-ganhou{width:100%}
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+.login-screen {
+
+    position: fixed;
+    inset: 0;
+
+    z-index: 9999;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background:
+        radial-gradient(
+            circle at top right,
+            rgba(255,106,0,.20),
+            transparent 35%
+        ),
+        linear-gradient(
+            135deg,
+            #090909,
+            #171717
+        );
 }
+
+.login-card {
+
+    width: min(430px,100%);
+
+    padding: 42px 32px;
+
+    background: rgba(255,255,255,.97);
+
+    border-radius: 24px;
+
+    box-shadow:
+        0 30px 100px rgba(0,0,0,.45);
+
+    text-align: center;
+}
+
+.login-logo {
+
+    margin-bottom: 8px;
+
+    color: var(--orange);
+
+    font-size: 36px;
+
+    font-weight: 900;
+
+    letter-spacing: -2px;
+}
+
+.login-card h1 {
+
+    font-size: 23px;
+
+    font-weight: 900;
+}
+
+.login-card p {
+
+    margin: 8px 0 25px;
+
+    color: #777;
+
+    font-size: 12px;
+}
+
+.login-input {
+
+    width: 100%;
+
+    height: 52px;
+
+    margin-bottom: 12px;
+
+    padding: 0 15px;
+
+    border:
+        1px solid
+        var(--gray-300);
+
+    border-radius: 11px;
+
+    outline: none;
+
+    font-family: inherit;
+
+    transition: .2s;
+}
+
+.login-input:focus {
+
+    border-color: var(--orange);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(255,106,0,.10);
+}
+
+.login-button {
+
+    width: 100%;
+
+    height: 54px;
+
+    border: none;
+
+    border-radius: 11px;
+
+    background: var(--orange);
+
+    color: white;
+
+    font-family: inherit;
+
+    font-weight: 900;
+
+    cursor: pointer;
+
+    transition: .2s;
+}
+
+.login-button:hover {
+
+    background: var(--orange-dark);
+
+    transform: translateY(-1px);
+}
+
+.login-button:disabled {
+
+    opacity: .6;
+
+    cursor: wait;
+}
+
+.login-error {
+
+    min-height: 18px;
+
+    margin-top: 12px;
+
+    color: var(--red);
+
+    font-size: 11px;
+
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   ADMIN
+========================================================= */
+
+#admin {
+
+    display: none;
+}
+
+
+/* =========================================================
+   ÁREA DO SORTEIO
+========================================================= */
+
+.sorteio-premium {
+
+    position: relative;
+
+    overflow: hidden;
+
+    padding: 35px;
+
+    border-radius: 20px;
+
+    background:
+        radial-gradient(
+            circle at 50% 0%,
+            rgba(255,106,0,.22),
+            transparent 45%
+        ),
+        linear-gradient(
+            135deg,
+            #0d0d0d,
+            #202020
+        );
+
+    color: white;
+
+    text-align: center;
+}
+
+.sorteio-premium::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 300px;
+    height: 300px;
+
+    left: 50%;
+    top: 50%;
+
+    transform:
+        translate(-50%,-50%);
+
+    border-radius: 50%;
+
+    border:
+        1px solid
+        rgba(255,106,0,.12);
+
+    box-shadow:
+        0 0 0 30px rgba(255,106,0,.025),
+        0 0 0 60px rgba(255,106,0,.02);
+
+    pointer-events: none;
+}
+
+.sorteio-status {
+
+    position: relative;
+
+    color: #aaa;
+
+    font-size: 9px;
+
+    font-weight: 900;
+
+    letter-spacing: 2px;
+}
+
+.sorteio-nome {
+
+    position: relative;
+
+    min-height: 70px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    margin: 15px 0;
+
+    color: var(--orange);
+
+    font-size:
+        clamp(
+            28px,
+            5vw,
+            50px
+        );
+
+    font-weight: 900;
+
+    letter-spacing: -1.5px;
+}
+
+.sorteio-nome.animando {
+
+    animation:
+        nomePulse .10s
+        infinite alternate;
+}
+
+@keyframes nomePulse {
+
+    from {
+
+        transform: scale(1);
+
+        opacity: .65;
+    }
+
+    to {
+
+        transform: scale(1.04);
+
+        opacity: 1;
+    }
+}
+
+.sorteio-nome.vencedor {
+
+    animation:
+        vencedor .7s
+        ease forwards;
+}
+
+@keyframes vencedor {
+
+    0% {
+
+        transform: scale(.7);
+
+        opacity: 0;
+    }
+
+    60% {
+
+        transform: scale(1.12);
+
+        opacity: 1;
+    }
+
+    100% {
+
+        transform: scale(1);
+    }
+}
+
+.config-sorteio {
+
+    position: relative;
+
+    display: grid;
+
+    grid-template-columns: 160px 1fr;
+
+    gap: 10px;
+
+    margin-bottom: 18px;
+}
+
+.quantidade-sorteio {
+
+    width: 100%;
+
+    height: 55px;
+
+    border: 1px solid #444;
+
+    border-radius: 11px;
+
+    background: #181818;
+
+    color: white;
+
+    text-align: center;
+
+    font-family: inherit;
+
+    font-size: 18px;
+
+    font-weight: 900;
+
+    outline: none;
+}
+
+.btn-sortear-premium {
+
+    height: 55px;
+
+    border: none;
+
+    border-radius: 11px;
+
+    background: var(--orange);
+
+    color: white;
+
+    font-family: inherit;
+
+    font-size: 12px;
+
+    font-weight: 900;
+
+    cursor: pointer;
+
+    transition: .2s;
+}
+
+.btn-sortear-premium:hover {
+
+    background: var(--orange-dark);
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 12px 30px
+        rgba(255,106,0,.25);
+}
+
+.btn-sortear-premium:disabled {
+
+    opacity: .5;
+
+    cursor: wait;
+
+    transform: none;
+}
+
+.resultados-premium {
+
+    position: relative;
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    margin-top: 15px;
+}
+
+.resultado-premium {
+
+    padding: 10px 15px;
+
+    border-radius: 30px;
+
+    background: var(--orange);
+
+    color: white;
+
+    font-size: 11px;
+
+    font-weight: 900;
+
+    animation:
+        resultadoEntrada .5s
+        ease forwards;
+}
+
+@keyframes resultadoEntrada {
+
+    from {
+
+        transform:
+            scale(.5)
+            translateY(20px);
+
+        opacity: 0;
+    }
+
+    to {
+
+        transform:
+            scale(1)
+            translateY(0);
+
+        opacity: 1;
+    }
+}
+
+
+/* =========================================================
+   ANIVERSARIANTES
+========================================================= */
+
+.aniversariante-box {
+
+    padding: 25px;
+
+    border-radius: 16px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #fff8f3,
+            #fff
+        );
+
+    border:
+        1px solid
+        #ffd5ba;
+}
+
+.aniversariante-resultados {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    justify-content: center;
+
+    gap: 10px;
+
+    min-height: 40px;
+
+    align-items: center;
+}
+
+.aniversariante-vencedor {
+
+    padding: 12px 18px;
+
+    border-radius: 30px;
+
+    background: var(--orange);
+
+    color: white;
+
+    font-size: 12px;
+
+    font-weight: 900;
+
+    animation:
+        resultadoEntrada .5s
+        ease forwards;
+}
+
+.aniversariante-vencedor small {
+
+    margin-left: 5px;
+
+    opacity: .8;
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+.toast {
+
+    position: fixed;
+
+    right: 25px;
+    bottom: 25px;
+
+    z-index: 10000;
+
+    max-width: 360px;
+
+    padding: 14px 18px;
+
+    border-radius: 12px;
+
+    background: #111;
+
+    color: white;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    box-shadow:
+        0 15px 45px
+        rgba(0,0,0,.25);
+
+    transform:
+        translateY(30px);
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transition: .3s;
+}
+
+.toast.show {
+
+    transform:
+        translateY(0);
+
+    opacity: 1;
+}
+
+.toast.sucesso {
+
+    border-left:
+        4px solid
+        var(--green);
+}
+
+.toast.erro {
+
+    border-left:
+        4px solid
+        var(--red);
+}
+
+
+/* =========================================================
+   CONFETES
+========================================================= */
+
+.confete {
+
+    position: fixed;
+
+    top: -20px;
+
+    z-index: 9998;
+
+    width: 8px;
+    height: 14px;
+
+    pointer-events: none;
+
+    animation:
+        cairConfete 2.5s
+        linear forwards;
+}
+
+@keyframes cairConfete {
+
+    to {
+
+        transform:
+            translateY(110vh)
+            rotate(720deg);
+
+        opacity: 0;
+    }
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:650px){
+
+    .login-card {
+
+        padding: 32px 22px;
+    }
+
+    .sorteio-premium {
+
+        padding: 25px 18px;
+    }
+
+    .config-sorteio {
+
+        grid-template-columns: 1fr;
+    }
+
+    .sorteio-nome {
+
+        font-size: 30px;
+    }
+
+}
+
 </style>
+
 </head>
+
 
 <body>
 
-<div id="login" class="login">
-<div class="login-card">
-<div class="logo">OK.SPIT</div>
-<h1>Painel Administrativo</h1>
-<p>Acesso exclusivo para administração do sorteio.</p>
 
-<input id="usuario" type="text" placeholder="Usuário" autocomplete="username">
-<input id="senha" type="password" placeholder="Senha" autocomplete="current-password">
+<!-- =======================================================
+     LOGIN
+======================================================== -->
 
-<button class="btn btn-primary" id="entrar">ENTRAR NO PAINEL</button>
-<div id="loginErro" class="login-erro"></div>
-</div>
-</div>
+<section
+    id="loginScreen"
+    class="login-screen"
+>
 
-<div id="admin" class="admin">
+    <div class="login-card">
 
-<header>
-<div class="brand">
-<div class="brand-logo">OK.SPIT</div>
-<div class="brand-info">
-<strong>Painel Administrativo</strong>
-<span>Controle de participações e sorteios</span>
-</div>
-</div>
-<button id="sair" class="btn-sair">Sair</button>
+        <div class="login-logo">
+            OK.SPIT
+        </div>
+
+        <h1>
+            Painel Administrativo
+        </h1>
+
+        <p>
+            Entre com sua conta administrativa.
+        </p>
+
+        <input
+            id="email"
+            class="login-input"
+            type="email"
+            placeholder="E-mail"
+            autocomplete="username"
+        >
+
+        <input
+            id="senha"
+            class="login-input"
+            type="password"
+            placeholder="Senha"
+            autocomplete="current-password"
+        >
+
+        <button
+            id="btnLogin"
+            class="login-button"
+        >
+            ENTRAR NO PAINEL
+        </button>
+
+        <div
+            id="loginError"
+            class="login-error"
+        ></div>
+
+    </div>
+
+</section>
+
+
+<!-- =======================================================
+     ADMIN
+======================================================== -->
+
+<div id="admin">
+
+
+<header class="admin-header">
+
+    <div class="brand">
+
+        <div class="brand-logo">
+            OK.SPIT
+        </div>
+
+        <div class="brand-info">
+
+            <strong>
+                Painel Administrativo
+            </strong>
+
+            <span>
+                Controle de participações e sorteios
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div
+        style="
+        display:flex;
+        gap:8px;
+        align-items:center;
+        "
+    >
+
+        <a
+            href="./index.html"
+            class="btn-site"
+        >
+            🌐 Ver site
+        </a>
+
+        <button
+            id="btnSair"
+            class="btn-site"
+        >
+            SAIR
+        </button>
+
+    </div>
+
 </header>
 
-<main class="container">
 
-<section class="titulo">
-<span>📊 CONTROLE</span>
-<h1>Painel de controle</h1>
-<p>Sorteie, marque quem já ganhou e acompanhe os participantes.</p>
+<main class="admin-container">
+
+
+<!-- =======================================================
+     TÍTULO
+======================================================== -->
+
+<section class="admin-title">
+
+    <div class="title-label">
+        📊 CONTROLE
+    </div>
+
+    <h1>
+        Painel de controle
+    </h1>
+
+    <p>
+        Gerencie participantes, ganhadores e sorteios da OK.SPIT.
+    </p>
+
 </section>
+
+
+<!-- =======================================================
+     ESTATÍSTICAS
+======================================================== -->
 
 <section class="stats">
 
-<div class="stat">
-<div class="stat-icon">🎁</div>
-<div>
-<span>PARTICIPAÇÕES NO MÊS</span>
-<strong id="totalMes">0</strong>
-</div>
-</div>
+    <div class="stat-card">
 
-<div class="stat">
-<div class="stat-icon">🏆</div>
-<div>
-<span>JÁ GANHARAM</span>
-<strong id="totalBloqueados">0</strong>
-</div>
-</div>
+        <div class="stat-icon">
+            🎁
+        </div>
 
-<div class="stat">
-<div class="stat-icon">👥</div>
-<div>
-<span>DISPONÍVEIS</span>
-<strong id="totalDisponiveis">0</strong>
-</div>
-</div>
+        <div class="stat-content">
 
-</section>
+            <span>
+                Participações no mês
+            </span>
 
-<section class="card">
+            <strong id="totalMes">
+                0
+            </strong>
 
-<div class="card-label">🎲 SORTEIO</div>
-<h2>Sortear participantes</h2>
-<p>Escolha quantas pessoas deseja sortear. Os ganhadores são gravados automaticamente na tabela ganhadores.</p>
+        </div>
 
-<div class="config-sorteio">
-<input id="quantidade" class="quantidade" type="number" min="1" max="50" value="1">
-<button id="sortear" class="btn-sortear">🎁 REALIZAR SORTEIO</button>
-</div>
+    </div>
 
-<div class="sorteio-box">
-<span id="statusSorteio">PRONTO PARA SORTEAR</span>
-<strong id="resultadoSorteio">Boa sorte!</strong>
-<div id="resultadosSorteio" class="resultados"></div>
-</div>
 
-<div id="mensagem" class="mensagem"></div>
+    <div class="stat-card">
 
-</section>
+        <div class="stat-icon">
+            🏆
+        </div>
 
-<section class="card">
+        <div class="stat-content">
 
-<div class="card-label">🎂 ANIVERSARIANTES</div>
-<h2>Sortear aniversariantes do mês</h2>
-<p>Escolha quantos aniversariantes deseja sortear entre os cadastrados no mês atual.</p>
+            <span>
+                Já ganharam
+            </span>
 
-<div class="config-sorteio">
-<input id="quantidadeAniversariantes" class="quantidade" type="number" min="1" max="50" value="1">
-<button id="sortearAniversariantes" class="btn-sortear">🎂 SORTEAR ANIVERSARIANTES</button>
-</div>
+            <strong id="totalBloqueados">
+                0
+            </strong>
 
-<div class="aniversariante-sorteio">
-<h3>🎂 Resultado</h3>
-<div id="resultadoAniversariantes" class="resultados">
-<span>Nenhum sorteio realizado.</span>
-</div>
-</div>
+        </div>
+
+    </div>
+
+
+    <div class="stat-card">
+
+        <div class="stat-icon">
+            👥
+        </div>
+
+        <div class="stat-content">
+
+            <span>
+                Disponíveis
+            </span>
+
+            <strong id="totalDisponiveis">
+                0
+            </strong>
+
+        </div>
+
+    </div>
 
 </section>
 
-<section class="card">
 
-<div class="card-label">🏆 GANHADORES</div>
-<h2>Ganhadores deste mês</h2>
-<p>Quem já ganhou fica automaticamente fora dos próximos sorteios deste mês.</p>
+<!-- =======================================================
+     SORTEIO PRINCIPAL
+======================================================== -->
 
-<div id="listaGanhadores" class="grid">
-<div class="item">Carregando...</div>
-</div>
+<section class="admin-section">
+
+    <div class="section-header">
+
+        <div>
+
+            <div class="section-label">
+                🎲 SORTEIO
+            </div>
+
+            <h2>
+                Sortear participantes
+            </h2>
+
+            <p>
+                O participante sorteado é automaticamente registrado
+                como ganhador e fica bloqueado neste mês.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="sorteio-premium">
+
+
+        <div
+            id="statusSorteio"
+            class="sorteio-status"
+        >
+            PRONTO PARA SORTEAR
+        </div>
+
+
+        <div
+            id="resultadoSorteio"
+            class="sorteio-nome"
+        >
+            BOA SORTE!
+        </div>
+
+
+        <div class="config-sorteio">
+
+            <input
+                id="quantidade"
+                class="quantidade-sorteio"
+                type="number"
+                min="1"
+                max="50"
+                value="1"
+            >
+
+            <button
+                id="btnSortear"
+                class="btn-sortear-premium"
+            >
+                🎁 REALIZAR SORTEIO
+            </button>
+
+        </div>
+
+
+        <div
+            id="resultadosSorteio"
+            class="resultados-premium"
+        ></div>
+
+
+    </div>
 
 </section>
 
-<section class="card">
 
-<div class="card-label">👥 PARTICIPANTES</div>
-<h2>Participantes disponíveis</h2>
-<p>Na frente de cada nome existe a opção <strong>“Já ganhou este mês”</strong>.</p>
+<!-- =======================================================
+     ANIVERSARIANTES
+======================================================== -->
 
-<input id="buscar" class="buscar" type="text" placeholder="🔎 Buscar participante...">
+<section class="admin-section">
 
-<div id="listaParticipantes" class="grid">
-<div class="item">Carregando...</div>
-</div>
+    <div class="section-header">
+
+        <div>
+
+            <div class="section-label">
+                🎂 ANIVERSARIANTES
+            </div>
+
+            <h2>
+                Sorteio de aniversariantes do mês
+            </h2>
+
+            <p>
+                Sorteie participantes que fazem aniversário
+                durante o mês atual.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="config-sorteio">
+
+        <input
+            id="quantidadeAniversariantes"
+            class="quantidade-sorteio"
+            type="number"
+            min="1"
+            max="50"
+            value="1"
+        >
+
+        <button
+            id="btnSortearAniversariantes"
+            class="btn-sortear-premium"
+        >
+            🎂 SORTEAR ANIVERSARIANTE
+        </button>
+
+    </div>
+
+
+    <div class="aniversariante-box">
+
+        <div
+            id="resultadoAniversariantes"
+            class="aniversariante-resultados"
+        >
+
+            <span class="loading">
+                Nenhum sorteio realizado.
+            </span>
+
+        </div>
+
+    </div>
 
 </section>
 
-<section class="card">
 
-<div class="card-label">⚙️ CONTROLE</div>
-<h2>Manutenção</h2>
-<p>Zerar os ganhadores permite iniciar um novo ciclo no mês atual.</p>
+<!-- =======================================================
+     GANHADORES
+======================================================== -->
 
-<div class="acoes">
-<button id="atualizar" class="btn-sec">🔄 Atualizar</button>
-<button id="zerar" class="btn-sec btn-danger">🔄 Zerar ganhadores do mês</button>
-</div>
+<section class="admin-section">
+
+    <div class="section-header">
+
+        <div>
+
+            <div class="section-label">
+                🏆 GANHADORES
+            </div>
+
+            <h2>
+                Ganhadores deste mês
+            </h2>
+
+            <p>
+                Pessoas que já ganharam e estão fora
+                dos próximos sorteios.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div
+        id="listaGanhadores"
+        class="ganhadores-grid"
+    >
+
+        <div class="loading-card">
+            Carregando ganhadores...
+        </div>
+
+    </div>
 
 </section>
+
+
+<!-- =======================================================
+     PARTICIPANTES
+======================================================== -->
+
+<section class="admin-section">
+
+    <div class="section-header">
+
+        <div>
+
+            <div class="section-label">
+                👥 PARTICIPANTES
+            </div>
+
+            <h2>
+                Participantes disponíveis
+            </h2>
+
+            <p>
+                Você pode marcar manualmente quem já ganhou este mês.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="search-box">
+
+        <span>
+            🔎
+        </span>
+
+        <input
+            id="buscar"
+            type="text"
+            placeholder="Buscar participante..."
+        >
+
+    </div>
+
+
+    <div class="table-wrapper">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Participante
+                    </th>
+
+                    <th>
+                        Plataforma
+                    </th>
+
+                    <th>
+                        Ação
+                    </th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="listaParticipantes">
+
+                <tr>
+
+                    <td colspan="3">
+                        <div class="loading">
+                            Carregando participantes...
+                        </div>
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+
+<!-- =======================================================
+     CONTROLE
+======================================================== -->
+
+<section class="admin-section">
+
+    <div class="section-header">
+
+        <div>
+
+            <div class="section-label">
+                ⚙️ CONTROLE
+            </div>
+
+            <h2>
+                Manutenção
+            </h2>
+
+            <p>
+                Atualize os dados ou inicie um novo ciclo
+                removendo os ganhadores do mês.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="acoes-ganhador">
+
+        <button
+            id="btnAtualizar"
+            class="btn-refresh"
+        >
+            🔄 ATUALIZAR
+        </button>
+
+        <button
+            id="btnZerar"
+            class="btn-limpar"
+        >
+            🗑️ ZERAR GANHADORES DO MÊS
+        </button>
+
+    </div>
+
+</section>
+
 
 </main>
 
+
 <footer>
-<strong>OK.SPIT</strong> | Painel Administrativo © 2026
+
+    <strong>
+        OK.SPIT
+    </strong>
+
+    | Painel Administrativo © 2026
+
 </footer>
 
+
 </div>
+
+
+<div
+    id="toast"
+    class="toast"
+></div>
+
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+
 <script>
+
 "use strict";
 
-const SUPABASE_URL="https://wiwvpqjlwmtmlexusiyd.supabase.co";
-const SUPABASE_ANON_KEY="sb_publishable_LzX0GpaYAK2KNSu2eetEuw_tr5PKqSi";
 
-const supabaseClient=window.supabase.createClient(
-SUPABASE_URL,
-SUPABASE_ANON_KEY
-);
+/* =========================================================
+   SUPABASE
+========================================================= */
 
-const USUARIO_ADMIN="ok.spit";
-const SENHA_ADMIN="adm.ok";
+const SUPABASE_URL =
+    "https://wiwvpqjlwmtmlexusiyd.supabase.co";
 
-let participantes=[];
-let ganhadores=[];
-let aniversariantes=[];
-let sorteando=false;
+const SUPABASE_ANON_KEY =
+    "sb_publishable_LzX0GpaYAK2KNSu2eetEuw_tr5PKqSi";
 
-const $=id=>document.getElementById(id);
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+    );
+
+
+/* =========================================================
+   ESTADO
+========================================================= */
+
+let participantes = [];
+
+let ganhadores = [];
+
+let aniversariantes = [];
+
+let sorteando = false;
+
+
+/* =========================================================
+   UTILITÁRIOS
+========================================================= */
+
+const $ = id =>
+    document.getElementById(id);
+
 
 function periodo(){
-const d=new Date();
-return{
-mes:d.getMonth()+1,
-ano:d.getFullYear()
-};
+
+    const agora = new Date();
+
+    return {
+
+        mes:
+            agora.getMonth() + 1,
+
+        ano:
+            agora.getFullYear()
+
+    };
+
 }
+
 
 function normalizar(nome){
-return String(nome||"")
-.trim()
-.toLowerCase()
-.normalize("NFD")
-.replace(/[\u0300-\u036f]/g,"")
-.replace(/\s+/g," ");
+
+    return String(nome || "")
+        .trim()
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g,"")
+        .replace(/\s+/g," ");
+
 }
+
 
 function escapar(texto){
-const div=document.createElement("div");
-div.textContent=String(texto||"");
-return div.innerHTML;
+
+    const div =
+        document.createElement("div");
+
+    div.textContent =
+        String(texto || "");
+
+    return div.innerHTML;
+
 }
 
-function dataPessoa(p){
-return p.data_participacao||p.criado_em;
-}
-
-function pertenceMes(valor){
-if(!valor)return false;
-const d=new Date(valor);
-const p=periodo();
-return d.getFullYear()===p.ano&&d.getMonth()+1===p.mes;
-}
 
 function nomeExibicao(nome){
-const partes=String(nome||"").trim().split(/\s+/);
-if(partes.length<=2)return partes.join(" ");
-return partes[0]+" "+partes[partes.length-1];
+
+    const partes =
+        String(nome || "")
+        .trim()
+        .split(/\s+/);
+
+    if(partes.length <= 2){
+
+        return partes.join(" ");
+
+    }
+
+    return (
+        partes[0] +
+        " " +
+        partes[partes.length - 1]
+    );
+
 }
 
-/* LOGIN */
 
-function entrar(){
-const usuario=$("usuario").value.trim();
-const senha=$("senha").value;
+function pertenceMes(valor){
 
-if(usuario===USUARIO_ADMIN&&senha===SENHA_ADMIN){
-sessionStorage.setItem("okspit_admin","true");
-$("login").style.display="none";
-$("admin").style.display="block";
-carregarTudo();
-}else{
-$("loginErro").textContent="❌ Usuário ou senha incorretos.";
-}
-}
+    if(!valor)return false;
 
-$("entrar").addEventListener("click",entrar);
+    const data =
+        new Date(valor);
 
-$("senha").addEventListener("keydown",e=>{
-if(e.key==="Enter")entrar();
-});
+    const p =
+        periodo();
 
-$("sair").addEventListener("click",()=>{
-sessionStorage.removeItem("okspit_admin");
-location.reload();
-});
+    return (
+        data.getFullYear() === p.ano &&
+        data.getMonth() + 1 === p.mes
+    );
 
-if(sessionStorage.getItem("okspit_admin")==="true"){
-$("login").style.display="none";
-$("admin").style.display="block";
-carregarTudo();
 }
 
-/* CARREGAMENTO */
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+let toastTimer;
+
+function mostrarMensagem(
+    texto,
+    tipo = ""
+){
+
+    const toast =
+        $("toast");
+
+    toast.textContent =
+        texto;
+
+    toast.className =
+        "toast show " + tipo;
+
+    clearTimeout(toastTimer);
+
+    toastTimer =
+        setTimeout(() => {
+
+            toast.className =
+                "toast";
+
+        },4000);
+
+}
+
+
+/* =========================================================
+   LOGIN SUPABASE AUTH
+========================================================= */
+
+async function verificarSessao(){
+
+    const {
+        data
+    } =
+        await supabaseClient
+            .auth
+            .getSession();
+
+    if(
+        data &&
+        data.session
+    ){
+
+        mostrarAdmin();
+
+    }
+
+}
+
+
+async function login(){
+
+    const email =
+        $("email").value.trim();
+
+    const senha =
+        $("senha").value;
+
+
+    $("loginError").textContent = "";
+
+
+    if(!email || !senha){
+
+        $("loginError").textContent =
+            "Digite seu e-mail e sua senha.";
+
+        return;
+
+    }
+
+
+    $("btnLogin").disabled = true;
+
+    $("btnLogin").textContent =
+        "ENTRANDO...";
+
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .auth
+            .signInWithPassword({
+
+                email,
+                password: senha
+
+            });
+
+
+    if(error){
+
+        console.error(error);
+
+        $("loginError").textContent =
+            "❌ E-mail ou senha inválidos.";
+
+        $("btnLogin").disabled = false;
+
+        $("btnLogin").textContent =
+            "ENTRAR NO PAINEL";
+
+        return;
+
+    }
+
+
+    mostrarAdmin();
+
+}
+
+
+async function sair(){
+
+    await supabaseClient
+        .auth
+        .signOut();
+
+    location.reload();
+
+}
+
+
+function mostrarAdmin(){
+
+    $("loginScreen").style.display =
+        "none";
+
+    $("admin").style.display =
+        "block";
+
+    carregarTudo();
+
+}
+
+
+$("btnLogin")
+    .addEventListener(
+        "click",
+        login
+    );
+
+
+$("senha")
+    .addEventListener(
+        "keydown",
+        e => {
+
+            if(e.key === "Enter"){
+
+                login();
+
+            }
+
+        }
+    );
+
+
+$("btnSair")
+    .addEventListener(
+        "click",
+        sair
+    );
+
+
+supabaseClient
+    .auth
+    .onAuthStateChange(
+        (event, session) => {
+
+            if(
+                event ===
+                "SIGNED_OUT"
+            ){
+
+                location.reload();
+
+            }
+
+        }
+    );
+
+
+/* =========================================================
+   CARREGAR TUDO
+========================================================= */
 
 async function carregarTudo(){
-try{
-await carregarGanhadores();
-await carregarParticipantes();
-await carregarAniversariantes();
-atualizarInterface();
-}catch(e){
-console.error(e);
-mostrarMensagem("❌ Erro ao carregar o Supabase.");
+
+    try{
+
+        await carregarGanhadores();
+
+        await carregarParticipantes();
+
+        await carregarAniversariantes();
+
+        atualizarInterface();
+
+    }catch(error){
+
+        console.error(error);
+
+        mostrarMensagem(
+            "❌ Erro ao carregar dados do Supabase.",
+            "erro"
+        );
+
+    }
+
 }
-}
+
+
+/* =========================================================
+   GANHADORES
+========================================================= */
 
 async function carregarGanhadores(){
-const p=periodo();
 
-const r=await supabaseClient
-.from("ganhadores")
-.select("*")
-.eq("mes",p.mes)
-.eq("ano",p.ano)
-.order("created_at",{ascending:false});
+    const p =
+        periodo();
 
-if(r.error)throw r.error;
 
-ganhadores=r.data||[];
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("ganhadores")
+            .select("*")
+            .eq("mes",p.mes)
+            .eq("ano",p.ano)
+            .order(
+                "created_at",
+                {
+                    ascending:false
+                }
+            );
+
+
+    if(error)
+        throw error;
+
+
+    ganhadores =
+        data || [];
+
 }
+
+
+/* =========================================================
+   PARTICIPANTES
+========================================================= */
 
 async function carregarParticipantes(){
-const r=await supabaseClient
-.from("divulgacoes")
-.select("id,nome,telefone,plataforma,data_participacao,criado_em")
-.limit(5000);
 
-if(r.error)throw r.error;
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("divulgacoes")
+            .select(
+                "id,nome,telefone,plataforma,data_participacao,criado_em"
+            )
+            .limit(5000);
 
-participantes=(r.data||[]).filter(p=>pertenceMes(dataPessoa(p)));
+
+    if(error)
+        throw error;
+
+
+    participantes =
+        (data || [])
+        .filter(p => {
+
+            const valor =
+                p.data_participacao ||
+                p.criado_em;
+
+            return pertenceMes(valor);
+
+        });
+
 }
+
+
+/* =========================================================
+   ANIVERSARIANTES
+========================================================= */
 
 async function carregarAniversariantes(){
-const r=await supabaseClient
-.from("aniversariantes")
-.select("*");
 
-if(r.error){
-console.warn("Tabela aniversariantes:",r.error.message);
-aniversariantes=[];
-return;
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("aniversariantes")
+            .select("*");
+
+
+    if(error){
+
+        console.warn(
+            "Tabela aniversariantes:",
+            error.message
+        );
+
+        aniversariantes = [];
+
+        return;
+
+    }
+
+
+    aniversariantes =
+        data || [];
+
 }
 
-aniversariantes=r.data||[];
-}
 
-/* DISPONÍVEIS */
-
-function participantesDoMes(){
-return participantes;
-}
+/* =========================================================
+   DISPONÍVEIS
+========================================================= */
 
 function disponiveis(){
 
-const bloqueados=new Set(
-ganhadores.map(g=>normalizar(g.nome))
-);
+    const bloqueados =
+        new Set(
+            ganhadores.map(
+                g =>
+                    normalizar(g.nome)
+            )
+        );
 
-const vistos=new Set();
 
-return participantesDoMes().filter(p=>{
-const nome=normalizar(p.nome);
+    const vistos =
+        new Set();
 
-if(!nome)return false;
-if(bloqueados.has(nome))return false;
-if(vistos.has(nome))return false;
 
-vistos.add(nome);
-return true;
-});
+    return participantes.filter(
+        pessoa => {
+
+            const nome =
+                normalizar(
+                    pessoa.nome
+                );
+
+
+            if(!nome)
+                return false;
+
+
+            if(
+                bloqueados.has(nome)
+            )
+                return false;
+
+
+            if(
+                vistos.has(nome)
+            )
+                return false;
+
+
+            vistos.add(nome);
+
+            return true;
+
+        }
+    );
+
 }
 
-/* INTERFACE */
+
+/* =========================================================
+   INTERFACE
+========================================================= */
 
 function atualizarInterface(){
 
-$("totalMes").textContent=participantesDoMes().length;
-$("totalBloqueados").textContent=ganhadores.length;
-$("totalDisponiveis").textContent=disponiveis().length;
+    $("totalMes").textContent =
+        participantes.length;
 
-renderizarGanhadores();
-renderizarParticipantes();
+    $("totalBloqueados").textContent =
+        ganhadores.length;
+
+    $("totalDisponiveis").textContent =
+        disponiveis().length;
+
+
+    renderizarGanhadores();
+
+    renderizarParticipantes();
+
 }
+
+
+/* =========================================================
+   GANHADORES
+========================================================= */
 
 function renderizarGanhadores(){
 
-const container=$("listaGanhadores");
+    const container =
+        $("listaGanhadores");
 
-if(!ganhadores.length){
-container.innerHTML='<div class="item">🏆 Nenhum ganhador neste mês.</div>';
-return;
+
+    if(!ganhadores.length){
+
+        container.innerHTML = `
+            <div class="loading-card">
+                🏆 Nenhum ganhador neste mês.
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        ganhadores
+        .map(g => `
+
+            <div class="ganhador-card">
+
+                <div class="ganhador-card-icon">
+                    🏆
+                </div>
+
+                <div class="ganhador-card-info">
+
+                    <strong>
+                        ${escapar(
+                            nomeExibicao(g.nome)
+                        )}
+                    </strong>
+
+                    <span>
+                        Já ganhou este mês
+                    </span>
+
+                </div>
+
+            </div>
+
+        `)
+        .join("");
+
 }
 
-container.innerHTML=ganhadores.map(g=>`
-<div class="item">
-<div class="item-icon">🏆</div>
-<div class="item-info">
-<strong>${escapar(nomeExibicao(g.nome))}</strong>
-<small>Já ganhou este mês</small>
-</div>
-<button class="btn-remover" onclick="removerGanhador('${escapar(g.id)}')">Remover</button>
-</div>
-`).join("");
-}
+
+/* =========================================================
+   PARTICIPANTES
+========================================================= */
 
 function renderizarParticipantes(){
 
-const busca=normalizar($("buscar").value);
-const container=$("listaParticipantes");
+    const busca =
+        normalizar(
+            $("buscar").value
+        );
 
-const lista=disponiveis().filter(p=>
-normalizar(p.nome).includes(busca)
-);
 
-if(!lista.length){
-container.innerHTML='<div class="item">👥 Nenhum participante disponível.</div>';
-return;
+    const lista =
+        disponiveis()
+        .filter(p =>
+
+            normalizar(
+                p.nome
+            ).includes(busca)
+
+        );
+
+
+    const tbody =
+        $("listaParticipantes");
+
+
+    if(!lista.length){
+
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="3">
+                    <div class="loading">
+                        👥 Nenhum participante disponível.
+                    </div>
+                </td>
+            </tr>
+        `;
+
+        return;
+
+    }
+
+
+    tbody.innerHTML =
+        lista
+        .map(p => `
+
+            <tr>
+
+                <td>
+
+                    <strong>
+                        ${escapar(
+                            nomeExibicao(p.nome)
+                        )}
+                    </strong>
+
+                </td>
+
+                <td>
+                    ${escapar(
+                        p.plataforma ||
+                        "Participante"
+                    )}
+                </td>
+
+                <td>
+
+                    <button
+                        class="btn-registrar"
+                        onclick="marcarGanhador('${p.id}')"
+                    >
+                        🏆 Já ganhou este mês
+                    </button>
+
+                </td>
+
+            </tr>
+
+        `)
+        .join("");
+
 }
 
-container.innerHTML=lista.map(p=>`
-<div class="item">
-<div class="item-icon">👤</div>
 
-<div class="item-info">
-<strong>${escapar(nomeExibicao(p.nome))}</strong>
-<small>${escapar(p.plataforma||"Participante")}</small>
-</div>
-
-<button
-class="btn-ganhou"
-onclick="marcarGanhador('${escapar(p.id)}')">
-🏆 Já ganhou este mês
-</button>
-
-</div>
-`).join("");
-}
-
-/* MARCAR GANHADOR */
+/* =========================================================
+   MARCAR MANUALMENTE
+========================================================= */
 
 async function marcarGanhador(id){
 
-const pessoa=participantes.find(p=>String(p.id)===String(id));
+    const pessoa =
+        participantes.find(
+            p =>
+                String(p.id) ===
+                String(id)
+        );
 
-if(!pessoa)return;
 
-const nome=nomeExibicao(pessoa.nome);
-const p=periodo();
+    if(!pessoa)
+        return;
 
-if(ganhadores.some(g=>normalizar(g.nome)===normalizar(nome))){
-mostrarMensagem("⚠️ Esta pessoa já está registrada como ganhadora.");
-return;
+
+    const nome =
+        nomeExibicao(
+            pessoa.nome
+        );
+
+
+    if(
+        !confirm(
+            "Marcar " +
+            nome +
+            " como ganhador deste mês?"
+        )
+    ){
+
+        return;
+
+    }
+
+
+    const p =
+        periodo();
+
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("ganhadores")
+            .insert({
+
+                nome,
+                mes:p.mes,
+                ano:p.ano
+
+            })
+            .select()
+            .single();
+
+
+    if(error){
+
+        console.error(error);
+
+        mostrarMensagem(
+            "❌ Erro ao registrar ganhador.",
+            "erro"
+        );
+
+        return;
+
+    }
+
+
+    ganhadores.unshift(data);
+
+
+    atualizarInterface();
+
+
+    mostrarMensagem(
+        "🏆 " +
+        nome +
+        " foi registrado como ganhador!",
+        "sucesso"
+    );
+
 }
 
-const confirmar=confirm(
-"Marcar "+nome+" como ganhador deste mês?"
-);
 
-if(!confirmar)return;
-
-const r=await supabaseClient
-.from("ganhadores")
-.insert({
-nome:nome,
-mes:p.mes,
-ano:p.ano
-})
-.select()
-.single();
-
-if(r.error){
-console.error(r.error);
-mostrarMensagem("❌ Não foi possível gravar na tabela ganhadores: "+r.error.message);
-return;
-}
-
-ganhadores.unshift(r.data);
-atualizarInterface();
-
-mostrarMensagem("🏆 "+nome+" foi registrado como ganhador!");
-}
-
-/* REMOVER GANHADOR */
-
-async function removerGanhador(id){
-
-if(!confirm("Remover este ganhador do mês?"))return;
-
-const r=await supabaseClient
-.from("ganhadores")
-.delete()
-.eq("id",id);
-
-if(r.error){
-alert("Erro ao remover: "+r.error.message);
-return;
-}
-
-ganhadores=ganhadores.filter(g=>String(g.id)!==String(id));
-
-atualizarInterface();
-mostrarMensagem("🔄 Ganhador removido.");
-}
-
-/* SORTEIO NORMAL */
+/* =========================================================
+   SORTEIO PREMIUM
+========================================================= */
 
 async function realizarSorteio(){
 
-if(sorteando)return;
+    if(sorteando)
+        return;
 
-let qtd=parseInt($("quantidade").value,10)||1;
 
-const lista=disponiveis();
+    let qtd =
+        parseInt(
+            $("quantidade").value,
+            10
+        ) || 1;
 
-if(!lista.length){
-mostrarMensagem("❌ Não existem participantes disponíveis.");
-return;
+
+    const lista =
+        disponiveis();
+
+
+    if(!lista.length){
+
+        mostrarMensagem(
+            "❌ Não existem participantes disponíveis.",
+            "erro"
+        );
+
+        return;
+
+    }
+
+
+    qtd =
+        Math.max(
+            1,
+            Math.min(
+                qtd,
+                lista.length
+            )
+        );
+
+
+    $("quantidade").value =
+        qtd;
+
+
+    sorteando = true;
+
+
+    $("btnSortear").disabled =
+        true;
+
+
+    $("btnSortear").textContent =
+        "🎲 SORTEANDO...";
+
+
+    $("statusSorteio").textContent =
+        "PROCESSANDO SORTEIO";
+
+
+    const resultado =
+        $("resultadoSorteio");
+
+
+    resultado.classList.remove(
+        "vencedor"
+    );
+
+    resultado.classList.add(
+        "animando"
+    );
+
+
+    $("resultadosSorteio")
+        .innerHTML = "";
+
+
+    const escolhidos =
+        [...lista]
+        .sort(
+            () =>
+                Math.random() -
+                .5
+        )
+        .slice(0,qtd);
+
+
+    let contador = 0;
+
+
+    const duracao =
+        qtd === 1
+            ? 35
+            : 28;
+
+
+    const intervalo =
+        setInterval(() => {
+
+            const pessoa =
+                lista[
+                    Math.floor(
+                        Math.random() *
+                        lista.length
+                    )
+                ];
+
+
+            resultado.textContent =
+                nomeExibicao(
+                    pessoa.nome
+                );
+
+
+            contador++;
+
+
+            if(
+                contador >=
+                duracao
+            ){
+
+                clearInterval(
+                    intervalo
+                );
+
+
+                finalizarSorteio(
+                    escolhidos
+                );
+
+            }
+
+        },90);
+
 }
 
-qtd=Math.max(1,Math.min(qtd,lista.length));
-$("quantidade").value=qtd;
 
-sorteando=true;
-$("sortear").disabled=true;
-$("sortear").textContent="🎲 SORTEANDO...";
-$("statusSorteio").textContent="SORTEANDO";
-$("resultadosSorteio").innerHTML="";
+/* =========================================================
+   FINALIZAR SORTEIO
+========================================================= */
 
-const escolhidos=[...lista]
-.sort(()=>Math.random()-0.5)
-.slice(0,qtd);
+async function finalizarSorteio(
+    escolhidos
+){
 
-let contador=0;
+    const resultado =
+        $("resultadoSorteio");
 
-const intervalo=setInterval(()=>{
 
-const pessoa=lista[Math.floor(Math.random()*lista.length)];
-$("resultadoSorteio").textContent=nomeExibicao(pessoa.nome);
+    resultado.classList.remove(
+        "animando"
+    );
 
-contador++;
 
-if(contador>=20){
-clearInterval(intervalo);
+    resultado.classList.add(
+        "vencedor"
+    );
 
-$("resultadoSorteio").textContent=qtd===1
-?nomeExibicao(escolhidos[0].nome)
-:"🏆 "+qtd+" GANHADORES";
 
-$("statusSorteio").textContent="🏆 RESULTADO";
+    $("statusSorteio").textContent =
+        "🏆 RESULTADO DO SORTEIO";
 
-for(const pessoa of escolhidos){
-registrarGanhadorSorteio(pessoa);
+
+    if(
+        escolhidos.length === 1
+    ){
+
+        resultado.textContent =
+            nomeExibicao(
+                escolhidos[0].nome
+            );
+
+    }else{
+
+        resultado.textContent =
+            escolhidos.length +
+            " GANHADORES";
+
+    }
+
+
+    const p =
+        periodo();
+
+
+    const novos = [];
+
+
+    for(
+        const pessoa
+        of escolhidos
+    ){
+
+        const nome =
+            nomeExibicao(
+                pessoa.nome
+            );
+
+
+        if(
+            ganhadores.some(
+                g =>
+                    normalizar(
+                        g.nome
+                    ) ===
+                    normalizar(
+                        nome
+                    )
+            )
+        ){
+
+            continue;
+
+        }
+
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from("ganhadores")
+                .insert({
+
+                    nome,
+                    mes:p.mes,
+                    ano:p.ano
+
+                })
+                .select()
+                .single();
+
+
+        if(error){
+
+            console.error(error);
+
+            mostrarMensagem(
+                "❌ Erro ao gravar " +
+                nome,
+                "erro"
+            );
+
+            continue;
+
+        }
+
+
+        novos.push(data);
+
+        ganhadores.unshift(
+            data
+        );
+
+
+        $("resultadosSorteio")
+            .insertAdjacentHTML(
+                "beforeend",
+                `
+                <span class="resultado-premium">
+                    🏆 ${escapar(nome)}
+                </span>
+                `
+            );
+
+    }
+
+
+    if(novos.length){
+
+        criarConfetes();
+
+        mostrarMensagem(
+            "🏆 Sorteio realizado com sucesso!",
+            "sucesso"
+        );
+
+    }
+
+
+    atualizarInterface();
+
+
+    sorteando = false;
+
+
+    $("btnSortear").disabled =
+        false;
+
+
+    $("btnSortear").textContent =
+        "🎁 REALIZAR NOVO SORTEIO";
+
 }
 
+
+/* =========================================================
+   CONFETES
+========================================================= */
+
+function criarConfetes(){
+
+    for(
+        let i = 0;
+        i < 80;
+        i++
+    ){
+
+        const confete =
+            document.createElement(
+                "div"
+            );
+
+
+        confete.className =
+            "confete";
+
+
+        confete.style.left =
+            Math.random() *
+            100 +
+            "vw";
+
+
+        confete.style.animationDelay =
+            Math.random() *
+            .8 +
+            "s";
+
+
+        confete.style.background =
+            Math.random() > .5
+                ? "#ff6a00"
+                : "#ffffff";
+
+
+        confete.style.transform =
+            "rotate(" +
+            Math.random()*360 +
+            "deg)";
+
+
+        document.body
+            .appendChild(
+                confete
+            );
+
+
+        setTimeout(
+            () =>
+                confete.remove(),
+            3500
+        );
+
+    }
+
 }
-},100);
-}
 
-async function registrarGanhadorSorteio(pessoa){
 
-const p=periodo();
-const nome=nomeExibicao(pessoa.nome);
-
-if(ganhadores.some(g=>normalizar(g.nome)===normalizar(nome)))return;
-
-const r=await supabaseClient
-.from("ganhadores")
-.insert({
-nome:nome,
-mes:p.mes,
-ano:p.ano
-})
-.select()
-.single();
-
-if(r.error){
-console.error(r.error);
-mostrarMensagem("❌ Erro ao gravar "+nome+": "+r.error.message);
-return;
-}
-
-ganhadores.unshift(r.data);
-
-$("resultadosSorteio").innerHTML+=
-'<span class="resultado-item">🏆 '+escapar(nome)+'</span>';
-
-atualizarInterface();
-
-if(ganhadores.length){
-mostrarMensagem("🏆 Sorteio registrado com sucesso!");
-}
-
-sorteando=false;
-$("sortear").disabled=false;
-$("sortear").textContent="🎁 REALIZAR NOVO SORTEIO";
-}
-
-/* SORTEIO DE ANIVERSARIANTES */
+/* =========================================================
+   SORTEIO DE ANIVERSARIANTES
+========================================================= */
 
 async function sortearAniversariantes(){
 
-let qtd=parseInt($("quantidadeAniversariantes").value,10)||1;
-const p=periodo();
+    const botao =
+        $("btnSortearAniversariantes");
 
-const lista=aniversariantes.filter(a=>{
 
-const valor=
-a.nascimento||
-a.data_nascimento||
-a.dataNascimento||
-a.data_aniversario||
-a.birthday;
+    let qtd =
+        parseInt(
+            $("quantidadeAniversariantes")
+                .value,
+            10
+        ) || 1;
 
-if(!valor)return false;
 
-const d=new Date(valor);
+    const p =
+        periodo();
 
-return d.getMonth()+1===p.mes;
-});
 
-if(!lista.length){
-$("resultadoAniversariantes").innerHTML="<span>Nenhum aniversariante encontrado neste mês.</span>";
-return;
+    const lista =
+        aniversariantes.filter(
+            pessoa => {
+
+                const valor =
+                    pessoa.nascimento ||
+                    pessoa.data_nascimento ||
+                    pessoa.dataNascimento ||
+                    pessoa.data_aniversario ||
+                    pessoa.birthday;
+
+
+                if(!valor)
+                    return false;
+
+
+                const data =
+                    new Date(valor);
+
+
+                return (
+                    data.getMonth() + 1 ===
+                    p.mes
+                );
+
+            }
+        );
+
+
+    if(!lista.length){
+
+        $("resultadoAniversariantes")
+            .innerHTML = `
+                <span>
+                    🎂 Nenhum aniversariante
+                    encontrado neste mês.
+                </span>
+            `;
+
+        return;
+
+    }
+
+
+    qtd =
+        Math.max(
+            1,
+            Math.min(
+                qtd,
+                lista.length
+            )
+        );
+
+
+    $("quantidadeAniversariantes")
+        .value = qtd;
+
+
+    botao.disabled =
+        true;
+
+
+    botao.textContent =
+        "🎂 SORTEANDO...";
+
+
+    const container =
+        $("resultadoAniversariantes");
+
+
+    let contador = 0;
+
+
+    const intervalo =
+        setInterval(() => {
+
+            const pessoa =
+                lista[
+                    Math.floor(
+                        Math.random() *
+                        lista.length
+                    )
+                ];
+
+
+            container.innerHTML = `
+                <span
+                    class="aniversariante-vencedor"
+                >
+                    🎂
+                    ${escapar(
+                        nomeExibicao(
+                            pessoa.nome
+                        )
+                    )}
+                </span>
+            `;
+
+
+            contador++;
+
+
+            if(contador >= 25){
+
+                clearInterval(
+                    intervalo
+                );
+
+
+                const escolhidos =
+                    [...lista]
+                    .sort(
+                        () =>
+                            Math.random() -
+                            .5
+                    )
+                    .slice(0,qtd);
+
+
+                container.innerHTML =
+                    escolhidos
+                    .map(
+                        pessoa => `
+                        <span
+                            class="aniversariante-vencedor"
+                        >
+                            🎂
+                            ${escapar(
+                                nomeExibicao(
+                                    pessoa.nome
+                                )
+                            )}
+                        </span>
+                        `
+                    )
+                    .join("");
+
+
+                criarConfetes();
+
+
+                botao.disabled =
+                    false;
+
+
+                botao.textContent =
+                    "🎂 SORTEAR NOVAMENTE";
+
+
+                mostrarMensagem(
+                    "🎂 Aniversariante sorteado!",
+                    "sucesso"
+                );
+
+            }
+
+        },90);
+
 }
 
-qtd=Math.max(1,Math.min(qtd,lista.length));
-$("quantidadeAniversariantes").value=qtd;
 
-const escolhidos=[...lista]
-.sort(()=>Math.random()-0.5)
-.slice(0,qtd);
+/* =========================================================
+   ZERAR GANHADORES
+========================================================= */
 
-$("resultadoAniversariantes").innerHTML=
-escolhidos.map(a=>
-'<span class="resultado-item">🎂 '+escapar(nomeExibicao(a.nome))+'</span>'
-).join("");
+async function zerarGanhadores(){
+
+    const p =
+        periodo();
+
+
+    if(!ganhadores.length){
+
+        mostrarMensagem(
+            "Não existem ganhadores neste mês."
+        );
+
+        return;
+
+    }
+
+
+    if(
+        !confirm(
+            "Deseja realmente zerar TODOS os ganhadores deste mês?"
+        )
+    ){
+
+        return;
+
+    }
+
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("ganhadores")
+            .delete()
+            .eq("mes",p.mes)
+            .eq("ano",p.ano);
+
+
+    if(error){
+
+        console.error(error);
+
+        mostrarMensagem(
+            "❌ Erro ao zerar ganhadores.",
+            "erro"
+        );
+
+        return;
+
+    }
+
+
+    ganhadores = [];
+
+
+    atualizarInterface();
+
+
+    mostrarMensagem(
+        "🔄 Ganhadores do mês removidos.",
+        "sucesso"
+    );
 
 }
 
-/* CONTROLES */
 
-$("sortear").addEventListener("click",realizarSorteio);
+/* =========================================================
+   EVENTOS
+========================================================= */
 
-$("sortearAniversariantes").addEventListener(
-"click",
-sortearAniversariantes
-);
+$("btnSortear")
+    .addEventListener(
+        "click",
+        realizarSorteio
+    );
 
-$("buscar").addEventListener(
-"input",
-renderizarParticipantes
-);
 
-$("atualizar").addEventListener(
-"click",
-async()=>{
-await carregarTudo();
-mostrarMensagem("🔄 Painel atualizado.");
-}
-);
+$("btnSortearAniversariantes")
+    .addEventListener(
+        "click",
+        sortearAniversariantes
+    );
 
-$("zerar").addEventListener(
-"click",
-async()=>{
 
-const p=periodo();
+$("buscar")
+    .addEventListener(
+        "input",
+        renderizarParticipantes
+    );
 
-if(!ganhadores.length){
-alert("Não existem ganhadores neste mês.");
-return;
-}
 
-if(!confirm("Deseja realmente zerar TODOS os ganhadores deste mês?"))return;
+$("btnAtualizar")
+    .addEventListener(
+        "click",
+        async () => {
 
-const r=await supabaseClient
-.from("ganhadores")
-.delete()
-.eq("mes",p.mes)
-.eq("ano",p.ano);
+            await carregarTudo();
 
-if(r.error){
-alert("Erro ao zerar: "+r.error.message);
-return;
-}
+            mostrarMensagem(
+                "🔄 Painel atualizado.",
+                "sucesso"
+            );
 
-ganhadores=[];
-atualizarInterface();
-mostrarMensagem("🔄 Ganhadores do mês removidos.");
+        }
+    );
 
-}
-);
 
-function mostrarMensagem(texto){
-$("mensagem").textContent=texto;
+$("btnZerar")
+    .addEventListener(
+        "click",
+        zerarGanhadores
+    );
 
-setTimeout(()=>{
-$("mensagem").textContent="";
-},5000);
-}
 
-window.marcarGanhador=marcarGanhador;
-window.removerGanhador=removerGanhador;
+/* =========================================================
+   INICIAR
+========================================================= */
+
+verificarSessao();
 
 </script>
 
 </body>
+
 </html>
