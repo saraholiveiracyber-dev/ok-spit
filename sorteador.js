@@ -1,801 +1,1222 @@
-﻿/* =========================================================
-   OK.SPIT - SORTEADOR
-   ========================================================= */
-
-"use strict";
+﻿"use strict";
 
 /* =========================================================
-   CONFIGURAÇÃO
-   ========================================================= */
+   OK.SPIT | SORTEADOR PÚBLICO
+   SOMENTE VISUALIZAÇÃO
+========================================================= */
 
-const agora = new Date();
-
-const mesAtual = agora.toLocaleDateString("pt-BR", {
-    month: "long",
-    year: "numeric"
-});
-
-/*
- * IMPORTANTE:
- * A tabela que aparece no seu Supabase é "divulgacoes".
- * Por isso usamos divulgacoes aqui.
- */
-
-const TABELA_PARTICIPANTES = "divulgacoes";
-const TABELA_GANHADORES = "sorteio_ganhadores";
-
-/* =========================================================
-   VARIÁVEIS
-   ========================================================= */
-
-let participantes = [];
-let bloqueados = [];
-let sorteioEmAndamento = false;
-
-/* =========================================================
-   ELEMENTOS
-   ========================================================= */
-
-const totalParticipantes =
-    document.getElementById("totalParticipantes");
-
-const totalBloqueados =
-    document.getElementById("totalBloqueados");
-
-const totalElegiveis =
-    document.getElementById("totalElegiveis");
-
-const resultado =
-    document.getElementById("resultado");
-
-const mensagem =
-    document.getElementById("mensagem");
-
-const btnSortear =
-    document.getElementById("sortear");
-
-const listaBloqueados =
-    document.getElementById("listaBloqueados");
-
-const formBloqueado =
-    document.getElementById("formBloqueado");
-
-const nomeBloqueado =
-    document.getElementById("nomeBloqueado");
-
-const telefoneBloqueado =
-    document.getElementById("telefoneBloqueado");
-
-const atualizar =
-    document.getElementById("atualizar");
 
 /* =========================================================
    SUPABASE
-   ========================================================= */
+========================================================= */
 
-function obterSupabase() {
+const SUPABASE_URL =
+    "https://wiwvpqjlwmtmlexusiyd.supabase.co";
+
+const SUPABASE_ANON_KEY =
+    "sb_publishable_LzX0GpaYAK2KNSu2eetEuw_tr5PKqSi";
+
+
+const TABELA_PARTICIPANTES =
+    "divulgacoes";
+
+const TABELA_GANHADORES =
+    "ganhadores";
+
+const TABELA_ANIVERSARIANTES =
+    "aniversariantes";
+
+
+let supabaseClient = null;
+
+let participantes = [];
+
+let participantesDisponiveis = [];
+
+let ganhadores = [];
+
+let aniversariantes = [];
+
+
+/* =========================================================
+   DATA
+========================================================= */
+
+const agora = new Date();
+
+const ANO_ATUAL =
+    agora.getFullYear();
+
+const MES_ATUAL_NUMERO =
+    agora.getMonth();
+
+const MES_ATUAL =
+    `${ANO_ATUAL}-${String(
+        MES_ATUAL_NUMERO + 1
+    ).padStart(2, "0")}`;
+
+
+/* =========================================================
+   INICIAR
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    iniciar
+);
+
+
+async function iniciar() {
+
+    console.log(
+        "👥 OK.SPIT | Sorteador público iniciado"
+    );
+
+
+    inicializarSupabase();
+
+    atualizarMes();
+
+    await carregarTudo();
+
+    atualizarInterface();
+
+}
+
+
+/* =========================================================
+   INICIALIZAR SUPABASE
+========================================================= */
+
+function inicializarSupabase() {
 
     if (
-        typeof window.supabaseClient !== "undefined" &&
-        window.supabaseClient
+        typeof window.supabase ===
+        "undefined"
     ) {
-        return window.supabaseClient;
-    }
-
-    return null;
-}
-
-/* =========================================================
-   MENSAGEM
-   ========================================================= */
-
-function mostrarMensagem(texto, tipo = "normal") {
-
-    if (!mensagem) {
-        return;
-    }
-
-    mensagem.textContent = texto;
-
-    mensagem.classList.remove(
-        "sucesso",
-        "erro",
-        "normal"
-    );
-
-    mensagem.classList.add(tipo);
-}
-
-/* =========================================================
-   NORMALIZAR NOME
-   ========================================================= */
-
-function normalizarNome(nome) {
-
-    return String(nome || "")
-        .trim()
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .replace(/\s+/g, " ");
-}
-
-/* =========================================================
-   ESCAPAR HTML
-   ========================================================= */
-
-function escapeHtml(texto) {
-
-    const div = document.createElement("div");
-
-    div.textContent = String(texto || "");
-
-    return div.innerHTML;
-}
-
-/* =========================================================
-   CARREGAR DADOS
-   ========================================================= */
-
-async function carregarDados() {
-
-    const cliente = obterSupabase();
-
-    if (!cliente) {
-
-        mostrarMensagem(
-            "Supabase não foi inicializado. Verifique o supabase.js.",
-            "erro"
-        );
-
-        return;
-    }
-
-    if (btnSortear) {
-        btnSortear.disabled = true;
-    }
-
-    mostrarMensagem(
-        "Carregando participantes..."
-    );
-
-    try {
-
-        /* =====================================================
-           PARTICIPANTES
-           ===================================================== */
-
-        const {
-            data: dadosParticipacoes,
-            error: erroParticipacoes
-        } = await cliente
-            .from(TABELA_PARTICIPANTES)
-            .select("nome, telefone");
-
-        if (erroParticipacoes) {
-            console.error(
-                "Erro na tabela divulgacoes:",
-                erroParticipacoes
-            );
-
-            throw erroParticipacoes;
-        }
-
-        participantes =
-            Array.isArray(dadosParticipacoes)
-                ? dadosParticipacoes
-                : [];
-
-        /* =====================================================
-           GANHADORES DO MÊS
-           ===================================================== */
-
-        const {
-            data: dadosGanhadores,
-            error: erroGanhadores
-        } = await cliente
-            .from(TABELA_GANHADORES)
-            .select("id, nome, telefone, mes_referencia")
-            .eq("mes_referencia", mesAtual);
-
-        if (erroGanhadores) {
-
-            console.error(
-                "Erro na tabela sorteio_ganhadores:",
-                erroGanhadores
-            );
-
-            throw erroGanhadores;
-        }
-
-        bloqueados =
-            Array.isArray(dadosGanhadores)
-                ? dadosGanhadores
-                : [];
-
-        atualizarInterface();
-
-        mostrarMensagem("");
-
-        console.log(
-            "Participantes carregados:",
-            participantes.length
-        );
-
-        console.log(
-            "Ganhadores bloqueados:",
-            bloqueados.length
-        );
-
-    } catch (erro) {
 
         console.error(
-            "ERRO COMPLETO DO SUPABASE:",
-            erro
+            "Supabase não carregado."
         );
 
-        mostrarMensagem(
-            "Não foi possível carregar os participantes. Verifique o Supabase.",
-            "erro"
-        );
+        return;
 
     }
+
+
+    supabaseClient =
+        window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_ANON_KEY
+        );
+
+
+    console.log(
+        "✅ Supabase conectado"
+    );
+
 }
 
+
 /* =========================================================
-   PARTICIPANTES ELEGÍVEIS
-   ========================================================= */
+   CARREGAR TUDO
+========================================================= */
 
-function obterElegiveis() {
+async function carregarTudo() {
 
-    const nomesBloqueados =
-        new Set(
-            bloqueados
-                .map(pessoa =>
-                    normalizarNome(pessoa.nome)
-                )
-                .filter(Boolean)
+    if (!supabaseClient) {
+
+        mostrarErro(
+            "Não foi possível conectar ao Supabase."
         );
 
-    const nomesAdicionados =
-        new Set();
+        return;
 
-    return participantes.filter(pessoa => {
+    }
 
-        const nome =
-            normalizarNome(pessoa.nome);
 
-        if (!nome) {
-            return false;
-        }
+    await Promise.all([
 
-        if (nomesBloqueados.has(nome)) {
-            return false;
-        }
+        carregarParticipantes(),
 
-        /*
-         * Evita que a mesma pessoa apareça
-         * várias vezes no sorteio.
-         */
+        carregarGanhadores(),
 
-        if (nomesAdicionados.has(nome)) {
-            return false;
-        }
+        carregarAniversariantes()
 
-        nomesAdicionados.add(nome);
+    ]);
 
-        return true;
-    });
+
+    calcularParticipantesDisponiveis();
+
 }
 
-/* =========================================================
-   ATUALIZAR INTERFACE
-   ========================================================= */
-
-function atualizarInterface() {
-
-    const elegiveis =
-        obterElegiveis();
-
-    if (totalParticipantes) {
-        totalParticipantes.textContent =
-            participantes.length;
-    }
-
-    if (totalBloqueados) {
-        totalBloqueados.textContent =
-            bloqueados.length;
-    }
-
-    if (totalElegiveis) {
-        totalElegiveis.textContent =
-            elegiveis.length;
-    }
-
-    renderizarBloqueados();
-
-    if (btnSortear) {
-
-        btnSortear.disabled =
-            elegiveis.length === 0 ||
-            sorteioEmAndamento;
-    }
-}
 
 /* =========================================================
-   RENDERIZAR BLOQUEADOS
-   ========================================================= */
+   PARTICIPANTES
+========================================================= */
 
-function renderizarBloqueados() {
-
-    if (!listaBloqueados) {
-        return;
-    }
-
-    if (!bloqueados.length) {
-
-        listaBloqueados.innerHTML = `
-            <div class="lista-vazia">
-                Nenhum ganhador bloqueado neste mês.
-            </div>
-        `;
-
-        return;
-    }
-
-    listaBloqueados.innerHTML =
-        bloqueados
-            .map(pessoa => {
-
-                const id =
-                    escapeHtml(pessoa.id);
-
-                const nome =
-                    escapeHtml(pessoa.nome);
-
-                const telefone =
-                    pessoa.telefone
-                        ? escapeHtml(pessoa.telefone)
-                        : "WhatsApp não informado";
-
-                return `
-                    <div class="bloqueado">
-
-                        <div class="bloqueado-info">
-
-                            <strong>
-                                ${nome}
-                            </strong>
-
-                            <span>
-                                ${telefone}
-                            </span>
-
-                        </div>
-
-                        <button
-                            type="button"
-                            class="btn-remover"
-                            data-id="${id}"
-                        >
-                            Remover
-                        </button>
-
-                    </div>
-                `;
-            })
-            .join("");
-
-    document
-        .querySelectorAll(".btn-remover")
-        .forEach(botao => {
-
-            botao.addEventListener(
-                "click",
-                () => {
-                    removerBloqueado(
-                        botao.dataset.id
-                    );
-                }
-            );
-
-        });
-}
-
-/* =========================================================
-   ADICIONAR BLOQUEADO
-   ========================================================= */
-
-async function adicionarBloqueado(event) {
-
-    event.preventDefault();
-
-    const cliente =
-        obterSupabase();
-
-    if (!cliente) {
-
-        mostrarMensagem(
-            "Supabase não está disponível.",
-            "erro"
-        );
-
-        return;
-    }
-
-    if (sorteioEmAndamento) {
-
-        mostrarMensagem(
-            "Aguarde o sorteio terminar.",
-            "erro"
-        );
-
-        return;
-    }
-
-    const nome =
-        nomeBloqueado.value.trim();
-
-    const telefone =
-        telefoneBloqueado.value.trim();
-
-    if (!nome) {
-
-        mostrarMensagem(
-            "Digite o nome do ganhador.",
-            "erro"
-        );
-
-        nomeBloqueado.focus();
-
-        return;
-    }
-
-    const nomeNormalizado =
-        normalizarNome(nome);
-
-    const jaExiste =
-        bloqueados.some(
-            pessoa =>
-                normalizarNome(pessoa.nome) ===
-                nomeNormalizado
-        );
-
-    if (jaExiste) {
-
-        mostrarMensagem(
-            "Essa pessoa já está bloqueada neste mês.",
-            "erro"
-        );
-
-        return;
-    }
+async function carregarParticipantes() {
 
     try {
 
         const {
             data,
             error
-        } = await cliente
-            .from(TABELA_GANHADORES)
-            .insert({
-                nome: nome,
-                telefone: telefone || null,
-                mes_referencia: mesAtual
-            })
-            .select()
-            .single();
+        } = await supabaseClient
+
+            .from(
+                TABELA_PARTICIPANTES
+            )
+
+            .select(
+                "id,nome,telefone,plataforma,data_participacao,criado_em"
+            );
+
 
         if (error) {
-            throw error;
+
+            console.error(
+                "Erro ao carregar participantes:",
+                error
+            );
+
+            participantes = [];
+
+            return;
+
         }
 
-        if (data) {
-            bloqueados.push(data);
-        }
 
-        nomeBloqueado.value = "";
-        telefoneBloqueado.value = "";
+        participantes =
+            Array.isArray(data)
+                ? data
+                : [];
 
-        atualizarInterface();
 
-        mostrarMensagem(
-            `${nome} foi bloqueado para os próximos sorteios deste mês.`,
-            "sucesso"
+        participantes =
+            participantes.filter(
+                pessoa =>
+                    pertenceAoMesAtual(
+                        pessoa
+                    )
+            );
+
+
+        participantes.sort(
+            (a, b) => {
+
+                const dataA =
+                    obterDataParticipacao(
+                        a
+                    );
+
+                const dataB =
+                    obterDataParticipacao(
+                        b
+                    );
+
+
+                if (!dataA) return 1;
+
+                if (!dataB) return -1;
+
+
+                return (
+                    dataB.getTime() -
+                    dataA.getTime()
+                );
+
+            }
         );
+
+
+        console.log(
+            "Participações:",
+            participantes.length
+        );
+
 
     } catch (erro) {
 
         console.error(
-            "Erro ao adicionar ganhador:",
             erro
         );
 
-        mostrarMensagem(
-            "Não foi possível adicionar o ganhador. Verifique as permissões do Supabase.",
-            "erro"
-        );
+        participantes = [];
+
     }
+
 }
 
+
 /* =========================================================
-   REMOVER BLOQUEADO
-   ========================================================= */
+   GANHADORES
+========================================================= */
 
-async function removerBloqueado(id) {
-
-    const cliente =
-        obterSupabase();
-
-    if (!cliente) {
-
-        mostrarMensagem(
-            "Supabase não está disponível.",
-            "erro"
-        );
-
-        return;
-    }
-
-    if (!id) {
-
-        mostrarMensagem(
-            "ID do ganhador não encontrado.",
-            "erro"
-        );
-
-        return;
-    }
-
-    const pessoa =
-        bloqueados.find(
-            item =>
-                String(item.id) === String(id)
-        );
-
-    const nome =
-        pessoa
-            ? pessoa.nome
-            : "esta pessoa";
-
-    const confirmar =
-        confirm(
-            `Remover ${nome} da lista de ganhadores deste mês?`
-        );
-
-    if (!confirmar) {
-        return;
-    }
+async function carregarGanhadores() {
 
     try {
 
         const {
+            data,
             error
-        } = await cliente
-            .from(TABELA_GANHADORES)
-            .delete()
-            .eq("id", id);
+        } = await supabaseClient
 
-        if (error) {
-            throw error;
-        }
+            .from(
+                TABELA_GANHADORES
+            )
 
-        bloqueados =
-            bloqueados.filter(
-                item =>
-                    String(item.id) !== String(id)
+            .select("*")
+
+            .eq(
+                "mes",
+                MES_ATUAL_NUMERO + 1
+            )
+
+            .eq(
+                "ano",
+                ANO_ATUAL
+            )
+
+            .order(
+                "created_at",
+                {
+                    ascending: true
+                }
             );
 
-        atualizarInterface();
 
-        mostrarMensagem(
-            `${nome} foi removido da lista.`,
-            "sucesso"
+        if (error) {
+
+            console.error(
+                "Erro ao carregar ganhadores:",
+                error
+            );
+
+            ganhadores = [];
+
+            return;
+
+        }
+
+
+        ganhadores =
+            Array.isArray(data)
+                ? data
+                : [];
+
+
+        console.log(
+            "Ganhadores:",
+            ganhadores.length
         );
+
 
     } catch (erro) {
 
         console.error(
-            "Erro ao remover ganhador:",
             erro
         );
 
-        mostrarMensagem(
-            "Não foi possível remover o nome. Verifique as permissões do Supabase.",
-            "erro"
-        );
+        ganhadores = [];
+
     }
+
 }
 
+
 /* =========================================================
-   REALIZAR SORTEIO
-   ========================================================= */
+   ANIVERSARIANTES
+========================================================= */
 
-function realizarSorteio() {
+async function carregarAniversariantes() {
 
-    if (sorteioEmAndamento) {
-        return;
-    }
+    try {
 
-    const elegiveis =
-        obterElegiveis();
+        const {
+            data,
+            error
+        } = await supabaseClient
 
-    if (!elegiveis.length) {
+            .from(
+                TABELA_ANIVERSARIANTES
+            )
 
-        mostrarMensagem(
-            "Não existem participantes elegíveis.",
-            "erro"
+            .select("*");
+
+
+        if (error) {
+
+            console.error(
+                "Erro ao carregar aniversariantes:",
+                error
+            );
+
+            aniversariantes = [];
+
+            return;
+
+        }
+
+
+        aniversariantes =
+            Array.isArray(data)
+                ? data
+                : [];
+
+
+    } catch (erro) {
+
+        console.error(
+            erro
         );
 
-        return;
+        aniversariantes = [];
+
     }
 
-    sorteioEmAndamento = true;
+}
 
-    btnSortear.disabled = true;
 
-    resultado.classList.remove("ganhador");
+/* =========================================================
+   PARTICIPANTES DISPONÍVEIS
+========================================================= */
 
-    mostrarMensagem(
-        "Sorteando..."
-    );
+function calcularParticipantesDisponiveis() {
 
-    let contador = 0;
+    const bloqueados =
+        ganhadores.map(
+            ganhador =>
+                normalizar(
+                    ganhador.nome
+                )
+        );
 
-    const quantidadeAnimacoes = 30;
-    const velocidade = 90;
 
-    const intervalo =
-        setInterval(() => {
+    participantesDisponiveis =
+        participantes.filter(
+            pessoa => {
 
-            const temporario =
-                elegiveis[
-                    Math.floor(
-                        Math.random() *
-                        elegiveis.length
-                    )
-                ];
+                const nome =
+                    normalizar(
+                        pessoa.nome
+                    );
 
-            resultado.innerHTML = `
 
-                <div class="resultado-icon">
-                    🎲
-                </div>
+                if (!nome) {
 
-                <span>
-                    SORTEANDO...
-                </span>
+                    return false;
+
+                }
+
+
+                return !bloqueados.includes(
+                    nome
+                );
+
+            }
+        );
+
+}
+
+
+/* =========================================================
+   INTERFACE
+========================================================= */
+
+function atualizarInterface() {
+
+    atualizarEstatisticas();
+
+    renderizarParticipantes();
+
+    renderizarGanhadores();
+
+    renderizarAniversariantes();
+
+}
+
+
+/* =========================================================
+   ESTATÍSTICAS
+========================================================= */
+
+function atualizarEstatisticas() {
+
+    const participantesEl =
+        document.getElementById(
+            "totalParticipantes"
+        );
+
+
+    const bloqueadosEl =
+        document.getElementById(
+            "totalBloqueados"
+        );
+
+
+    const aniversariantesEl =
+        document.getElementById(
+            "totalAniversariantes"
+        );
+
+
+    if (participantesEl) {
+
+        participantesEl.textContent =
+            participantesDisponiveis.length;
+
+    }
+
+
+    if (bloqueadosEl) {
+
+        bloqueadosEl.textContent =
+            ganhadores.length;
+
+    }
+
+
+    if (aniversariantesEl) {
+
+        const total =
+            aniversariantes.filter(
+                pessoa => {
+
+                    const data =
+                        obterDataNascimento(
+                            pessoa
+                        );
+
+
+                    return (
+                        data &&
+                        data.getMonth() ===
+                        MES_ATUAL_NUMERO
+                    );
+
+                }
+            ).length;
+
+
+        aniversariantesEl.textContent =
+            total;
+
+    }
+
+}
+
+
+/* =========================================================
+   PARTICIPANTES
+========================================================= */
+
+function renderizarParticipantes() {
+
+    const container =
+        document.getElementById(
+            "listaParticipantes"
+        );
+
+
+    if (!container) {
+
+        return;
+
+    }
+
+
+    if (
+        !participantesDisponiveis.length
+    ) {
+
+        container.innerHTML = `
+
+            <div class="lista-vazia">
+
+                👥
 
                 <strong>
-                    ${escapeHtml(
-                        temporario.nome
-                    )}
+                    Nenhum participante disponível.
                 </strong>
 
-            `;
+                <br>
 
-            contador++;
+                Todos já ganharam neste mês
+                ou ainda não existem participações.
 
-            if (
-                contador >=
-                quantidadeAnimacoes
-            ) {
+            </div>
 
-                clearInterval(intervalo);
+        `;
 
-                revelarGanhador(
-                    elegiveis
-                );
-            }
+        return;
 
-        }, velocidade);
+    }
+
+
+    container.innerHTML =
+        participantesDisponiveis
+
+            .map(
+                pessoa => {
+
+                    const nome =
+                        escapeHtml(
+                            pessoa.nome ||
+                            "Sem nome"
+                        );
+
+
+                    const plataforma =
+                        escapeHtml(
+                            pessoa.plataforma ||
+                            "Participação registrada"
+                        );
+
+
+                    const data =
+                        obterDataParticipacao(
+                            pessoa
+                        );
+
+
+                    return `
+
+                        <article
+                            class="participante-card"
+                        >
+
+                            <div
+                                class="participante-icon"
+                            >
+                                👤
+                            </div>
+
+
+                            <div
+                                class="participante-info"
+                            >
+
+                                <strong>
+                                    ${nome}
+                                </strong>
+
+
+                                <span>
+                                    📢 ${plataforma}
+                                </span>
+
+
+                                ${
+                                    data
+                                        ? `
+                                            <small>
+                                                Participou em
+                                                ${formatarData(data)}
+                                            </small>
+                                        `
+                                        : ""
+                                }
+
+                            </div>
+
+                        </article>
+
+                    `;
+
+                }
+            )
+
+            .join("");
+
 }
 
+
 /* =========================================================
-   REVELAR GANHADOR
-   ========================================================= */
+   GANHADORES
+========================================================= */
 
-function revelarGanhador(elegiveis) {
+function renderizarGanhadores() {
 
-    if (!elegiveis.length) {
+    const container =
+        document.getElementById(
+            "listaGanhadores"
+        );
 
-        sorteioEmAndamento = false;
+
+    if (!container) {
+
+        return;
+
+    }
+
+
+    if (!ganhadores.length) {
+
+        container.innerHTML = `
+
+            <div class="lista-vazia">
+
+                🏆
+
+                Nenhum ganhador registrado
+                neste mês.
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        ganhadores
+
+            .map(
+                ganhador => {
+
+                    const nome =
+                        escapeHtml(
+                            ganhador.nome ||
+                            "Sem nome"
+                        );
+
+
+                    const data =
+                        converterData(
+                            ganhador.created_at
+                        );
+
+
+                    return `
+
+                        <article
+                            class="ganhador-item"
+                        >
+
+                            <div
+                                class="ganhador-icon"
+                            >
+                                🏆
+                            </div>
+
+
+                            <div>
+
+                                <strong>
+                                    ${nome}
+                                </strong>
+
+
+                                ${
+                                    data
+                                        ? `
+                                            <small>
+                                                Registrado em
+                                                ${formatarData(data)}
+                                            </small>
+                                        `
+                                        : ""
+                                }
+
+                            </div>
+
+                        </article>
+
+                    `;
+
+                }
+            )
+
+            .join("");
+
+}
+
+
+/* =========================================================
+   ANIVERSARIANTES
+========================================================= */
+
+function renderizarAniversariantes() {
+
+    const container =
+        document.getElementById(
+            "listaAniversariantes"
+        );
+
+
+    if (!container) {
+
+        return;
+
+    }
+
+
+    const lista =
+        aniversariantes.filter(
+            pessoa => {
+
+                const data =
+                    obterDataNascimento(
+                        pessoa
+                    );
+
+
+                return (
+                    data &&
+                    data.getMonth() ===
+                    MES_ATUAL_NUMERO
+                );
+
+            }
+        );
+
+
+    lista.sort(
+        (a, b) => {
+
+            const dataA =
+                obterDataNascimento(a);
+
+            const dataB =
+                obterDataNascimento(b);
+
+
+            return (
+                dataA.getDate() -
+                dataB.getDate()
+            );
+
+        }
+    );
+
+
+    if (!lista.length) {
+
+        container.innerHTML = `
+
+            <div class="lista-vazia">
+
+                🎂
+
+                Nenhum aniversariante
+                cadastrado neste mês.
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        lista
+
+            .map(
+                pessoa => {
+
+                    const nome =
+                        escapeHtml(
+                            pessoa.nome ||
+                            "Sem nome"
+                        );
+
+
+                    const data =
+                        obterDataNascimento(
+                            pessoa
+                        );
+
+
+                    return `
+
+                        <article
+                            class="aniversariante-item"
+                        >
+
+                            <div
+                                class="aniversariante-icon"
+                            >
+                                🎂
+                            </div>
+
+
+                            <div>
+
+                                <strong>
+                                    ${nome}
+                                </strong>
+
+
+                                <span>
+                                    ${formatarAniversario(data)}
+                                </span>
+
+                            </div>
+
+                        </article>
+
+                    `;
+
+                }
+            )
+
+            .join("");
+
+}
+
+
+/* =========================================================
+   MÊS
+========================================================= */
+
+function atualizarMes() {
+
+    const nome =
+        new Intl.DateTimeFormat(
+            "pt-BR",
+            {
+                month: "long"
+            }
+        )
+            .format(agora)
+            .replace(
+                /^./,
+                letra =>
+                    letra.toUpperCase()
+            );
+
+
+    const ids = [
+
+        "mesAtual",
+
+        "tituloGanhadores",
+
+        "tituloParticipantes",
+
+        "tituloAniversariantes"
+
+    ];
+
+
+    ids.forEach(
+        id => {
+
+            const elemento =
+                document.getElementById(
+                    id
+                );
+
+
+            if (elemento) {
+
+                elemento.textContent =
+                    nome;
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   DATA PARTICIPAÇÃO
+========================================================= */
+
+function obterDataParticipacao(
+    pessoa
+) {
+
+    return converterData(
+        pessoa.data_participacao ||
+        pessoa.criado_em
+    );
+
+}
+
+
+/* =========================================================
+   DATA NASCIMENTO
+========================================================= */
+
+function obterDataNascimento(
+    pessoa
+) {
+
+    return converterData(
+
+        pessoa.nascimento ||
+
+        pessoa.data_nascimento ||
+
+        pessoa.dataNascimento ||
+
+        pessoa.data_aniversario ||
+
+        pessoa.birthday
+
+    );
+
+}
+
+
+/* =========================================================
+   CONVERTER DATA
+========================================================= */
+
+function converterData(valor) {
+
+    if (!valor) {
+
+        return null;
+
+    }
+
+
+    if (
+        typeof valor === "string" &&
+        /^\d{4}-\d{2}-\d{2}$/.test(valor)
+    ) {
+
+        const partes =
+            valor.split("-")
+                .map(Number);
+
+
+        return new Date(
+            partes[0],
+            partes[1] - 1,
+            partes[2]
+        );
+
+    }
+
+
+    const data =
+        new Date(valor);
+
+
+    if (
+        Number.isNaN(
+            data.getTime()
+        )
+    ) {
+
+        return null;
+
+    }
+
+
+    return data;
+
+}
+
+
+/* =========================================================
+   MÊS ATUAL
+========================================================= */
+
+function pertenceAoMesAtual(
+    pessoa
+) {
+
+    const data =
+        obterDataParticipacao(
+            pessoa
+        );
+
+
+    if (!data) {
+
+        return false;
+
+    }
+
+
+    return (
+
+        data.getFullYear() ===
+        ANO_ATUAL &&
+
+        data.getMonth() ===
+        MES_ATUAL_NUMERO
+
+    );
+
+}
+
+
+/* =========================================================
+   FORMATAÇÃO
+========================================================= */
+
+function formatarData(data) {
+
+    return data.toLocaleDateString(
+        "pt-BR",
+        {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric"
+        }
+    );
+
+}
+
+
+function formatarAniversario(data) {
+
+    return data.toLocaleDateString(
+        "pt-BR",
+        {
+            day: "2-digit",
+            month: "long"
+        }
+    );
+
+}
+
+
+/* =========================================================
+   NORMALIZAR
+========================================================= */
+
+function normalizar(texto) {
+
+    return String(texto || "")
+
+        .trim()
+
+        .toLowerCase()
+
+        .normalize("NFD")
+
+        .replace(
+            /[\u0300-\u036f]/g,
+            ""
+        )
+
+        .replace(
+            /\s+/g,
+            " "
+        );
+
+}
+
+
+/* =========================================================
+   SEGURANÇA HTML
+========================================================= */
+
+function escapeHtml(texto) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+
+    div.textContent =
+        String(
+            texto || ""
+        );
+
+
+    return div.innerHTML;
+
+}
+
+
+/* =========================================================
+   ERRO
+========================================================= */
+
+function mostrarErro(
+    mensagem
+) {
+
+    const participantes =
+        document.getElementById(
+            "listaParticipantes"
+        );
+
+
+    const ganhadores =
+        document.getElementById(
+            "listaGanhadores"
+        );
+
+
+    if (participantes) {
+
+        participantes.innerHTML = `
+
+            <div class="lista-vazia">
+
+                ❌
+
+                ${escapeHtml(mensagem)}
+
+            </div>
+
+        `;
+
+    }
+
+
+    if (ganhadores) {
+
+        ganhadores.innerHTML = `
+
+            <div class="lista-vazia">
+
+                ❌
+
+                Não foi possível carregar os ganhadores.
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+/* =========================================================
+   ATUALIZAÇÃO AUTOMÁTICA
+========================================================= */
+
+setInterval(
+    async () => {
+
+        if (!supabaseClient) {
+
+            return;
+
+        }
+
+
+        await carregarTudo();
 
         atualizarInterface();
 
-        return;
-    }
+    },
+    30000
+);
 
-    const indice =
-        Math.floor(
-            Math.random() *
-            elegiveis.length
-        );
-
-    const ganhador =
-        elegiveis[indice];
-
-    resultado.classList.add(
-        "ganhador"
-    );
-
-    resultado.innerHTML = `
-
-        <div class="resultado-icon">
-            🏆
-        </div>
-
-        <span>
-            🎉 GANHADOR DO SORTEIO 🎉
-        </span>
-
-        <strong>
-            ${escapeHtml(
-                ganhador.nome
-            )}
-        </strong>
-
-    `;
-
-    mostrarMensagem(
-        "Ganhador selecionado! Adicione-o à lista abaixo para que ele não participe novamente neste mês.",
-        "sucesso"
-    );
-
-    sorteioEmAndamento = false;
-
-    /*
-     * O ganhador NÃO é salvo automaticamente.
-     * O administrador confirma clicando em
-     * "+ Adicionar".
-     */
-
-    atualizarInterface();
-}
 
 /* =========================================================
-   EVENTOS
-   ========================================================= */
+   FIM
+========================================================= */
 
-if (formBloqueado) {
-
-    formBloqueado.addEventListener(
-        "submit",
-        adicionarBloqueado
-    );
-}
-
-if (btnSortear) {
-
-    btnSortear.addEventListener(
-        "click",
-        realizarSorteio
-    );
-}
-
-if (atualizar) {
-
-    atualizar.addEventListener(
-        "click",
-        async () => {
-
-            if (sorteioEmAndamento) {
-
-                mostrarMensagem(
-                    "Aguarde o sorteio terminar.",
-                    "erro"
-                );
-
-                return;
-            }
-
-            await carregarDados();
-        }
-    );
-}
-
-/* =========================================================
-   INICIALIZAÇÃO
-   ========================================================= */
-
-carregarDados();
+console.log(
+    "👥 OK.SPIT | Sorteador público carregado"
+);
