@@ -3,693 +3,1452 @@
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
+    <meta
+        name="theme-color"
+        content="#ff6a00"
+    >
 
-<meta
-    name="theme-color"
-    content="#ff6a00"
->
+    <title>OK.SPIT | Administração</title>
 
-<title>OK.SPIT | Administração</title>
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
 
-<link
-    rel="preconnect"
-    href="https://fonts.googleapis.com"
->
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+        crossorigin
+    >
 
-<link
-    rel="preconnect"
-    href="https://fonts.gstatic.com"
-    crossorigin
->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet"
+    >
 
-<link
-    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap"
-    rel="stylesheet"
->
+    <link
+        rel="stylesheet"
+        href="./admin.css"
+    >
 
-<link
-    rel="stylesheet"
-    href="./admin.css"
->
+    <style>
 
-<style>
+        * {
+            box-sizing: border-box;
+        }
 
-/* =========================================================
-   LOGIN
-========================================================= */
+        html {
+            scroll-behavior: smooth;
+        }
 
-.login-screen {
+        body {
+            margin: 0;
+            font-family: "Montserrat", sans-serif;
+        }
 
-    position: fixed;
-    inset: 0;
+        button,
+        input {
+            font-family: inherit;
+        }
 
-    z-index: 9999;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+        /* =====================================================
+           LOGIN
+        ===================================================== */
 
-    padding: 20px;
+        .login-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
 
-    background:
-        radial-gradient(
-            circle at top right,
-            rgba(255,106,0,.20),
-            transparent 35%
-        ),
-        linear-gradient(
-            135deg,
-            #090909,
-            #171717
-        );
-}
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
-.login-card {
+            padding: 20px;
 
-    width: min(430px,100%);
+            background:
+                radial-gradient(
+                    circle at top right,
+                    rgba(255,106,0,.20),
+                    transparent 35%
+                ),
+                linear-gradient(
+                    135deg,
+                    #090909,
+                    #171717
+                );
+        }
 
-    padding: 42px 32px;
+        .login-card {
+            width: min(430px,100%);
 
-    background: rgba(255,255,255,.97);
+            padding: 42px 32px;
 
-    border-radius: 24px;
+            background: rgba(255,255,255,.97);
 
-    box-shadow:
-        0 30px 100px rgba(0,0,0,.45);
+            border-radius: 24px;
 
-    text-align: center;
-}
+            box-shadow:
+                0 30px 100px rgba(0,0,0,.45);
 
-.login-logo {
+            text-align: center;
+        }
 
-    margin-bottom: 8px;
+        .login-logo {
+            margin-bottom: 8px;
 
-    color: var(--orange);
+            color: var(--orange);
 
-    font-size: 36px;
+            font-size: 36px;
+            font-weight: 900;
 
-    font-weight: 900;
+            letter-spacing: -2px;
+        }
 
-    letter-spacing: -2px;
-}
+        .login-card h1 {
+            margin: 0;
 
-.login-card h1 {
+            font-size: 23px;
+            font-weight: 900;
+        }
 
-    font-size: 23px;
+        .login-card p {
+            margin: 8px 0 25px;
 
-    font-weight: 900;
-}
+            color: #777;
 
-.login-card p {
+            font-size: 12px;
+        }
 
-    margin: 8px 0 25px;
+        .login-input {
+            width: 100%;
+            height: 52px;
 
-    color: #777;
+            margin-bottom: 12px;
+            padding: 0 15px;
 
-    font-size: 12px;
-}
+            border:
+                1px solid
+                var(--gray-300);
 
-.login-input {
+            border-radius: 11px;
 
-    width: 100%;
+            outline: none;
 
-    height: 52px;
+            transition: .2s;
+        }
 
-    margin-bottom: 12px;
+        .login-input:focus {
+            border-color: var(--orange);
 
-    padding: 0 15px;
+            box-shadow:
+                0 0 0 3px
+                rgba(255,106,0,.10);
+        }
 
-    border:
-        1px solid
-        var(--gray-300);
+        .login-button {
+            width: 100%;
+            height: 54px;
 
-    border-radius: 11px;
+            border: none;
+            border-radius: 11px;
 
-    outline: none;
+            background: var(--orange);
 
-    font-family: inherit;
+            color: white;
 
-    transition: .2s;
-}
+            font-weight: 900;
 
-.login-input:focus {
+            cursor: pointer;
 
-    border-color: var(--orange);
+            transition: .2s;
+        }
 
-    box-shadow:
-        0 0 0 3px
-        rgba(255,106,0,.10);
-}
+        .login-button:hover {
+            background: var(--orange-dark);
 
-.login-button {
+            transform:
+                translateY(-1px);
+        }
 
-    width: 100%;
+        .login-button:disabled {
+            opacity: .6;
+            cursor: wait;
+        }
 
-    height: 54px;
+        .login-error {
+            min-height: 18px;
 
-    border: none;
+            margin-top: 12px;
 
-    border-radius: 11px;
+            color: var(--red);
 
-    background: var(--orange);
+            font-size: 11px;
+            font-weight: 800;
+        }
 
-    color: white;
 
-    font-family: inherit;
+        /* =====================================================
+           ADMIN
+        ===================================================== */
 
-    font-weight: 900;
+        #admin {
+            display: none;
+        }
 
-    cursor: pointer;
 
-    transition: .2s;
-}
+        /* =====================================================
+           CONSULTA DE PERÍODO
+        ===================================================== */
 
-.login-button:hover {
+        .periodo-controle {
+            display: grid;
 
-    background: var(--orange-dark);
+            grid-template-columns:
+                1fr
+                1fr
+                auto
+                auto
+                auto
+                auto
+                auto
+                auto;
 
-    transform: translateY(-1px);
-}
+            gap: 10px;
 
-.login-button:disabled {
+            align-items: end;
 
-    opacity: .6;
+            margin-bottom: 18px;
 
-    cursor: wait;
-}
+            padding: 18px;
 
-.login-error {
+            border:
+                1px solid
+                #e8e8e8;
 
-    min-height: 18px;
+            border-radius: 16px;
 
-    margin-top: 12px;
+            background:
+                linear-gradient(
+                    135deg,
+                    #ffffff,
+                    #f8f8f8
+                );
 
-    color: var(--red);
+            box-shadow:
+                0 8px 30px
+                rgba(0,0,0,.04);
+        }
 
-    font-size: 11px;
+        .periodo-campo {
+            display: grid;
 
-    font-weight: 800;
-}
+            gap: 7px;
+        }
 
+        .periodo-campo label {
+            color: #666;
 
-/* =========================================================
-   ADMIN
-========================================================= */
+            font-size: 9px;
 
-#admin {
+            font-weight: 900;
 
-    display: none;
-}
+            letter-spacing: 1px;
+        }
 
+        .periodo-campo input {
+            width: 100%;
 
-/* =========================================================
-   ÁREA DO SORTEIO
-========================================================= */
+            height: 46px;
 
-.sorteio-premium {
+            padding: 0 13px;
 
-    position: relative;
+            border:
+                1px solid
+                #ddd;
 
-    overflow: hidden;
+            border-radius: 10px;
 
-    padding: 35px;
+            background: white;
 
-    border-radius: 20px;
+            color: #222;
 
-    background:
-        radial-gradient(
-            circle at 50% 0%,
-            rgba(255,106,0,.22),
-            transparent 45%
-        ),
-        linear-gradient(
-            135deg,
-            #0d0d0d,
-            #202020
-        );
+            font-size: 12px;
 
-    color: white;
+            font-weight: 700;
 
-    text-align: center;
-}
+            outline: none;
+        }
 
-.sorteio-premium::before {
+        .periodo-campo input:focus {
+            border-color: var(--orange);
 
-    content: "";
+            box-shadow:
+                0 0 0 3px
+                rgba(255,106,0,.10);
+        }
 
-    position: absolute;
+        .btn-periodo {
+            height: 46px;
 
-    width: 300px;
-    height: 300px;
+            padding: 0 15px;
 
-    left: 50%;
-    top: 50%;
+            border: none;
 
-    transform:
-        translate(-50%,-50%);
+            border-radius: 10px;
 
-    border-radius: 50%;
+            background: #111;
 
-    border:
-        1px solid
-        rgba(255,106,0,.12);
+            color: white;
 
-    box-shadow:
-        0 0 0 30px rgba(255,106,0,.025),
-        0 0 0 60px rgba(255,106,0,.02);
+            font-size: 10px;
 
-    pointer-events: none;
-}
+            font-weight: 900;
 
-.sorteio-status {
+            cursor: pointer;
 
-    position: relative;
+            transition: .2s;
 
-    color: #aaa;
+            white-space: nowrap;
+        }
 
-    font-size: 9px;
+        .btn-periodo:hover {
+            background: var(--orange);
 
-    font-weight: 900;
+            transform:
+                translateY(-1px);
+        }
 
-    letter-spacing: 2px;
-}
+        .btn-periodo.ativo {
+            background: var(--orange);
+        }
 
-.sorteio-nome {
+        .btn-dia-anterior,
+        .btn-dia-proximo {
+            width: 46px;
 
-    position: relative;
+            padding: 0;
 
-    min-height: 70px;
+            font-size: 17px;
+        }
 
-    display: flex;
+        .periodo-informacao {
+            grid-column: 1 / -1;
 
-    align-items: center;
+            display: flex;
 
-    justify-content: center;
+            flex-wrap: wrap;
 
-    margin: 15px 0;
+            align-items: center;
 
-    color: var(--orange);
+            justify-content: space-between;
 
-    font-size:
-        clamp(
-            28px,
-            5vw,
-            50px
-        );
+            gap: 10px;
 
-    font-weight: 900;
+            padding-top: 5px;
 
-    letter-spacing: -1.5px;
-}
+            color: #555;
 
-.sorteio-nome.animando {
+            font-size: 11px;
 
-    animation:
-        nomePulse .10s
-        infinite alternate;
-}
+            font-weight: 800;
+        }
 
-@keyframes nomePulse {
+        .periodo-informacao strong {
+            color: #111;
+        }
 
-    from {
+        .modo-badge {
+            display: inline-flex;
 
-        transform: scale(1);
+            align-items: center;
 
-        opacity: .65;
-    }
+            gap: 6px;
 
-    to {
+            padding: 7px 10px;
 
-        transform: scale(1.04);
+            border-radius: 30px;
 
-        opacity: 1;
-    }
-}
+            background: #fff1e8;
 
-.sorteio-nome.vencedor {
+            color: var(--orange);
 
-    animation:
-        vencedor .7s
-        ease forwards;
-}
+            font-size: 9px;
 
-@keyframes vencedor {
+            font-weight: 900;
 
-    0% {
+            letter-spacing: .5px;
+        }
 
-        transform: scale(.7);
 
-        opacity: 0;
-    }
+        /* =====================================================
+           SORTEIO
+        ===================================================== */
 
-    60% {
+        .sorteio-premium {
+            position: relative;
 
-        transform: scale(1.12);
+            overflow: hidden;
 
-        opacity: 1;
-    }
+            padding: 35px;
 
-    100% {
+            border-radius: 20px;
 
-        transform: scale(1);
-    }
-}
+            background:
+                radial-gradient(
+                    circle at 50% 0%,
+                    rgba(255,106,0,.22),
+                    transparent 45%
+                ),
+                linear-gradient(
+                    135deg,
+                    #0d0d0d,
+                    #202020
+                );
 
-.config-sorteio {
+            color: white;
 
-    position: relative;
+            text-align: center;
+        }
 
-    display: grid;
+        .sorteio-premium::before {
+            content: "";
 
-    grid-template-columns: 160px 1fr;
+            position: absolute;
 
-    gap: 10px;
+            width: 300px;
+            height: 300px;
 
-    margin-bottom: 18px;
-}
+            left: 50%;
+            top: 50%;
 
-.quantidade-sorteio {
+            transform:
+                translate(-50%,-50%);
 
-    width: 100%;
+            border-radius: 50%;
 
-    height: 55px;
+            border:
+                1px solid
+                rgba(255,106,0,.12);
 
-    border: 1px solid #444;
+            box-shadow:
+                0 0 0 30px
+                rgba(255,106,0,.025),
+                0 0 0 60px
+                rgba(255,106,0,.02);
 
-    border-radius: 11px;
+            pointer-events: none;
+        }
 
-    background: #181818;
+        .sorteio-status {
+            position: relative;
 
-    color: white;
+            color: #aaa;
 
-    text-align: center;
+            font-size: 9px;
 
-    font-family: inherit;
+            font-weight: 900;
 
-    font-size: 18px;
+            letter-spacing: 2px;
+        }
 
-    font-weight: 900;
+        .sorteio-nome {
+            position: relative;
 
-    outline: none;
-}
+            min-height: 70px;
 
-.btn-sortear-premium {
+            display: flex;
 
-    height: 55px;
+            align-items: center;
 
-    border: none;
+            justify-content: center;
 
-    border-radius: 11px;
+            margin: 15px 0;
 
-    background: var(--orange);
+            color: var(--orange);
 
-    color: white;
+            font-size:
+                clamp(
+                    28px,
+                    5vw,
+                    50px
+                );
 
-    font-family: inherit;
+            font-weight: 900;
 
-    font-size: 12px;
+            letter-spacing: -1.5px;
+        }
 
-    font-weight: 900;
+        .sorteio-nome.animando {
+            animation:
+                nomePulse .10s
+                infinite alternate;
+        }
 
-    cursor: pointer;
+        @keyframes nomePulse {
 
-    transition: .2s;
-}
+            from {
+                transform: scale(1);
+                opacity: .65;
+            }
 
-.btn-sortear-premium:hover {
+            to {
+                transform: scale(1.04);
+                opacity: 1;
+            }
+        }
 
-    background: var(--orange-dark);
+        .sorteio-nome.vencedor {
+            animation:
+                vencedor .7s
+                ease forwards;
+        }
 
-    transform: translateY(-2px);
+        @keyframes vencedor {
 
-    box-shadow:
-        0 12px 30px
-        rgba(255,106,0,.25);
-}
+            0% {
+                transform: scale(.7);
+                opacity: 0;
+            }
 
-.btn-sortear-premium:disabled {
+            60% {
+                transform: scale(1.12);
+                opacity: 1;
+            }
 
-    opacity: .5;
+            100% {
+                transform: scale(1);
+            }
+        }
 
-    cursor: wait;
+        .config-sorteio {
+            position: relative;
 
-    transform: none;
-}
+            display: grid;
 
-.resultados-premium {
+            grid-template-columns:
+                160px 1fr;
 
-    position: relative;
+            gap: 10px;
 
-    display: flex;
+            margin-bottom: 18px;
+        }
 
-    flex-wrap: wrap;
+        .quantidade-sorteio {
+            width: 100%;
 
-    justify-content: center;
+            height: 55px;
 
-    gap: 8px;
+            border:
+                1px solid
+                #444;
 
-    margin-top: 15px;
-}
+            border-radius: 11px;
 
-.resultado-premium {
+            background: #181818;
 
-    padding: 10px 15px;
+            color: white;
 
-    border-radius: 30px;
+            text-align: center;
 
-    background: var(--orange);
+            font-size: 18px;
 
-    color: white;
+            font-weight: 900;
 
-    font-size: 11px;
+            outline: none;
+        }
 
-    font-weight: 900;
+        .btn-sortear-premium {
+            height: 55px;
 
-    animation:
-        resultadoEntrada .5s
-        ease forwards;
-}
+            border: none;
 
-@keyframes resultadoEntrada {
+            border-radius: 11px;
 
-    from {
+            background: var(--orange);
 
-        transform:
-            scale(.5)
-            translateY(20px);
+            color: white;
 
-        opacity: 0;
-    }
+            font-size: 12px;
 
-    to {
+            font-weight: 900;
 
-        transform:
-            scale(1)
-            translateY(0);
+            cursor: pointer;
 
-        opacity: 1;
-    }
-}
+            transition: .2s;
+        }
 
+        .btn-sortear-premium:hover {
+            background: var(--orange-dark);
 
-/* =========================================================
-   ANIVERSARIANTES
-========================================================= */
+            transform:
+                translateY(-2px);
 
-.aniversariante-box {
+            box-shadow:
+                0 12px 30px
+                rgba(255,106,0,.25);
+        }
 
-    padding: 25px;
+        .btn-sortear-premium:disabled {
+            opacity: .5;
 
-    border-radius: 16px;
+            cursor: wait;
 
-    background:
-        linear-gradient(
-            135deg,
-            #fff8f3,
-            #fff
-        );
+            transform: none;
+        }
 
-    border:
-        1px solid
-        #ffd5ba;
-}
+        .resultados-premium {
+            position: relative;
 
-.aniversariante-resultados {
+            display: flex;
 
-    display: flex;
+            flex-wrap: wrap;
 
-    flex-wrap: wrap;
+            justify-content: center;
 
-    justify-content: center;
+            gap: 8px;
 
-    gap: 10px;
+            margin-top: 15px;
+        }
 
-    min-height: 40px;
+        .resultado-premium {
+            padding: 10px 15px;
 
-    align-items: center;
-}
+            border-radius: 30px;
 
-.aniversariante-vencedor {
+            background: var(--orange);
 
-    padding: 12px 18px;
+            color: white;
 
-    border-radius: 30px;
+            font-size: 11px;
 
-    background: var(--orange);
+            font-weight: 900;
 
-    color: white;
+            animation:
+                resultadoEntrada .5s
+                ease forwards;
+        }
 
-    font-size: 12px;
+        @keyframes resultadoEntrada {
 
-    font-weight: 900;
+            from {
+                transform:
+                    scale(.5)
+                    translateY(20px);
 
-    animation:
-        resultadoEntrada .5s
-        ease forwards;
-}
+                opacity: 0;
+            }
 
-.aniversariante-vencedor small {
+            to {
+                transform:
+                    scale(1)
+                    translateY(0);
 
-    margin-left: 5px;
+                opacity: 1;
+            }
+        }
 
-    opacity: .8;
-}
 
+        /* =====================================================
+           ANIVERSARIANTES
+        ===================================================== */
 
-/* =========================================================
-   TOAST
-========================================================= */
+        .aniversariante-box {
+            padding: 25px;
 
-.toast {
+            border-radius: 16px;
 
-    position: fixed;
+            background:
+                linear-gradient(
+                    135deg,
+                    #fff8f3,
+                    #fff
+                );
 
-    right: 25px;
-    bottom: 25px;
+            border:
+                1px solid
+                #ffd5ba;
+        }
 
-    z-index: 10000;
+        .aniversariante-resultados {
+            display: flex;
 
-    max-width: 360px;
+            flex-wrap: wrap;
 
-    padding: 14px 18px;
+            justify-content: center;
 
-    border-radius: 12px;
+            gap: 10px;
 
-    background: #111;
+            min-height: 40px;
 
-    color: white;
+            align-items: center;
+        }
 
-    font-size: 11px;
+        .aniversariante-vencedor {
+            padding: 12px 18px;
 
-    font-weight: 800;
+            border-radius: 30px;
 
-    box-shadow:
-        0 15px 45px
-        rgba(0,0,0,.25);
+            background: var(--orange);
 
-    transform:
-        translateY(30px);
+            color: white;
 
-    opacity: 0;
+            font-size: 12px;
 
-    pointer-events: none;
+            font-weight: 900;
 
-    transition: .3s;
-}
+            animation:
+                resultadoEntrada .5s
+                ease forwards;
+        }
 
-.toast.show {
+        .aniversariante-vencedor small {
+            margin-left: 5px;
 
-    transform:
-        translateY(0);
+            opacity: .8;
+        }
 
-    opacity: 1;
-}
 
-.toast.sucesso {
+        /* =====================================================
+           PARTICIPAÇÕES
+        ===================================================== */
 
-    border-left:
-        4px solid
-        var(--green);
-}
+        .participacao-periodo {
+            margin-bottom: 12px;
 
-.toast.erro {
+            padding: 15px 18px;
 
-    border-left:
-        4px solid
-        var(--red);
-}
+            border-radius: 12px;
 
+            background: #f7f7f7;
 
-/* =========================================================
-   CONFETES
-========================================================= */
+            border:
+                1px solid
+                #e8e8e8;
 
-.confete {
+            color: #555;
 
-    position: fixed;
+            font-size: 12px;
 
-    top: -20px;
+            font-weight: 800;
+        }
 
-    z-index: 9998;
+        .btn-adicionar-participacao {
+            border: none;
 
-    width: 8px;
-    height: 14px;
+            padding: 12px 18px;
 
-    pointer-events: none;
+            border-radius: 10px;
 
-    animation:
-        cairConfete 2.5s
-        linear forwards;
-}
+            background: var(--orange);
 
-@keyframes cairConfete {
+            color: white;
 
-    to {
+            font-size: 11px;
 
-        transform:
-            translateY(110vh)
-            rotate(720deg);
+            font-weight: 900;
 
-        opacity: 0;
-    }
-}
+            cursor: pointer;
 
+            transition: .2s;
+        }
 
-/* =========================================================
-   MOBILE
-========================================================= */
+        .btn-adicionar-participacao:hover {
+            background: var(--orange-dark);
 
-@media(max-width:650px){
+            transform:
+                translateY(-1px);
+        }
 
-    .login-card {
+        .btn-remover-participacao {
+            width: 36px;
+            height: 36px;
 
-        padding: 32px 22px;
-    }
+            display: inline-flex;
 
-    .sorteio-premium {
+            align-items: center;
+            justify-content: center;
 
-        padding: 25px 18px;
-    }
+            border: none;
 
-    .config-sorteio {
+            border-radius: 9px;
 
-        grid-template-columns: 1fr;
-    }
+            background: #fff0f0;
 
-    .sorteio-nome {
+            color: #d60000;
 
-        font-size: 30px;
-    }
+            font-size: 21px;
 
-}
+            font-weight: 900;
 
-</style>
+            cursor: pointer;
+
+            transition: .2s;
+        }
+
+        .btn-remover-participacao:hover {
+            background: #d60000;
+
+            color: white;
+
+            transform:
+                scale(1.05);
+        }
+
+        .data-participacao {
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 5px;
+
+            white-space: nowrap;
+
+            font-size: 11px;
+
+            font-weight: 800;
+
+            color: #555;
+        }
+
+
+        /* =====================================================
+           NOME DO PARTICIPANTE CLICÁVEL
+        ===================================================== */
+
+        .nome-participante-btn {
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            padding: 7px 10px;
+
+            border: none;
+
+            border-radius: 8px;
+
+            background: transparent;
+
+            color: #111;
+
+            font-family: inherit;
+
+            font-size: 12px;
+
+            font-weight: 900;
+
+            cursor: pointer;
+
+            text-align: left;
+
+            transition: .2s;
+        }
+
+        .nome-participante-btn:hover {
+            background: #fff1e8;
+
+            color: var(--orange);
+        }
+
+        .nome-participante-btn span {
+            text-decoration: underline;
+
+            text-underline-offset: 3px;
+        }
+
+
+        /* =====================================================
+           POPUP WHATSAPP
+        ===================================================== */
+
+        .whatsapp-popup {
+            position: fixed;
+
+            inset: 0;
+
+            z-index: 10002;
+
+            display: none;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 20px;
+
+            background:
+                rgba(0,0,0,.68);
+
+            backdrop-filter:
+                blur(5px);
+        }
+
+        .whatsapp-popup.aberto {
+            display: flex;
+        }
+
+        .whatsapp-popup-card {
+            width:
+                min(390px,100%);
+
+            padding: 28px;
+
+            border-radius: 20px;
+
+            background: white;
+
+            text-align: center;
+
+            box-shadow:
+                0 30px 100px
+                rgba(0,0,0,.35);
+
+            animation:
+                popupEntrada .25s
+                ease forwards;
+        }
+
+        @keyframes popupEntrada {
+
+            from {
+                opacity: 0;
+
+                transform:
+                    translateY(15px)
+                    scale(.96);
+            }
+
+            to {
+                opacity: 1;
+
+                transform:
+                    translateY(0)
+                    scale(1);
+            }
+        }
+
+        .whatsapp-popup-icon {
+            margin-bottom: 10px;
+
+            font-size: 42px;
+        }
+
+        .whatsapp-popup-label {
+            color: var(--orange);
+
+            font-size: 9px;
+
+            font-weight: 900;
+
+            letter-spacing: 1.5px;
+        }
+
+        .whatsapp-popup-nome {
+            margin: 6px 0 18px;
+
+            color: #111;
+
+            font-size: 21px;
+
+            font-weight: 900;
+        }
+
+        .whatsapp-popup-numero {
+            margin-bottom: 18px;
+
+            padding: 14px;
+
+            border-radius: 10px;
+
+            background: #f7f7f7;
+
+            color: #222;
+
+            font-size: 15px;
+
+            font-weight: 800;
+
+            word-break: break-word;
+        }
+
+        .btn-whatsapp {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            width: 100%;
+
+            height: 50px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            background: #25D366;
+
+            color: white;
+
+            font-size: 12px;
+
+            font-weight: 900;
+
+            text-decoration: none;
+
+            cursor: pointer;
+
+            transition: .2s;
+        }
+
+        .btn-whatsapp:hover {
+            background: #1ebe5d;
+
+            transform:
+                translateY(-1px);
+        }
+
+        .btn-fechar-whatsapp {
+            width: 100%;
+
+            height: 45px;
+
+            margin-top: 9px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            background: #eeeeee;
+
+            color: #333;
+
+            font-size: 11px;
+
+            font-weight: 900;
+
+            cursor: pointer;
+
+            transition: .2s;
+        }
+
+        .btn-fechar-whatsapp:hover {
+            background: #dddddd;
+        }
+
+
+        /* =====================================================
+           MODAL
+        ===================================================== */
+
+        .modal-overlay {
+            position: fixed;
+
+            inset: 0;
+
+            z-index: 10001;
+
+            display: none;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 20px;
+
+            background:
+                rgba(0,0,0,.68);
+
+            backdrop-filter:
+                blur(5px);
+        }
+
+        .modal-overlay.aberto {
+            display: flex;
+        }
+
+        .modal-card {
+            width:
+                min(500px,100%);
+
+            max-height: 90vh;
+
+            overflow-y: auto;
+
+            padding: 28px;
+
+            border-radius: 20px;
+
+            background: white;
+
+            box-shadow:
+                0 30px 100px
+                rgba(0,0,0,.35);
+        }
+
+        .modal-header {
+            display: flex;
+
+            justify-content:
+                space-between;
+
+            align-items:
+                flex-start;
+
+            gap: 15px;
+
+            margin-bottom: 22px;
+        }
+
+        .modal-label {
+            color: var(--orange);
+
+            font-size: 10px;
+
+            font-weight: 900;
+
+            letter-spacing: 1.5px;
+        }
+
+        .modal-title {
+            margin: 5px 0 0;
+
+            color: #111;
+
+            font-size: 22px;
+
+            font-weight: 900;
+        }
+
+        .btn-fechar-modal {
+            width: 36px;
+            height: 36px;
+
+            flex-shrink: 0;
+
+            border: none;
+
+            border-radius: 50%;
+
+            background: #f1f1f1;
+
+            color: #333;
+
+            font-size: 21px;
+
+            cursor: pointer;
+
+            transition: .2s;
+        }
+
+        .btn-fechar-modal:hover {
+            background: #e4e4e4;
+
+            transform:
+                rotate(90deg);
+        }
+
+        .modal-form {
+            display: grid;
+
+            gap: 13px;
+        }
+
+        .campo-modal {
+            width: 100%;
+
+            height: 50px;
+
+            padding: 0 14px;
+
+            border:
+                1px solid
+                #ddd;
+
+            border-radius: 10px;
+
+            outline: none;
+
+            color: #222;
+
+            background: white;
+
+            font-size: 13px;
+        }
+
+        .campo-modal:focus {
+            border-color:
+                var(--orange);
+
+            box-shadow:
+                0 0 0 3px
+                rgba(255,106,0,.10);
+        }
+
+        .campo-label {
+            display: grid;
+
+            gap: 6px;
+
+            color: #555;
+
+            font-size: 10px;
+
+            font-weight: 900;
+        }
+
+        .btn-salvar-modal {
+            width: 100%;
+
+            height: 52px;
+
+            margin-top: 5px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            background:
+                var(--orange);
+
+            color: white;
+
+            font-weight: 900;
+
+            cursor: pointer;
+
+            transition: .2s;
+        }
+
+        .btn-salvar-modal:hover {
+            background:
+                var(--orange-dark);
+        }
+
+        .btn-salvar-modal:disabled {
+            opacity: .6;
+
+            cursor: wait;
+        }
+
+
+        /* =====================================================
+           TOAST
+        ===================================================== */
+
+        .toast {
+            position: fixed;
+
+            right: 25px;
+            bottom: 25px;
+
+            z-index: 10000;
+
+            max-width: 360px;
+
+            padding: 14px 18px;
+
+            border-radius: 12px;
+
+            background: #111;
+
+            color: white;
+
+            font-size: 11px;
+
+            font-weight: 800;
+
+            box-shadow:
+                0 15px 45px
+                rgba(0,0,0,.25);
+
+            transform:
+                translateY(30px);
+
+            opacity: 0;
+
+            pointer-events: none;
+
+            transition: .3s;
+        }
+
+        .toast.show {
+            transform:
+                translateY(0);
+
+            opacity: 1;
+        }
+
+        .toast.sucesso {
+            border-left:
+                4px solid
+                var(--green);
+        }
+
+        .toast.erro {
+            border-left:
+                4px solid
+                var(--red);
+        }
+
+
+        /* =====================================================
+           CONFETES
+        ===================================================== */
+
+        .confete {
+            position: fixed;
+
+            top: -20px;
+
+            z-index: 9998;
+
+            width: 8px;
+            height: 14px;
+
+            pointer-events: none;
+
+            animation:
+                cairConfete 2.5s
+                linear forwards;
+        }
+
+        @keyframes cairConfete {
+
+            to {
+                transform:
+                    translateY(110vh)
+                    rotate(720deg);
+
+                opacity: 0;
+            }
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media(max-width:1100px) {
+
+            .periodo-controle {
+                grid-template-columns:
+                    1fr
+                    1fr
+                    auto
+                    auto;
+            }
+
+            .periodo-informacao {
+                grid-column:
+                    1 / -1;
+            }
+
+        }
+
+
+        @media(max-width:850px) {
+
+            .periodo-controle {
+                grid-template-columns:
+                    1fr
+                    1fr;
+            }
+
+            .periodo-campo {
+                grid-column:
+                    1 / -1;
+            }
+
+            .btn-periodo {
+                width: 100%;
+            }
+
+            .periodo-informacao {
+                grid-column:
+                    1 / -1;
+            }
+
+        }
+
+
+        @media(max-width:650px) {
+
+            .login-card {
+                padding: 32px 22px;
+            }
+
+            .sorteio-premium {
+                padding: 25px 18px;
+            }
+
+            .config-sorteio {
+                grid-template-columns: 1fr;
+            }
+
+            .sorteio-nome {
+                font-size: 30px;
+            }
+
+            .section-header {
+                flex-direction:
+                    column;
+
+                align-items:
+                    stretch;
+            }
+
+            .btn-adicionar-participacao {
+                width: 100%;
+            }
+
+            .table-wrapper {
+                overflow-x: auto;
+            }
+
+            table {
+                min-width: 700px;
+            }
+
+            .modal-card {
+                padding: 22px;
+            }
+
+            .periodo-controle {
+                grid-template-columns:
+                    1fr 1fr;
+            }
+
+            .periodo-campo {
+                grid-column:
+                    1 / -1;
+            }
+
+            .periodo-informacao {
+                align-items:
+                    flex-start;
+
+                flex-direction:
+                    column;
+            }
+
+            .whatsapp-popup-card {
+                padding: 24px 20px;
+            }
+
+        }
+
+    </style>
 
 </head>
 
@@ -697,9 +1456,9 @@
 <body>
 
 
-<!-- =======================================================
+<!-- =========================================================
      LOGIN
-======================================================== -->
+========================================================= -->
 
 <section
     id="loginScreen"
@@ -739,6 +1498,7 @@
         <button
             id="btnLogin"
             class="login-button"
+            type="button"
         >
             ENTRAR NO PAINEL
         </button>
@@ -753,504 +1513,845 @@
 </section>
 
 
-<!-- =======================================================
+<!-- =========================================================
      ADMIN
-======================================================== -->
+========================================================= -->
 
 <div id="admin">
 
 
-<header class="admin-header">
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
 
-    <div class="brand">
+    <header class="admin-header">
 
-        <div class="brand-logo">
-            OK.SPIT
-        </div>
+        <div class="brand">
 
-        <div class="brand-info">
-
-            <strong>
-                Painel Administrativo
-            </strong>
-
-            <span>
-                Controle de participações e sorteios
-            </span>
-
-        </div>
-
-    </div>
-
-
-    <div
-        style="
-        display:flex;
-        gap:8px;
-        align-items:center;
-        "
-    >
-
-        <a
-            href="./index.html"
-            class="btn-site"
-        >
-            🌐 Ver site
-        </a>
-
-        <button
-            id="btnSair"
-            class="btn-site"
-        >
-            SAIR
-        </button>
-
-    </div>
-
-</header>
-
-
-<main class="admin-container">
-
-
-<!-- =======================================================
-     TÍTULO
-======================================================== -->
-
-<section class="admin-title">
-
-    <div class="title-label">
-        📊 CONTROLE
-    </div>
-
-    <h1>
-        Painel de controle
-    </h1>
-
-    <p>
-        Gerencie participantes, ganhadores e sorteios da OK.SPIT.
-    </p>
-
-</section>
-
-
-<!-- =======================================================
-     ESTATÍSTICAS
-======================================================== -->
-
-<section class="stats">
-
-    <div class="stat-card">
-
-        <div class="stat-icon">
-            🎁
-        </div>
-
-        <div class="stat-content">
-
-            <span>
-                Participações no mês
-            </span>
-
-            <strong id="totalMes">
-                0
-            </strong>
-
-        </div>
-
-    </div>
-
-
-    <div class="stat-card">
-
-        <div class="stat-icon">
-            🏆
-        </div>
-
-        <div class="stat-content">
-
-            <span>
-                Já ganharam
-            </span>
-
-            <strong id="totalBloqueados">
-                0
-            </strong>
-
-        </div>
-
-    </div>
-
-
-    <div class="stat-card">
-
-        <div class="stat-icon">
-            👥
-        </div>
-
-        <div class="stat-content">
-
-            <span>
-                Disponíveis
-            </span>
-
-            <strong id="totalDisponiveis">
-                0
-            </strong>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- =======================================================
-     SORTEIO PRINCIPAL
-======================================================== -->
-
-<section class="admin-section">
-
-    <div class="section-header">
-
-        <div>
-
-            <div class="section-label">
-                🎲 SORTEIO
+            <div class="brand-logo">
+                OK.SPIT
             </div>
 
-            <h2>
-                Sortear participantes
-            </h2>
+            <div class="brand-info">
 
-            <p>
-                O participante sorteado é automaticamente registrado
-                como ganhador e fica bloqueado neste mês.
-            </p>
+                <strong>
+                    Painel Administrativo
+                </strong>
 
-        </div>
+                <span>
+                    Controle de participações e sorteios
+                </span>
 
-    </div>
+            </div>
 
-
-    <div class="sorteio-premium">
-
-
-        <div
-            id="statusSorteio"
-            class="sorteio-status"
-        >
-            PRONTO PARA SORTEAR
         </div>
 
 
         <div
-            id="resultadoSorteio"
-            class="sorteio-nome"
+            style="
+                display:flex;
+                gap:8px;
+                align-items:center;
+            "
         >
-            BOA SORTE!
-        </div>
 
-
-        <div class="config-sorteio">
-
-            <input
-                id="quantidade"
-                class="quantidade-sorteio"
-                type="number"
-                min="1"
-                max="50"
-                value="1"
+            <a
+                href="./index.html"
+                class="btn-site"
             >
+                🌐 Ver site
+            </a>
 
             <button
-                id="btnSortear"
-                class="btn-sortear-premium"
+                id="btnSair"
+                class="btn-site"
+                type="button"
             >
-                🎁 REALIZAR SORTEIO
+                SAIR
             </button>
 
         </div>
 
-
-        <div
-            id="resultadosSorteio"
-            class="resultados-premium"
-        ></div>
+    </header>
 
 
-    </div>
+    <!-- =====================================================
+         CONTEÚDO
+    ====================================================== -->
 
-</section>
+    <main class="admin-container">
 
 
-<!-- =======================================================
-     ANIVERSARIANTES
-======================================================== -->
+        <!-- =================================================
+             TÍTULO
+        ================================================== -->
 
-<section class="admin-section">
+        <section class="admin-title">
 
-    <div class="section-header">
-
-        <div>
-
-            <div class="section-label">
-                🎂 ANIVERSARIANTES
+            <div class="title-label">
+                📊 CONTROLE
             </div>
 
-            <h2>
-                Sorteio de aniversariantes do mês
-            </h2>
+            <h1>
+                Painel de controle
+            </h1>
 
             <p>
-                Sorteie participantes que fazem aniversário
-                durante o mês atual.
+                Gerencie participantes, ganhadores e sorteios da OK.SPIT.
             </p>
 
-        </div>
-
-    </div>
+        </section>
 
 
-    <div class="config-sorteio">
+        <!-- =================================================
+             CONSULTA DE PERÍODO
+        ================================================== -->
 
-        <input
-            id="quantidadeAniversariantes"
-            class="quantidade-sorteio"
-            type="number"
-            min="1"
-            max="50"
-            value="1"
-        >
+        <section class="admin-section">
 
-        <button
-            id="btnSortearAniversariantes"
-            class="btn-sortear-premium"
-        >
-            🎂 SORTEAR ANIVERSARIANTE
-        </button>
+            <div class="section-header">
 
-    </div>
+                <div>
 
+                    <div class="section-label">
+                        📅 CONSULTAR PARTICIPAÇÕES
+                    </div>
 
-    <div class="aniversariante-box">
+                    <h2>
+                        Escolha o período que deseja visualizar
+                    </h2>
 
-        <div
-            id="resultadoAniversariantes"
-            class="aniversariante-resultados"
-        >
+                    <p>
+                        Selecione uma data inicial e uma data final
+                        para consultar as participações registradas.
+                    </p>
 
-            <span class="loading">
-                Nenhum sorteio realizado.
-            </span>
+                </div>
 
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- =======================================================
-     GANHADORES
-======================================================== -->
-
-<section class="admin-section">
-
-    <div class="section-header">
-
-        <div>
-
-            <div class="section-label">
-                🏆 GANHADORES
             </div>
 
-            <h2>
-                Ganhadores deste mês
-            </h2>
 
-            <p>
-                Pessoas que já ganharam e estão fora
-                dos próximos sorteios.
-            </p>
-
-        </div>
-
-    </div>
+            <div class="periodo-controle">
 
 
-    <div
-        id="listaGanhadores"
-        class="ganhadores-grid"
-    >
+                <div class="periodo-campo">
 
-        <div class="loading-card">
-            Carregando ganhadores...
-        </div>
+                    <label for="dataInicioConsulta">
+                        DATA INICIAL
+                    </label>
 
-    </div>
+                    <input
+                        id="dataInicioConsulta"
+                        type="date"
+                    >
 
-</section>
+                </div>
 
 
-<!-- =======================================================
-     PARTICIPANTES
-======================================================== -->
+                <div class="periodo-campo">
 
-<section class="admin-section">
+                    <label for="dataFimConsulta">
+                        DATA FINAL
+                    </label>
 
-    <div class="section-header">
+                    <input
+                        id="dataFimConsulta"
+                        type="date"
+                    >
 
-        <div>
+                </div>
 
-            <div class="section-label">
-                👥 PARTICIPANTES
+
+                <button
+                    id="btnDiaAnterior"
+                    class="btn-periodo btn-dia-anterior"
+                    type="button"
+                    title="Período anterior"
+                >
+                    ←
+                </button>
+
+
+                <button
+                    id="btnDiaProximo"
+                    class="btn-periodo btn-dia-proximo"
+                    type="button"
+                    title="Próximo período"
+                >
+                    →
+                </button>
+
+
+                <button
+                    id="btnVerPeriodo"
+                    class="btn-periodo ativo"
+                    type="button"
+                >
+                    🔎 VER PERÍODO
+                </button>
+
+
+                <button
+                    id="btnVerDia"
+                    class="btn-periodo"
+                    type="button"
+                >
+                    📅 VER DIA
+                </button>
+
+
+                <button
+                    id="btnVerSemana"
+                    class="btn-periodo"
+                    type="button"
+                >
+                    📆 VER SEMANA
+                </button>
+
+
+                <button
+                    id="btnHoje"
+                    class="btn-periodo"
+                    type="button"
+                >
+                    🏠 HOJE
+                </button>
+
+
+                <div class="periodo-informacao">
+
+                    <span id="periodoSelecionado">
+                        📅 Carregando período...
+                    </span>
+
+                    <span
+                        id="periodoModo"
+                        class="modo-badge"
+                    >
+                        📅 VISUALIZANDO DIA
+                    </span>
+
+                </div>
+
             </div>
 
-            <h2>
-                Participantes disponíveis
-            </h2>
-
-            <p>
-                Você pode marcar manualmente quem já ganhou este mês.
-            </p>
-
-        </div>
-
-    </div>
+        </section>
 
 
-    <div class="search-box">
+        <!-- =================================================
+             ESTATÍSTICAS
+        ================================================== -->
 
-        <span>
-            🔎
-        </span>
+        <section class="stats">
 
-        <input
-            id="buscar"
-            type="text"
-            placeholder="Buscar participante..."
-        >
+            <div class="stat-card">
 
-    </div>
+                <div class="stat-icon">
+                    🎁
+                </div>
 
+                <div class="stat-content">
 
-    <div class="table-wrapper">
+                    <span id="textoTotalParticipacoes">
+                        Participações no dia
+                    </span>
 
-        <table>
+                    <strong id="totalMes">
+                        0
+                    </strong>
 
-            <thead>
+                </div>
 
-                <tr>
-
-                    <th>
-                        Participante
-                    </th>
-
-                    <th>
-                        Plataforma
-                    </th>
-
-                    <th>
-                        Ação
-                    </th>
-
-                </tr>
-
-            </thead>
-
-            <tbody id="listaParticipantes">
-
-                <tr>
-
-                    <td colspan="3">
-                        <div class="loading">
-                            Carregando participantes...
-                        </div>
-                    </td>
-
-                </tr>
-
-            </tbody>
-
-        </table>
-
-    </div>
-
-</section>
-
-
-<!-- =======================================================
-     CONTROLE
-======================================================== -->
-
-<section class="admin-section">
-
-    <div class="section-header">
-
-        <div>
-
-            <div class="section-label">
-                ⚙️ CONTROLE
             </div>
 
-            <h2>
-                Manutenção
-            </h2>
 
-            <p>
-                Atualize os dados ou inicie um novo ciclo
-                removendo os ganhadores do mês.
-            </p>
+            <div class="stat-card">
 
-        </div>
+                <div class="stat-icon">
+                    🏆
+                </div>
 
-    </div>
+                <div class="stat-content">
 
+                    <span>
+                        Já ganharam
+                    </span>
 
-    <div class="acoes-ganhador">
+                    <strong id="totalBloqueados">
+                        0
+                    </strong>
 
-        <button
-            id="btnAtualizar"
-            class="btn-refresh"
-        >
-            🔄 ATUALIZAR
-        </button>
+                </div>
 
-        <button
-            id="btnZerar"
-            class="btn-limpar"
-        >
-            🗑️ ZERAR GANHADORES DO MÊS
-        </button>
-
-    </div>
-
-</section>
+            </div>
 
 
-</main>
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    👥
+                </div>
+
+                <div class="stat-content">
+
+                    <span>
+                        Disponíveis
+                    </span>
+
+                    <strong id="totalDisponiveis">
+                        0
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
 
 
-<footer>
+        <!-- =================================================
+             SORTEIO
+        ================================================== -->
 
-    <strong>
-        OK.SPIT
-    </strong>
+        <section class="admin-section">
 
-    | Painel Administrativo © 2026
+            <div class="section-header">
 
-</footer>
+                <div>
+
+                    <div class="section-label">
+                        🎲 SORTEIO
+                    </div>
+
+                    <h2>
+                        Sortear participantes
+                    </h2>
+
+                    <p>
+                        O participante sorteado é automaticamente
+                        registrado como ganhador e fica bloqueado.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="sorteio-premium">
+
+                <div
+                    id="statusSorteio"
+                    class="sorteio-status"
+                >
+                    PRONTO PARA SORTEAR
+                </div>
+
+
+                <div
+                    id="resultadoSorteio"
+                    class="sorteio-nome"
+                >
+                    BOA SORTE!
+                </div>
+
+
+                <div class="config-sorteio">
+
+                    <input
+                        id="quantidade"
+                        class="quantidade-sorteio"
+                        type="number"
+                        min="1"
+                        max="50"
+                        value="1"
+                    >
+
+
+                    <button
+                        id="btnSortear"
+                        class="btn-sortear-premium"
+                        type="button"
+                    >
+                        🎁 REALIZAR SORTEIO
+                    </button>
+
+                </div>
+
+
+                <div
+                    id="resultadosSorteio"
+                    class="resultados-premium"
+                ></div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             ANIVERSARIANTES
+        ================================================== -->
+
+        <section class="admin-section">
+
+            <div class="section-header">
+
+                <div>
+
+                    <div class="section-label">
+                        🎂 ANIVERSARIANTES
+                    </div>
+
+                    <h2>
+                        Sorteio de aniversariantes do mês
+                    </h2>
+
+                    <p>
+                        Sorteie participantes que fazem aniversário
+                        durante o mês atual.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="config-sorteio">
+
+                <input
+                    id="quantidadeAniversariantes"
+                    class="quantidade-sorteio"
+                    type="number"
+                    min="1"
+                    max="50"
+                    value="1"
+                >
+
+
+                <button
+                    id="btnSortearAniversariantes"
+                    class="btn-sortear-premium"
+                    type="button"
+                >
+                    🎂 SORTEAR ANIVERSARIANTE
+                </button>
+
+            </div>
+
+
+            <div class="aniversariante-box">
+
+                <div
+                    id="resultadoAniversariantes"
+                    class="aniversariante-resultados"
+                >
+
+                    <span>
+                        Nenhum sorteio realizado.
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             GANHADORES
+        ================================================== -->
+
+        <section class="admin-section">
+
+            <div class="section-header">
+
+                <div>
+
+                    <div class="section-label">
+                        🏆 GANHADORES
+                    </div>
+
+                    <h2>
+                        Ganhadores deste mês
+                    </h2>
+
+                    <p>
+                        Pessoas que já ganharam e estão fora
+                        dos próximos sorteios.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="listaGanhadores"
+                class="ganhadores-grid"
+            >
+
+                <div class="loading-card">
+                    Carregando ganhadores...
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             PARTICIPAÇÕES
+        ================================================== -->
+
+        <section class="admin-section">
+
+
+            <div class="section-header">
+
+                <div>
+
+                    <div class="section-label">
+                        👥 PARTICIPAÇÕES
+                    </div>
+
+                    <h2>
+                        Participações
+                    </h2>
+
+                    <p>
+                        Consulte as pessoas que participaram
+                        no período selecionado.
+                    </p>
+
+                </div>
+
+
+                <button
+                    id="btnAdicionarParticipacao"
+                    class="btn-adicionar-participacao"
+                    type="button"
+                >
+                    ➕ ADICIONAR PARTICIPAÇÃO
+                </button>
+
+            </div>
+
+
+            <div
+                id="periodoParticipacoes"
+                class="participacao-periodo"
+            >
+                📅 Carregando...
+            </div>
+
+
+            <div class="search-box">
+
+                <span>
+                    🔎
+                </span>
+
+                <input
+                    id="buscar"
+                    type="text"
+                    placeholder="Buscar participante..."
+                    autocomplete="off"
+                >
+
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Participante
+                            </th>
+
+                            <th>
+                                Plataforma
+                            </th>
+
+                            <th>
+                                Data da participação
+                            </th>
+
+                            <th>
+                                Ação
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="listaParticipantes">
+
+                        <tr>
+
+                            <td colspan="4">
+
+                                <div class="loading">
+                                    Carregando participações...
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             CONTROLE
+        ================================================== -->
+
+        <section class="admin-section">
+
+            <div class="section-header">
+
+                <div>
+
+                    <div class="section-label">
+                        ⚙️ CONTROLE
+                    </div>
+
+                    <h2>
+                        Manutenção
+                    </h2>
+
+                    <p>
+                        Atualize os dados ou inicie um novo ciclo
+                        removendo os ganhadores do mês.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="acoes-ganhador">
+
+                <button
+                    id="btnAtualizar"
+                    class="btn-refresh"
+                    type="button"
+                >
+                    🔄 ATUALIZAR
+                </button>
+
+
+                <button
+                    id="btnZerar"
+                    class="btn-limpar"
+                    type="button"
+                >
+                    🗑️ ZERAR GANHADORES DO MÊS
+                </button>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+    <footer>
+
+        <strong>
+            OK.SPIT
+        </strong>
+
+        | Painel Administrativo © 2026
+
+    </footer>
 
 
 </div>
 
 
+<!-- =========================================================
+     MODAL NOVA PARTICIPAÇÃO
+========================================================= -->
+
+<div
+    id="modalParticipacao"
+    class="modal-overlay"
+>
+
+    <div class="modal-card">
+
+        <div class="modal-header">
+
+            <div>
+
+                <div class="modal-label">
+                    NOVA PARTICIPAÇÃO
+                </div>
+
+                <h2 class="modal-title">
+                    Adicionar participante
+                </h2>
+
+            </div>
+
+
+            <button
+                id="btnFecharModalParticipacao"
+                class="btn-fechar-modal"
+                type="button"
+                aria-label="Fechar"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="modal-form">
+
+            <input
+                id="novoNome"
+                class="campo-modal"
+                type="text"
+                placeholder="Nome completo"
+                autocomplete="name"
+            >
+
+
+            <input
+                id="novoTelefone"
+                class="campo-modal"
+                type="text"
+                placeholder="Telefone / WhatsApp"
+                autocomplete="tel"
+            >
+
+
+            <input
+                id="novaPlataforma"
+                class="campo-modal"
+                type="text"
+                placeholder="Plataforma"
+            >
+
+
+            <label class="campo-label">
+
+                DATA DA PARTICIPAÇÃO
+
+                <input
+                    id="novaDataParticipacao"
+                    class="campo-modal"
+                    type="date"
+                >
+
+            </label>
+
+
+            <button
+                id="btnSalvarParticipacao"
+                class="btn-salvar-modal"
+                type="button"
+            >
+                ➕ SALVAR PARTICIPAÇÃO
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     POPUP WHATSAPP
+========================================================= -->
+
+<div
+    id="whatsappPopup"
+    class="whatsapp-popup"
+>
+
+    <div class="whatsapp-popup-card">
+
+        <div class="whatsapp-popup-icon">
+            📱
+        </div>
+
+
+        <div class="whatsapp-popup-label">
+            CONTATO DO PARTICIPANTE
+        </div>
+
+
+        <div
+            id="whatsappNome"
+            class="whatsapp-popup-nome"
+        >
+            Participante
+        </div>
+
+
+        <div
+            id="whatsappNumero"
+            class="whatsapp-popup-numero"
+        >
+            —
+        </div>
+
+
+        <a
+            id="btnAbrirWhatsapp"
+            class="btn-whatsapp"
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            💬 ABRIR NO WHATSAPP
+        </a>
+
+
+        <button
+            id="btnFecharWhatsapp"
+            class="btn-fechar-whatsapp"
+            type="button"
+        >
+            FECHAR
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     TOAST
+========================================================= -->
+
 <div
     id="toast"
     class="toast"
+    role="status"
+    aria-live="polite"
 ></div>
 
+
+<!-- =========================================================
+     SUPABASE
+========================================================= -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -1270,11 +2371,22 @@ const SUPABASE_URL =
 const SUPABASE_ANON_KEY =
     "sb_publishable_LzX0GpaYAK2KNSu2eetEuw_tr5PKqSi";
 
-const supabaseClient =
-    window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_ANON_KEY
-    );
+
+let supabaseClient = null;
+
+
+if (
+    window.supabase &&
+    typeof window.supabase.createClient === "function"
+) {
+
+    supabaseClient =
+        window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_ANON_KEY
+        );
+
+}
 
 
 /* =========================================================
@@ -1289,69 +2401,86 @@ let aniversariantes = [];
 
 let sorteando = false;
 
+let toastTimer = null;
+
+let modoConsulta = "dia";
+
+let dataInicioConsulta = new Date();
+
+let dataFimConsulta = new Date();
+
 
 /* =========================================================
    UTILITÁRIOS
 ========================================================= */
 
-const $ = id =>
-    document.getElementById(id);
+function $(id) {
 
-
-function periodo(){
-
-    const agora = new Date();
-
-    return {
-
-        mes:
-            agora.getMonth() + 1,
-
-        ano:
-            agora.getFullYear()
-
-    };
+    return document.getElementById(id);
 
 }
 
 
-function normalizar(nome){
+function setText(id, texto) {
+
+    const elemento = $(id);
+
+    if (elemento) {
+
+        elemento.textContent = texto;
+
+    }
+
+}
+
+
+function normalizar(nome) {
 
     return String(nome || "")
         .trim()
         .toLowerCase()
         .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g,"")
-        .replace(/\s+/g," ");
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/\s+/g, " ");
 
 }
 
 
-function escapar(texto){
+function escapar(texto) {
 
     const div =
         document.createElement("div");
 
     div.textContent =
-        String(texto || "");
+        String(texto ?? "");
 
     return div.innerHTML;
 
 }
 
 
-function nomeExibicao(nome){
+function nomeExibicao(nome) {
 
     const partes =
         String(nome || "")
-        .trim()
-        .split(/\s+/);
+            .trim()
+            .split(/\s+/)
+            .filter(Boolean);
 
-    if(partes.length <= 2){
+
+    if (!partes.length) {
+
+        return "Participante";
+
+    }
+
+
+    if (partes.length <= 2) {
 
         return partes.join(" ");
 
     }
+
 
     return (
         partes[0] +
@@ -1362,20 +2491,535 @@ function nomeExibicao(nome){
 }
 
 
-function pertenceMes(valor){
+/* =========================================================
+   EMBARALHAMENTO
+========================================================= */
 
-    if(!valor)return false;
+function embaralhar(lista) {
+
+    const resultado = [...lista];
+
+    for (
+        let i = resultado.length - 1;
+        i > 0;
+        i--
+    ) {
+
+        const j =
+            Math.floor(
+                Math.random() * (i + 1)
+            );
+
+        [
+            resultado[i],
+            resultado[j]
+        ] =
+        [
+            resultado[j],
+            resultado[i]
+        ];
+
+    }
+
+    return resultado;
+
+}
+
+
+/* =========================================================
+   DATAS
+========================================================= */
+
+function clonarData(data) {
+
+    return new Date(
+        data.getFullYear(),
+        data.getMonth(),
+        data.getDate()
+    );
+
+}
+
+
+function inicioDia(data) {
+
+    const inicio =
+        clonarData(data);
+
+    inicio.setHours(
+        0,
+        0,
+        0,
+        0
+    );
+
+    return inicio;
+
+}
+
+
+function fimDia(data) {
+
+    const fim =
+        clonarData(data);
+
+    fim.setHours(
+        23,
+        59,
+        59,
+        999
+    );
+
+    return fim;
+
+}
+
+
+function inicioSemanaDaData(data) {
+
+    const inicio =
+        clonarData(data);
+
+    const dia =
+        inicio.getDay();
+
+    const diferenca =
+        dia === 0
+            ? 6
+            : dia - 1;
+
+    inicio.setDate(
+        inicio.getDate() -
+        diferenca
+    );
+
+    inicio.setHours(
+        0,
+        0,
+        0,
+        0
+    );
+
+    return inicio;
+
+}
+
+
+function fimSemanaDaData(data) {
+
+    const fim =
+        inicioSemanaDaData(data);
+
+    fim.setDate(
+        fim.getDate() + 6
+    );
+
+    fim.setHours(
+        23,
+        59,
+        59,
+        999
+    );
+
+    return fim;
+
+}
+
+
+function dataParaInput(data) {
+
+    const ano =
+        data.getFullYear();
+
+    const mes =
+        String(
+            data.getMonth() + 1
+        ).padStart(
+            2,
+            "0"
+        );
+
+    const dia =
+        String(
+            data.getDate()
+        ).padStart(
+            2,
+            "0"
+        );
+
+    return (
+        ano +
+        "-" +
+        mes +
+        "-" +
+        dia
+    );
+
+}
+
+
+function inputParaData(valor) {
+
+    if (!valor) {
+
+        return new Date();
+
+    }
+
+    const partes =
+        valor.split("-");
+
+    if (
+        partes.length !== 3
+    ) {
+
+        return new Date();
+
+    }
+
+    return new Date(
+        Number(partes[0]),
+        Number(partes[1]) - 1,
+        Number(partes[2])
+    );
+
+}
+
+
+function formatarData(valor) {
+
+    if (!valor) {
+
+        return "-";
+
+    }
+
+
+    if (
+        typeof valor === "string" &&
+        /^\d{4}-\d{2}-\d{2}$/.test(valor)
+    ) {
+
+        const data =
+            inputParaData(valor);
+
+        return data.toLocaleDateString(
+            "pt-BR",
+            {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric"
+            }
+        );
+
+    }
+
 
     const data =
         new Date(valor);
 
-    const p =
-        periodo();
 
-    return (
-        data.getFullYear() === p.ano &&
-        data.getMonth() + 1 === p.mes
+    if (
+        Number.isNaN(
+            data.getTime()
+        )
+    ) {
+
+        return "-";
+
+    }
+
+
+    return data.toLocaleDateString(
+        "pt-BR",
+        {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric"
+        }
     );
+
+}
+
+
+function formatarDataLonga(data) {
+
+    return data.toLocaleDateString(
+        "pt-BR",
+        {
+            weekday: "long",
+            day: "2-digit",
+            month: "long",
+            year: "numeric"
+        }
+    );
+
+}
+
+
+/* =========================================================
+   PERÍODO
+========================================================= */
+
+function obterPeriodoConsulta() {
+
+    let inicio;
+    let fim;
+
+
+    if (
+        modoConsulta === "dia"
+    ) {
+
+        inicio =
+            inicioDia(
+                dataInicioConsulta
+            );
+
+        fim =
+            fimDia(
+                dataInicioConsulta
+            );
+
+    }
+
+    else if (
+        modoConsulta === "semana"
+    ) {
+
+        inicio =
+            inicioSemanaDaData(
+                dataInicioConsulta
+            );
+
+        fim =
+            fimSemanaDaData(
+                dataInicioConsulta
+            );
+
+    }
+
+    else {
+
+        inicio =
+            inicioDia(
+                dataInicioConsulta
+            );
+
+        fim =
+            fimDia(
+                dataFimConsulta
+            );
+
+    }
+
+
+    return {
+        inicio,
+        fim
+    };
+
+}
+
+
+function atualizarInterfacePeriodo() {
+
+    const periodo =
+        obterPeriodoConsulta();
+
+
+    const inputInicio =
+        $("dataInicioConsulta");
+
+    const inputFim =
+        $("dataFimConsulta");
+
+
+    if (inputInicio) {
+
+        inputInicio.value =
+            dataParaInput(
+                dataInicioConsulta
+            );
+
+    }
+
+
+    if (inputFim) {
+
+        inputFim.value =
+            dataParaInput(
+                dataFimConsulta
+            );
+
+    }
+
+
+    if (
+        modoConsulta === "dia"
+    ) {
+
+        setText(
+            "periodoSelecionado",
+            "📅 " +
+            formatarDataLonga(
+                dataInicioConsulta
+            )
+        );
+
+
+        setText(
+            "periodoParticipacoes",
+            "📅 Participações de " +
+            formatarData(
+                dataInicioConsulta
+            )
+        );
+
+
+        setText(
+            "periodoModo",
+            "📅 VISUALIZANDO DIA"
+        );
+
+
+        setText(
+            "textoTotalParticipacoes",
+            "Participações no dia"
+        );
+
+    }
+
+    else if (
+        modoConsulta === "semana"
+    ) {
+
+        setText(
+            "periodoSelecionado",
+            "📆 Semana: " +
+            formatarData(
+                periodo.inicio
+            ) +
+            " até " +
+            formatarData(
+                periodo.fim
+            )
+        );
+
+
+        setText(
+            "periodoParticipacoes",
+            "📆 Participações da semana de " +
+            formatarData(
+                periodo.inicio
+            ) +
+            " até " +
+            formatarData(
+                periodo.fim
+            )
+        );
+
+
+        setText(
+            "periodoModo",
+            "📆 VISUALIZANDO SEMANA"
+        );
+
+
+        setText(
+            "textoTotalParticipacoes",
+            "Participações na semana"
+        );
+
+    }
+
+    else {
+
+        setText(
+            "periodoSelecionado",
+            "📅 Período: " +
+            formatarData(
+                periodo.inicio
+            ) +
+            " até " +
+            formatarData(
+                periodo.fim
+            )
+        );
+
+
+        setText(
+            "periodoParticipacoes",
+            "📅 Participações de " +
+            formatarData(
+                periodo.inicio
+            ) +
+            " até " +
+            formatarData(
+                periodo.fim
+            )
+        );
+
+
+        setText(
+            "periodoModo",
+            "📅 VISUALIZANDO PERÍODO"
+        );
+
+
+        setText(
+            "textoTotalParticipacoes",
+            "Participações no período"
+        );
+
+    }
+
+
+    atualizarBotoesPeriodo();
+
+}
+
+
+function atualizarBotoesPeriodo() {
+
+    const btnDia =
+        $("btnVerDia");
+
+    const btnSemana =
+        $("btnVerSemana");
+
+    const btnPeriodo =
+        $("btnVerPeriodo");
+
+
+    if (btnDia) {
+
+        btnDia.classList.toggle(
+            "ativo",
+            modoConsulta === "dia"
+        );
+
+    }
+
+
+    if (btnSemana) {
+
+        btnSemana.classList.toggle(
+            "ativo",
+            modoConsulta === "semana"
+        );
+
+    }
+
+
+    if (btnPeriodo) {
+
+        btnPeriodo.classList.toggle(
+            "ativo",
+            modoConsulta === "periodo"
+        );
+
+    }
 
 }
 
@@ -1384,211 +3028,358 @@ function pertenceMes(valor){
    TOAST
 ========================================================= */
 
-let toastTimer;
-
 function mostrarMensagem(
     texto,
     tipo = ""
-){
+) {
 
     const toast =
         $("toast");
+
+
+    if (!toast) {
+
+        return;
+
+    }
+
 
     toast.textContent =
         texto;
 
     toast.className =
-        "toast show " + tipo;
+        "toast show " +
+        tipo;
 
-    clearTimeout(toastTimer);
+
+    clearTimeout(
+        toastTimer
+    );
+
 
     toastTimer =
-        setTimeout(() => {
+        setTimeout(
+            () => {
 
-            toast.className =
-                "toast";
+                toast.className =
+                    "toast";
 
-        },4000);
+            },
+            4000
+        );
 
 }
 
 
 /* =========================================================
-   LOGIN SUPABASE AUTH
+   LOGIN
 ========================================================= */
 
-async function verificarSessao(){
+async function verificarSessao() {
 
-    const {
-        data
-    } =
-        await supabaseClient
-            .auth
-            .getSession();
+    if (!supabaseClient) {
 
-    if(
-        data &&
-        data.session
-    ){
-
-        mostrarAdmin();
-
-    }
-
-}
-
-
-async function login(){
-
-    const email =
-        $("email").value.trim();
-
-    const senha =
-        $("senha").value;
-
-
-    $("loginError").textContent = "";
-
-
-    if(!email || !senha){
-
-        $("loginError").textContent =
-            "Digite seu e-mail e sua senha.";
+        console.error(
+            "Supabase não foi carregado."
+        );
 
         return;
 
     }
 
 
-    $("btnLogin").disabled = true;
+    try {
 
-    $("btnLogin").textContent =
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .auth
+                .getSession();
+
+
+        if (error) {
+
+            console.error(error);
+
+            return;
+
+        }
+
+
+        if (
+            data &&
+            data.session
+        ) {
+
+            await mostrarAdmin();
+
+        }
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Erro ao verificar sessão:",
+            error
+        );
+
+    }
+
+}
+
+
+async function login() {
+
+    if (!supabaseClient) {
+
+        mostrarMensagem(
+            "❌ Supabase não foi carregado.",
+            "erro"
+        );
+
+        return;
+
+    }
+
+
+    const emailInput =
+        $("email");
+
+    const senhaInput =
+        $("senha");
+
+    const erroLogin =
+        $("loginError");
+
+    const botao =
+        $("btnLogin");
+
+
+    if (
+        !emailInput ||
+        !senhaInput ||
+        !botao
+    ) {
+
+        return;
+
+    }
+
+
+    const email =
+        emailInput.value.trim();
+
+    const senha =
+        senhaInput.value;
+
+
+    if (erroLogin) {
+
+        erroLogin.textContent = "";
+
+    }
+
+
+    if (
+        !email ||
+        !senha
+    ) {
+
+        if (erroLogin) {
+
+            erroLogin.textContent =
+                "Digite seu e-mail e sua senha.";
+
+        }
+
+        return;
+
+    }
+
+
+    botao.disabled = true;
+
+    botao.textContent =
         "ENTRANDO...";
 
 
-    const {
-        error
-    } =
-        await supabaseClient
-            .auth
-            .signInWithPassword({
+    try {
 
-                email,
-                password: senha
+        const {
+            error
+        } =
+            await supabaseClient
+                .auth
+                .signInWithPassword({
 
-            });
+                    email,
+
+                    password:
+                        senha
+
+                });
 
 
-    if(error){
+        if (error) {
 
-        console.error(error);
+            console.error(error);
 
-        $("loginError").textContent =
-            "❌ E-mail ou senha inválidos.";
+            if (erroLogin) {
 
-        $("btnLogin").disabled = false;
+                erroLogin.textContent =
+                    "❌ E-mail ou senha inválidos.";
 
-        $("btnLogin").textContent =
-            "ENTRAR NO PAINEL";
+            }
 
-        return;
+            botao.disabled = false;
+
+            botao.textContent =
+                "ENTRAR NO PAINEL";
+
+            return;
+
+        }
+
+
+        await mostrarAdmin();
 
     }
 
+    catch (error) {
 
-    mostrarAdmin();
+        console.error(error);
+
+        if (erroLogin) {
+
+            erroLogin.textContent =
+                "❌ Não foi possível entrar.";
+
+        }
+
+        botao.disabled = false;
+
+        botao.textContent =
+            "ENTRAR NO PAINEL";
+
+    }
 
 }
 
 
-async function sair(){
+async function sair() {
 
-    await supabaseClient
-        .auth
-        .signOut();
+    try {
+
+        if (supabaseClient) {
+
+            await supabaseClient
+                .auth
+                .signOut();
+
+        }
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+    }
+
 
     location.reload();
 
 }
 
 
-function mostrarAdmin(){
+async function mostrarAdmin() {
 
-    $("loginScreen").style.display =
-        "none";
+    const loginScreen =
+        $("loginScreen");
 
-    $("admin").style.display =
-        "block";
+    const admin =
+        $("admin");
 
-    carregarTudo();
+
+    if (loginScreen) {
+
+        loginScreen.style.display =
+            "none";
+
+    }
+
+
+    if (admin) {
+
+        admin.style.display =
+            "block";
+
+    }
+
+
+    iniciarConsulta();
+
+    await carregarTudo();
 
 }
 
 
-$("btnLogin")
-    .addEventListener(
-        "click",
-        login
+/* =========================================================
+   INICIAR CONSULTA
+========================================================= */
+
+function iniciarConsulta() {
+
+    const hoje =
+        new Date();
+
+    hoje.setHours(
+        0,
+        0,
+        0,
+        0
     );
 
 
-$("senha")
-    .addEventListener(
-        "keydown",
-        e => {
+    dataInicioConsulta =
+        clonarData(hoje);
 
-            if(e.key === "Enter"){
+    dataFimConsulta =
+        clonarData(hoje);
 
-                login();
-
-            }
-
-        }
-    );
+    modoConsulta =
+        "dia";
 
 
-$("btnSair")
-    .addEventListener(
-        "click",
-        sair
-    );
+    atualizarInterfacePeriodo();
 
-
-supabaseClient
-    .auth
-    .onAuthStateChange(
-        (event, session) => {
-
-            if(
-                event ===
-                "SIGNED_OUT"
-            ){
-
-                location.reload();
-
-            }
-
-        }
-    );
+}
 
 
 /* =========================================================
    CARREGAR TUDO
 ========================================================= */
 
-async function carregarTudo(){
+async function carregarTudo() {
 
-    try{
+    try {
 
         await carregarGanhadores();
 
-        await carregarParticipantes();
-
         await carregarAniversariantes();
+
+        await carregarParticipantes();
 
         atualizarInterface();
 
-    }catch(error){
+        atualizarStatusSorteio();
+
+    }
+
+    catch (error) {
 
         console.error(error);
 
@@ -1606,10 +3397,23 @@ async function carregarTudo(){
    GANHADORES
 ========================================================= */
 
-async function carregarGanhadores(){
+async function carregarGanhadores() {
 
-    const p =
-        periodo();
+    if (!supabaseClient) {
+
+        return;
+
+    }
+
+
+    const agora =
+        new Date();
+
+    const mes =
+        agora.getMonth() + 1;
+
+    const ano =
+        agora.getFullYear();
 
 
     const {
@@ -1619,18 +3423,27 @@ async function carregarGanhadores(){
         await supabaseClient
             .from("ganhadores")
             .select("*")
-            .eq("mes",p.mes)
-            .eq("ano",p.ano)
+            .eq(
+                "mes",
+                mes
+            )
+            .eq(
+                "ano",
+                ano
+            )
             .order(
                 "created_at",
                 {
-                    ascending:false
+                    ascending: false
                 }
             );
 
 
-    if(error)
+    if (error) {
+
         throw error;
+
+    }
 
 
     ganhadores =
@@ -1643,7 +3456,32 @@ async function carregarGanhadores(){
    PARTICIPANTES
 ========================================================= */
 
-async function carregarParticipantes(){
+async function carregarParticipantes() {
+
+    if (!supabaseClient) {
+
+        return;
+
+    }
+
+
+    const periodo =
+        obterPeriodoConsulta();
+
+
+    const inicioISO =
+        periodo.inicio.toISOString();
+
+
+    const fimExclusivo =
+        new Date(
+            periodo.fim.getTime() + 1
+        );
+
+
+    const fimISO =
+        fimExclusivo.toISOString();
+
 
     const {
         data,
@@ -1654,24 +3492,35 @@ async function carregarParticipantes(){
             .select(
                 "id,nome,telefone,plataforma,data_participacao,criado_em"
             )
+            .gte(
+                "data_participacao",
+                inicioISO
+            )
+            .lt(
+                "data_participacao",
+                fimISO
+            )
+            .order(
+                "data_participacao",
+                {
+                    ascending: false
+                }
+            )
             .limit(5000);
 
 
-    if(error)
+    if (error) {
+
         throw error;
+
+    }
 
 
     participantes =
-        (data || [])
-        .filter(p => {
+        data || [];
 
-            const valor =
-                p.data_participacao ||
-                p.criado_em;
 
-            return pertenceMes(valor);
-
-        });
+    atualizarInterfacePeriodo();
 
 }
 
@@ -1680,7 +3529,14 @@ async function carregarParticipantes(){
    ANIVERSARIANTES
 ========================================================= */
 
-async function carregarAniversariantes(){
+async function carregarAniversariantes() {
+
+    if (!supabaseClient) {
+
+        return;
+
+    }
+
 
     const {
         data,
@@ -1691,7 +3547,7 @@ async function carregarAniversariantes(){
             .select("*");
 
 
-    if(error){
+    if (error) {
 
         console.warn(
             "Tabela aniversariantes:",
@@ -1712,25 +3568,88 @@ async function carregarAniversariantes(){
 
 
 /* =========================================================
+   NOMES BLOQUEADOS
+========================================================= */
+
+function nomesBloqueados() {
+
+    return new Set(
+        ganhadores
+            .map(
+                g =>
+                    normalizar(
+                        g.nome
+                    )
+            )
+            .filter(Boolean)
+    );
+
+}
+
+
+/* =========================================================
+   PARTICIPANTES ÚNICOS
+========================================================= */
+
+function participantesUnicos(lista) {
+
+    const mapa =
+        new Map();
+
+
+    lista.forEach(
+        pessoa => {
+
+            const chave =
+                normalizar(
+                    pessoa.nome
+                );
+
+
+            if (!chave) {
+
+                return;
+
+            }
+
+
+            if (!mapa.has(chave)) {
+
+                mapa.set(
+                    chave,
+                    pessoa
+                );
+
+            }
+
+        }
+    );
+
+
+    return Array.from(
+        mapa.values()
+    );
+
+}
+
+
+/* =========================================================
    DISPONÍVEIS
 ========================================================= */
 
-function disponiveis(){
+function disponiveis() {
 
     const bloqueados =
-        new Set(
-            ganhadores.map(
-                g =>
-                    normalizar(g.nome)
-            )
+        nomesBloqueados();
+
+
+    const unicos =
+        participantesUnicos(
+            participantes
         );
 
 
-    const vistos =
-        new Set();
-
-
-    return participantes.filter(
+    return unicos.filter(
         pessoa => {
 
             const nome =
@@ -1739,25 +3658,10 @@ function disponiveis(){
                 );
 
 
-            if(!nome)
-                return false;
-
-
-            if(
-                bloqueados.has(nome)
-            )
-                return false;
-
-
-            if(
-                vistos.has(nome)
-            )
-                return false;
-
-
-            vistos.add(nome);
-
-            return true;
+            return (
+                nome &&
+                !bloqueados.has(nome)
+            );
 
         }
     );
@@ -1769,41 +3673,62 @@ function disponiveis(){
    INTERFACE
 ========================================================= */
 
-function atualizarInterface(){
+function atualizarInterface() {
 
-    $("totalMes").textContent =
-        participantes.length;
+    setText(
+        "totalMes",
+        participantes.length
+    );
 
-    $("totalBloqueados").textContent =
-        ganhadores.length;
 
-    $("totalDisponiveis").textContent =
-        disponiveis().length;
+    setText(
+        "totalBloqueados",
+        ganhadores.length
+    );
+
+
+    setText(
+        "totalDisponiveis",
+        disponiveis().length
+    );
 
 
     renderizarGanhadores();
 
     renderizarParticipantes();
 
+    atualizarStatusSorteio();
+
 }
 
 
 /* =========================================================
-   GANHADORES
+   RENDERIZAR GANHADORES
 ========================================================= */
 
-function renderizarGanhadores(){
+function renderizarGanhadores() {
 
     const container =
         $("listaGanhadores");
 
 
-    if(!ganhadores.length){
+    if (!container) {
+
+        return;
+
+    }
+
+
+    if (!ganhadores.length) {
 
         container.innerHTML = `
+
             <div class="loading-card">
+
                 🏆 Nenhum ganhador neste mês.
+
             </div>
+
         `;
 
         return;
@@ -1813,73 +3738,113 @@ function renderizarGanhadores(){
 
     container.innerHTML =
         ganhadores
-        .map(g => `
+            .map(
+                g => `
 
-            <div class="ganhador-card">
+                    <div class="ganhador-card">
 
-                <div class="ganhador-card-icon">
-                    🏆
-                </div>
+                        <div class="ganhador-card-icon">
+                            🏆
+                        </div>
 
-                <div class="ganhador-card-info">
+                        <div class="ganhador-card-info">
 
-                    <strong>
-                        ${escapar(
-                            nomeExibicao(g.nome)
-                        )}
-                    </strong>
+                            <strong>
 
-                    <span>
-                        Já ganhou este mês
-                    </span>
+                                ${escapar(
+                                    nomeExibicao(
+                                        g.nome
+                                    )
+                                )}
 
-                </div>
+                            </strong>
 
-            </div>
+                            <span>
+                                Já ganhou este mês
+                            </span>
 
-        `)
-        .join("");
+                        </div>
+
+                    </div>
+
+                `
+            )
+            .join("");
 
 }
 
 
 /* =========================================================
-   PARTICIPANTES
+   RENDERIZAR PARTICIPAÇÕES
 ========================================================= */
 
-function renderizarParticipantes(){
+function renderizarParticipantes() {
 
-    const busca =
-        normalizar(
-            $("buscar").value
-        );
-
-
-    const lista =
-        disponiveis()
-        .filter(p =>
-
-            normalizar(
-                p.nome
-            ).includes(busca)
-
-        );
-
+    const buscaInput =
+        $("buscar");
 
     const tbody =
         $("listaParticipantes");
 
 
-    if(!lista.length){
+    if (!tbody) {
+
+        return;
+
+    }
+
+
+    const busca =
+        normalizar(
+            buscaInput
+                ? buscaInput.value
+                : ""
+        );
+
+
+    const lista =
+        participantes.filter(
+            pessoa => {
+
+                const nome =
+                    normalizar(
+                        pessoa.nome
+                    );
+
+                const telefone =
+                    normalizar(
+                        pessoa.telefone
+                    );
+
+
+                return (
+                    nome.includes(busca) ||
+                    telefone.includes(busca)
+                );
+
+            }
+        );
+
+
+    if (!lista.length) {
 
         tbody.innerHTML = `
+
             <tr>
-                <td colspan="3">
+
+                <td colspan="4">
+
                     <div class="loading">
-                        👥 Nenhum participante disponível.
+
+                        👥 Nenhuma participação
+                        encontrada no período selecionado.
+
                     </div>
+
                 </td>
+
             </tr>
+
         `;
 
         return;
@@ -1889,51 +3854,99 @@ function renderizarParticipantes(){
 
     tbody.innerHTML =
         lista
-        .map(p => `
+            .map(
+                pessoa => `
 
-            <tr>
+                    <tr>
 
-                <td>
+                        <td>
 
-                    <strong>
-                        ${escapar(
-                            nomeExibicao(p.nome)
-                        )}
-                    </strong>
+                            <button
+                                type="button"
+                                class="nome-participante-btn"
+                                data-id="${escapar(
+                                    String(pessoa.id)
+                                )}"
+                                title="Clique para ver o WhatsApp"
+                            >
 
-                </td>
+                                📱
 
-                <td>
-                    ${escapar(
-                        p.plataforma ||
-                        "Participante"
-                    )}
-                </td>
+                                <span>
 
-                <td>
+                                    ${escapar(
+                                        nomeExibicao(
+                                            pessoa.nome
+                                        )
+                                    )}
 
-                    <button
-                        class="btn-registrar"
-                        onclick="marcarGanhador('${p.id}')"
-                    >
-                        🏆 Já ganhou este mês
-                    </button>
+                                </span>
 
-                </td>
+                            </button>
 
-            </tr>
+                        </td>
 
-        `)
-        .join("");
+
+                        <td>
+
+                            ${escapar(
+                                pessoa.plataforma ||
+                                "Participante"
+                            )}
+
+                        </td>
+
+
+                        <td>
+
+                            <span
+                                class="data-participacao"
+                            >
+
+                                📅
+
+                                ${formatarData(
+                                    pessoa.data_participacao ||
+                                    pessoa.criado_em
+                                )}
+
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <button
+                                type="button"
+                                class="btn-remover-participacao"
+                                data-id="${escapar(
+                                    String(pessoa.id)
+                                )}"
+                                title="Remover participação"
+                                aria-label="Remover participação"
+                            >
+
+                                ×
+
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+                `
+            )
+            .join("");
 
 }
 
 
 /* =========================================================
-   MARCAR MANUALMENTE
+   WHATSAPP DO PARTICIPANTE
 ========================================================= */
 
-async function marcarGanhador(id){
+function abrirWhatsappParticipante(id) {
 
     const pessoa =
         participantes.find(
@@ -1943,56 +3956,314 @@ async function marcarGanhador(id){
         );
 
 
-    if(!pessoa)
-        return;
-
-
-    const nome =
-        nomeExibicao(
-            pessoa.nome
-        );
-
-
-    if(
-        !confirm(
-            "Marcar " +
-            nome +
-            " como ganhador deste mês?"
-        )
-    ){
+    if (!pessoa) {
 
         return;
 
     }
 
 
-    const p =
-        periodo();
+    const popup =
+        $("whatsappPopup");
+
+    const nome =
+        $("whatsappNome");
+
+    const numero =
+        $("whatsappNumero");
+
+    const botaoWhatsapp =
+        $("btnAbrirWhatsapp");
 
 
-    const {
-        data,
-        error
-    } =
-        await supabaseClient
-            .from("ganhadores")
-            .insert({
-
-                nome,
-                mes:p.mes,
-                ano:p.ano
-
-            })
-            .select()
-            .single();
+    const telefone =
+        String(
+            pessoa.telefone || ""
+        ).trim();
 
 
-    if(error){
+    if (nome) {
+
+        nome.textContent =
+            nomeExibicao(
+                pessoa.nome
+            );
+
+    }
+
+
+    if (numero) {
+
+        numero.textContent =
+            telefone ||
+            "Telefone não cadastrado";
+
+    }
+
+
+    if (botaoWhatsapp) {
+
+        if (!telefone) {
+
+            botaoWhatsapp.style.display =
+                "none";
+
+            botaoWhatsapp.removeAttribute(
+                "href"
+            );
+
+        }
+
+        else {
+
+            const telefoneLimpo =
+                telefone.replace(
+                    /\D/g,
+                    ""
+                );
+
+
+            const numeroWhatsapp =
+                telefoneLimpo.startsWith("55")
+                    ? telefoneLimpo
+                    : "55" + telefoneLimpo;
+
+
+            botaoWhatsapp.href =
+                "https://wa.me/" +
+                numeroWhatsapp;
+
+            botaoWhatsapp.style.display =
+                "flex";
+
+        }
+
+    }
+
+
+    if (popup) {
+
+        popup.classList.add(
+            "aberto"
+        );
+
+    }
+
+}
+
+
+function fecharWhatsappParticipante() {
+
+    const popup =
+        $("whatsappPopup");
+
+
+    if (popup) {
+
+        popup.classList.remove(
+            "aberto"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   ATUALIZAR STATUS DO SORTEIO
+========================================================= */
+
+function atualizarStatusSorteio() {
+
+    const disponiveisAgora =
+        disponiveis().length;
+
+
+    const periodo =
+        obterPeriodoConsulta();
+
+
+    let descricao;
+
+
+    if (
+        modoConsulta === "dia"
+    ) {
+
+        descricao =
+            formatarData(
+                periodo.inicio
+            );
+
+    }
+
+    else {
+
+        descricao =
+            formatarData(
+                periodo.inicio
+            ) +
+            " até " +
+            formatarData(
+                periodo.fim
+            );
+
+    }
+
+
+    setText(
+        "statusSorteio",
+        disponiveisAgora > 0
+            ? "🎲 " +
+              disponiveisAgora +
+              " PARTICIPANTE(S) DISPONÍVEL(EIS) • " +
+              descricao
+            : "⚠️ NENHUM PARTICIPANTE DISPONÍVEL • " +
+              descricao
+    );
+
+}
+
+
+/* =========================================================
+   CONSULTAR PERÍODO
+========================================================= */
+
+async function aplicarConsulta() {
+
+    try {
+
+        if (
+            dataInicioConsulta >
+            dataFimConsulta
+        ) {
+
+            const temporaria =
+                dataInicioConsulta;
+
+            dataInicioConsulta =
+                dataFimConsulta;
+
+            dataFimConsulta =
+                temporaria;
+
+        }
+
+
+        atualizarInterfacePeriodo();
+
+
+        const tbody =
+            $("listaParticipantes");
+
+
+        if (tbody) {
+
+            tbody.innerHTML = `
+
+                <tr>
+
+                    <td colspan="4">
+
+                        <div class="loading">
+
+                            🔄 Carregando participações...
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        }
+
+
+        await carregarParticipantes();
+
+        atualizarInterface();
+
+
+        if (
+            modoConsulta === "dia"
+        ) {
+
+            mostrarMensagem(
+                "📅 Dia atualizado.",
+                "sucesso"
+            );
+
+        }
+
+        else if (
+            modoConsulta === "semana"
+        ) {
+
+            mostrarMensagem(
+                "📆 Semana atualizada.",
+                "sucesso"
+            );
+
+        }
+
+        else {
+
+            mostrarMensagem(
+                "📅 Período atualizado.",
+                "sucesso"
+            );
+
+        }
+
+    }
+
+    catch (error) {
 
         console.error(error);
 
         mostrarMensagem(
-            "❌ Erro ao registrar ganhador.",
+            "❌ Erro ao consultar as participações.",
+            "erro"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   VER PERÍODO
+========================================================= */
+
+async function verPeriodo() {
+
+    const inputInicio =
+        $("dataInicioConsulta");
+
+    const inputFim =
+        $("dataFimConsulta");
+
+
+    const inicio =
+        inputInicio
+            ? inputInicio.value
+            : "";
+
+
+    const fim =
+        inputFim
+            ? inputFim.value
+            : "";
+
+
+    if (
+        !inicio ||
+        !fim
+    ) {
+
+        mostrarMensagem(
+            "Informe a data inicial e a data final.",
             "erro"
         );
 
@@ -2001,35 +4272,472 @@ async function marcarGanhador(id){
     }
 
 
-    ganhadores.unshift(data);
+    const novaInicio =
+        inputParaData(inicio);
+
+    const novaFim =
+        inputParaData(fim);
 
 
-    atualizarInterface();
+    if (
+        novaInicio >
+        novaFim
+    ) {
+
+        mostrarMensagem(
+            "A data inicial não pode ser maior que a data final.",
+            "erro"
+        );
+
+        return;
+
+    }
 
 
-    mostrarMensagem(
-        "🏆 " +
-        nome +
-        " foi registrado como ganhador!",
-        "sucesso"
-    );
+    dataInicioConsulta =
+        novaInicio;
+
+    dataFimConsulta =
+        novaFim;
+
+    modoConsulta =
+        "periodo";
+
+
+    await aplicarConsulta();
 
 }
 
 
 /* =========================================================
-   SORTEIO PREMIUM
+   VER DIA
 ========================================================= */
 
-async function realizarSorteio(){
+async function verDia() {
 
-    if(sorteando)
+    const input =
+        $("dataInicioConsulta");
+
+
+    const valor =
+        input
+            ? input.value
+            : "";
+
+
+    if (!valor) {
+
+        mostrarMensagem(
+            "Escolha uma data.",
+            "erro"
+        );
+
         return;
+
+    }
+
+
+    dataInicioConsulta =
+        inputParaData(valor);
+
+    dataFimConsulta =
+        clonarData(
+            dataInicioConsulta
+        );
+
+    modoConsulta =
+        "dia";
+
+
+    await aplicarConsulta();
+
+}
+
+
+/* =========================================================
+   VER SEMANA
+========================================================= */
+
+async function verSemana() {
+
+    const input =
+        $("dataInicioConsulta");
+
+
+    const valor =
+        input
+            ? input.value
+            : "";
+
+
+    if (!valor) {
+
+        mostrarMensagem(
+            "Escolha uma data.",
+            "erro"
+        );
+
+        return;
+
+    }
+
+
+    const data =
+        inputParaData(valor);
+
+
+    dataInicioConsulta =
+        inicioSemanaDaData(
+            data
+        );
+
+    dataFimConsulta =
+        fimSemanaDaData(
+            data
+        );
+
+
+    modoConsulta =
+        "semana";
+
+
+    await aplicarConsulta();
+
+}
+
+
+/* =========================================================
+   PERÍODO ANTERIOR
+========================================================= */
+
+async function periodoAnterior() {
+
+    if (
+        modoConsulta === "dia"
+    ) {
+
+        dataInicioConsulta.setDate(
+            dataInicioConsulta.getDate() - 1
+        );
+
+        dataFimConsulta =
+            clonarData(
+                dataInicioConsulta
+            );
+
+    }
+
+    else if (
+        modoConsulta === "semana"
+    ) {
+
+        dataInicioConsulta.setDate(
+            dataInicioConsulta.getDate() - 7
+        );
+
+        dataInicioConsulta =
+            inicioSemanaDaData(
+                dataInicioConsulta
+            );
+
+        dataFimConsulta =
+            fimSemanaDaData(
+                dataInicioConsulta
+            );
+
+    }
+
+    else {
+
+        const quantidadeDias =
+            Math.max(
+                0,
+                Math.round(
+                    (
+                        inicioDia(
+                            dataFimConsulta
+                        ) -
+                        inicioDia(
+                            dataInicioConsulta
+                        )
+                    ) /
+                    86400000
+                )
+            );
+
+
+        dataInicioConsulta.setDate(
+            dataInicioConsulta.getDate() -
+            (quantidadeDias + 1)
+        );
+
+
+        dataFimConsulta =
+            clonarData(
+                dataInicioConsulta
+            );
+
+
+        dataFimConsulta.setDate(
+            dataFimConsulta.getDate() +
+            quantidadeDias
+        );
+
+    }
+
+
+    await aplicarConsulta();
+
+}
+
+
+/* =========================================================
+   PRÓXIMO PERÍODO
+========================================================= */
+
+async function periodoProximo() {
+
+    if (
+        modoConsulta === "dia"
+    ) {
+
+        dataInicioConsulta.setDate(
+            dataInicioConsulta.getDate() + 1
+        );
+
+        dataFimConsulta =
+            clonarData(
+                dataInicioConsulta
+            );
+
+    }
+
+    else if (
+        modoConsulta === "semana"
+    ) {
+
+        dataInicioConsulta.setDate(
+            dataInicioConsulta.getDate() + 7
+        );
+
+        dataInicioConsulta =
+            inicioSemanaDaData(
+                dataInicioConsulta
+            );
+
+        dataFimConsulta =
+            fimSemanaDaData(
+                dataInicioConsulta
+            );
+
+    }
+
+    else {
+
+        const quantidadeDias =
+            Math.max(
+                0,
+                Math.round(
+                    (
+                        inicioDia(
+                            dataFimConsulta
+                        ) -
+                        inicioDia(
+                            dataInicioConsulta
+                        )
+                    ) /
+                    86400000
+                )
+            );
+
+
+        dataInicioConsulta.setDate(
+            dataInicioConsulta.getDate() +
+            (quantidadeDias + 1)
+        );
+
+
+        dataFimConsulta =
+            clonarData(
+                dataInicioConsulta
+            );
+
+
+        dataFimConsulta.setDate(
+            dataFimConsulta.getDate() +
+            quantidadeDias
+        );
+
+    }
+
+
+    await aplicarConsulta();
+
+}
+
+
+/* =========================================================
+   HOJE
+========================================================= */
+
+async function irParaHoje() {
+
+    const hoje =
+        new Date();
+
+    hoje.setHours(
+        0,
+        0,
+        0,
+        0
+    );
+
+
+    dataInicioConsulta =
+        clonarData(hoje);
+
+    dataFimConsulta =
+        clonarData(hoje);
+
+    modoConsulta =
+        "dia";
+
+
+    await aplicarConsulta();
+
+}
+
+
+/* =========================================================
+   REMOVER PARTICIPAÇÃO
+========================================================= */
+
+async function removerParticipacao(id) {
+
+    if (!supabaseClient) {
+
+        return;
+
+    }
+
+
+    const pessoa =
+        participantes.find(
+            p =>
+                String(p.id) ===
+                String(id)
+        );
+
+
+    if (!pessoa) {
+
+        return;
+
+    }
+
+
+    const confirmou =
+        confirm(
+            "Remover a participação de " +
+            nomeExibicao(
+                pessoa.nome
+            ) +
+            "?\n\n" +
+            "Essa ação excluirá somente esta participação."
+        );
+
+
+    if (!confirmou) {
+
+        return;
+
+    }
+
+
+    try {
+
+        const {
+            error
+        } =
+            await supabaseClient
+                .from("divulgacoes")
+                .delete()
+                .eq(
+                    "id",
+                    id
+                );
+
+
+        if (error) {
+
+            throw error;
+
+        }
+
+
+        participantes =
+            participantes.filter(
+                p =>
+                    String(p.id) !==
+                    String(id)
+            );
+
+
+        atualizarInterface();
+
+
+        mostrarMensagem(
+            "🗑️ Participação removida com sucesso.",
+            "sucesso"
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        mostrarMensagem(
+            "❌ Não foi possível remover a participação.",
+            "erro"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   SORTEIO
+========================================================= */
+
+async function realizarSorteio() {
+
+    if (sorteando) {
+
+        return;
+
+    }
+
+
+    const quantidadeInput =
+        $("quantidade");
+
+    const botao =
+        $("btnSortear");
+
+    const resultado =
+        $("resultadoSorteio");
+
+    const resultados =
+        $("resultadosSorteio");
 
 
     let qtd =
         parseInt(
-            $("quantidade").value,
+            quantidadeInput
+                ? quantidadeInput.value
+                : "1",
             10
         ) || 1;
 
@@ -2038,10 +4746,10 @@ async function realizarSorteio(){
         disponiveis();
 
 
-    if(!lista.length){
+    if (!lista.length) {
 
         mostrarMensagem(
-            "❌ Não existem participantes disponíveis.",
+            "❌ Não existem participantes disponíveis no período selecionado.",
             "erro"
         );
 
@@ -2055,58 +4763,72 @@ async function realizarSorteio(){
             1,
             Math.min(
                 qtd,
-                lista.length
+                Math.min(
+                    lista.length,
+                    50
+                )
             )
         );
 
 
-    $("quantidade").value =
-        qtd;
+    if (quantidadeInput) {
+
+        quantidadeInput.value =
+            qtd;
+
+    }
 
 
-    sorteando = true;
-
-
-    $("btnSortear").disabled =
+    sorteando =
         true;
 
 
-    $("btnSortear").textContent =
-        "🎲 SORTEANDO...";
+    if (botao) {
+
+        botao.disabled = true;
+
+        botao.textContent =
+            "🎲 SORTEANDO...";
+
+    }
 
 
-    $("statusSorteio").textContent =
-        "PROCESSANDO SORTEIO";
-
-
-    const resultado =
-        $("resultadoSorteio");
-
-
-    resultado.classList.remove(
-        "vencedor"
-    );
-
-    resultado.classList.add(
-        "animando"
+    setText(
+        "statusSorteio",
+        "PROCESSANDO SORTEIO..."
     );
 
 
-    $("resultadosSorteio")
-        .innerHTML = "";
+    if (resultado) {
+
+        resultado.classList.remove(
+            "vencedor"
+        );
+
+        resultado.classList.add(
+            "animando"
+        );
+
+    }
+
+
+    if (resultados) {
+
+        resultados.innerHTML = "";
+
+    }
 
 
     const escolhidos =
-        [...lista]
-        .sort(
-            () =>
-                Math.random() -
-                .5
-        )
-        .slice(0,qtd);
+        embaralhar(lista)
+            .slice(
+                0,
+                qtd
+            );
 
 
-    let contador = 0;
+    let contador =
+        0;
 
 
     const duracao =
@@ -2116,43 +4838,50 @@ async function realizarSorteio(){
 
 
     const intervalo =
-        setInterval(() => {
+        setInterval(
+            () => {
 
-            const pessoa =
-                lista[
-                    Math.floor(
-                        Math.random() *
-                        lista.length
-                    )
-                ];
-
-
-            resultado.textContent =
-                nomeExibicao(
-                    pessoa.nome
-                );
+                const pessoa =
+                    lista[
+                        Math.floor(
+                            Math.random() *
+                            lista.length
+                        )
+                    ];
 
 
-            contador++;
+                if (resultado) {
+
+                    resultado.textContent =
+                        nomeExibicao(
+                            pessoa.nome
+                        );
+
+                }
 
 
-            if(
-                contador >=
-                duracao
-            ){
-
-                clearInterval(
-                    intervalo
-                );
+                contador++;
 
 
-                finalizarSorteio(
-                    escolhidos
-                );
+                if (
+                    contador >=
+                    duracao
+                ) {
 
-            }
+                    clearInterval(
+                        intervalo
+                    );
 
-        },90);
+
+                    finalizarSorteio(
+                        escolhidos
+                    );
+
+                }
+
+            },
+            90
+        );
 
 }
 
@@ -2163,155 +4892,240 @@ async function realizarSorteio(){
 
 async function finalizarSorteio(
     escolhidos
-){
+) {
 
     const resultado =
         $("resultadoSorteio");
 
 
-    resultado.classList.remove(
-        "animando"
-    );
+    if (resultado) {
 
+        resultado.classList.remove(
+            "animando"
+        );
 
-    resultado.classList.add(
-        "vencedor"
-    );
-
-
-    $("statusSorteio").textContent =
-        "🏆 RESULTADO DO SORTEIO";
-
-
-    if(
-        escolhidos.length === 1
-    ){
-
-        resultado.textContent =
-            nomeExibicao(
-                escolhidos[0].nome
-            );
-
-    }else{
-
-        resultado.textContent =
-            escolhidos.length +
-            " GANHADORES";
+        resultado.classList.add(
+            "vencedor"
+        );
 
     }
 
 
-    const p =
-        periodo();
+    setText(
+        "statusSorteio",
+        "🏆 RESULTADO DO SORTEIO"
+    );
+
+
+    if (
+        escolhidos.length === 1
+    ) {
+
+        if (resultado) {
+
+            resultado.textContent =
+                nomeExibicao(
+                    escolhidos[0].nome
+                );
+
+        }
+
+    }
+
+    else {
+
+        if (resultado) {
+
+            resultado.textContent =
+                escolhidos.length +
+                " GANHADORES";
+
+        }
+
+    }
+
+
+    const agora =
+        new Date();
+
+    const mes =
+        agora.getMonth() + 1;
+
+    const ano =
+        agora.getFullYear();
 
 
     const novos = [];
 
 
-    for(
-        const pessoa
-        of escolhidos
-    ){
+    try {
 
-        const nome =
-            nomeExibicao(
-                pessoa.nome
+        for (
+            const pessoa
+            of escolhidos
+        ) {
+
+            const nome =
+                nomeExibicao(
+                    pessoa.nome
+                );
+
+
+            const nomeNormalizado =
+                normalizar(
+                    nome
+                );
+
+
+            if (
+                ganhadores.some(
+                    g =>
+                        normalizar(
+                            g.nome
+                        ) ===
+                        nomeNormalizado
+                )
+            ) {
+
+                continue;
+
+            }
+
+
+            const {
+                data,
+                error
+            } =
+                await supabaseClient
+                    .from("ganhadores")
+                    .insert({
+
+                        nome,
+
+                        mes,
+
+                        ano
+
+                    })
+                    .select()
+                    .single();
+
+
+            if (error) {
+
+                console.error(error);
+
+                mostrarMensagem(
+                    "❌ Erro ao gravar " +
+                    nome +
+                    ".",
+                    "erro"
+                );
+
+                continue;
+
+            }
+
+
+            novos.push(data);
+
+            ganhadores.unshift(
+                data
             );
 
 
-        if(
-            ganhadores.some(
-                g =>
-                    normalizar(
-                        g.nome
-                    ) ===
-                    normalizar(
-                        nome
-                    )
-            )
-        ){
+            const resultados =
+                $("resultadosSorteio");
 
-            continue;
+
+            if (resultados) {
+
+                resultados.insertAdjacentHTML(
+                    "beforeend",
+                    `
+
+                        <span
+                            class="resultado-premium"
+                        >
+
+                            🏆
+                            ${escapar(nome)}
+
+                        </span>
+
+                    `
+                );
+
+            }
 
         }
 
 
-        const {
-            data,
-            error
-        } =
-            await supabaseClient
-                .from("ganhadores")
-                .insert({
+        if (novos.length) {
 
-                    nome,
-                    mes:p.mes,
-                    ano:p.ano
+            criarConfetes();
 
-                })
-                .select()
-                .single();
-
-
-        if(error){
-
-            console.error(error);
 
             mostrarMensagem(
-                "❌ Erro ao gravar " +
-                nome,
+                novos.length === 1
+                    ? "🏆 Sorteio realizado com sucesso!"
+                    : "🏆 " +
+                      novos.length +
+                      " ganhadores registrados com sucesso!",
+                "sucesso"
+            );
+
+        }
+
+        else {
+
+            mostrarMensagem(
+                "❌ Nenhum ganhador foi registrado.",
                 "erro"
             );
 
-            continue;
+        }
+
+
+        atualizarInterface();
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        mostrarMensagem(
+            "❌ Erro ao finalizar o sorteio.",
+            "erro"
+        );
+
+    }
+
+    finally {
+
+        sorteando =
+            false;
+
+
+        const botao =
+            $("btnSortear");
+
+
+        if (botao) {
+
+            botao.disabled =
+                false;
+
+            botao.textContent =
+                "🎁 REALIZAR NOVO SORTEIO";
 
         }
 
 
-        novos.push(data);
-
-        ganhadores.unshift(
-            data
-        );
-
-
-        $("resultadosSorteio")
-            .insertAdjacentHTML(
-                "beforeend",
-                `
-                <span class="resultado-premium">
-                    🏆 ${escapar(nome)}
-                </span>
-                `
-            );
+        atualizarStatusSorteio();
 
     }
-
-
-    if(novos.length){
-
-        criarConfetes();
-
-        mostrarMensagem(
-            "🏆 Sorteio realizado com sucesso!",
-            "sucesso"
-        );
-
-    }
-
-
-    atualizarInterface();
-
-
-    sorteando = false;
-
-
-    $("btnSortear").disabled =
-        false;
-
-
-    $("btnSortear").textContent =
-        "🎁 REALIZAR NOVO SORTEIO";
 
 }
 
@@ -2320,13 +5134,13 @@ async function finalizarSorteio(
    CONFETES
 ========================================================= */
 
-function criarConfetes(){
+function criarConfetes() {
 
-    for(
+    for (
         let i = 0;
         i < 80;
         i++
-    ){
+    ) {
 
         const confete =
             document.createElement(
@@ -2358,19 +5172,22 @@ function criarConfetes(){
 
         confete.style.transform =
             "rotate(" +
-            Math.random()*360 +
+            Math.random() *
+            360 +
             "deg)";
 
 
-        document.body
-            .appendChild(
-                confete
-            );
+        document.body.appendChild(
+            confete
+        );
 
 
         setTimeout(
-            () =>
-                confete.remove(),
+            () => {
+
+                confete.remove();
+
+            },
             3500
         );
 
@@ -2380,28 +5197,97 @@ function criarConfetes(){
 
 
 /* =========================================================
+   DATA DO ANIVERSÁRIO
+========================================================= */
+
+function obterMesNascimento(valor) {
+
+    if (!valor) {
+
+        return null;
+
+    }
+
+
+    if (
+        typeof valor === "string" &&
+        /^\d{4}-\d{2}-\d{2}$/.test(valor)
+    ) {
+
+        return (
+            Number(
+                valor.substring(
+                    5,
+                    7
+                )
+            )
+        );
+
+    }
+
+
+    const data =
+        new Date(valor);
+
+
+    if (
+        Number.isNaN(
+            data.getTime()
+        )
+    ) {
+
+        return null;
+
+    }
+
+
+    return (
+        data.getMonth() + 1
+    );
+
+}
+
+
+/* =========================================================
    SORTEIO DE ANIVERSARIANTES
 ========================================================= */
 
-async function sortearAniversariantes(){
+async function sortearAniversariantes() {
 
     const botao =
         $("btnSortearAniversariantes");
 
+    const quantidadeInput =
+        $("quantidadeAniversariantes");
+
+    const container =
+        $("resultadoAniversariantes");
+
+
+    if (!container) {
+
+        return;
+
+    }
+
 
     let qtd =
         parseInt(
-            $("quantidadeAniversariantes")
-                .value,
+            quantidadeInput
+                ? quantidadeInput.value
+                : "1",
             10
         ) || 1;
 
 
-    const p =
-        periodo();
+    const agora =
+        new Date();
+
+    const mes =
+        agora.getMonth() + 1;
 
 
-    const lista =
+    const candidatos =
         aniversariantes.filter(
             pessoa => {
 
@@ -2413,32 +5299,41 @@ async function sortearAniversariantes(){
                     pessoa.birthday;
 
 
-                if(!valor)
+                if (!valor) {
+
                     return false;
 
-
-                const data =
-                    new Date(valor);
+                }
 
 
                 return (
-                    data.getMonth() + 1 ===
-                    p.mes
+                    obterMesNascimento(
+                        valor
+                    ) === mes
                 );
 
             }
         );
 
 
-    if(!lista.length){
+    const lista =
+        participantesUnicos(
+            candidatos
+        );
 
-        $("resultadoAniversariantes")
-            .innerHTML = `
-                <span>
-                    🎂 Nenhum aniversariante
-                    encontrado neste mês.
-                </span>
-            `;
+
+    if (!lista.length) {
+
+        container.innerHTML = `
+
+            <span>
+
+                🎂 Nenhum aniversariante
+                encontrado neste mês.
+
+            </span>
+
+        `;
 
         return;
 
@@ -2450,114 +5345,454 @@ async function sortearAniversariantes(){
             1,
             Math.min(
                 qtd,
-                lista.length
+                Math.min(
+                    lista.length,
+                    50
+                )
             )
         );
 
 
-    $("quantidadeAniversariantes")
-        .value = qtd;
+    if (quantidadeInput) {
+
+        quantidadeInput.value =
+            qtd;
+
+    }
 
 
-    botao.disabled =
-        true;
+    if (botao) {
+
+        botao.disabled =
+            true;
+
+        botao.textContent =
+            "🎂 SORTEANDO...";
+
+    }
 
 
-    botao.textContent =
-        "🎂 SORTEANDO...";
-
-
-    const container =
-        $("resultadoAniversariantes");
-
-
-    let contador = 0;
+    let contador =
+        0;
 
 
     const intervalo =
-        setInterval(() => {
+        setInterval(
+            () => {
 
-            const pessoa =
-                lista[
-                    Math.floor(
-                        Math.random() *
-                        lista.length
-                    )
-                ];
-
-
-            container.innerHTML = `
-                <span
-                    class="aniversariante-vencedor"
-                >
-                    🎂
-                    ${escapar(
-                        nomeExibicao(
-                            pessoa.nome
+                const pessoa =
+                    lista[
+                        Math.floor(
+                            Math.random() *
+                            lista.length
                         )
-                    )}
-                </span>
-            `;
+                    ];
 
 
-            contador++;
+                container.innerHTML = `
+
+                    <span
+                        class="aniversariante-vencedor"
+                    >
+
+                        🎂
+
+                        ${escapar(
+                            nomeExibicao(
+                                pessoa.nome
+                            )
+                        )}
+
+                    </span>
+
+                `;
 
 
-            if(contador >= 25){
-
-                clearInterval(
-                    intervalo
-                );
+                contador++;
 
 
-                const escolhidos =
-                    [...lista]
-                    .sort(
-                        () =>
-                            Math.random() -
-                            .5
-                    )
-                    .slice(0,qtd);
+                if (
+                    contador >= 25
+                ) {
+
+                    clearInterval(
+                        intervalo
+                    );
 
 
-                container.innerHTML =
-                    escolhidos
-                    .map(
-                        pessoa => `
-                        <span
-                            class="aniversariante-vencedor"
-                        >
-                            🎂
-                            ${escapar(
-                                nomeExibicao(
-                                    pessoa.nome
-                                )
-                            )}
-                        </span>
-                        `
-                    )
-                    .join("");
+                    const escolhidos =
+                        embaralhar(
+                            lista
+                        ).slice(
+                            0,
+                            qtd
+                        );
 
 
-                criarConfetes();
+                    container.innerHTML =
+                        escolhidos
+                            .map(
+                                pessoa => `
+
+                                    <span
+                                        class="aniversariante-vencedor"
+                                    >
+
+                                        🎂
+
+                                        ${escapar(
+                                            nomeExibicao(
+                                                pessoa.nome
+                                            )
+                                        )}
+
+                                    </span>
+
+                                `
+                            )
+                            .join("");
 
 
-                botao.disabled =
-                    false;
+                    criarConfetes();
 
 
-                botao.textContent =
-                    "🎂 SORTEAR NOVAMENTE";
+                    if (botao) {
+
+                        botao.disabled =
+                            false;
+
+                        botao.textContent =
+                            "🎂 SORTEAR NOVAMENTE";
+
+                    }
 
 
-                mostrarMensagem(
-                    "🎂 Aniversariante sorteado!",
-                    "sucesso"
-                );
+                    mostrarMensagem(
+                        escolhidos.length === 1
+                            ? "🎂 Aniversariante sorteado!"
+                            : "🎂 " +
+                              escolhidos.length +
+                              " aniversariantes sorteados!",
+                        "sucesso"
+                    );
+
+                }
+
+            },
+            90
+        );
+
+}
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+function abrirModalParticipacao() {
+
+    const modal =
+        $("modalParticipacao");
+
+
+    if (!modal) {
+
+        return;
+
+    }
+
+
+    modal.classList.add(
+        "aberto"
+    );
+
+
+    const nome =
+        $("novoNome");
+
+    const telefone =
+        $("novoTelefone");
+
+    const plataforma =
+        $("novaPlataforma");
+
+    const data =
+        $("novaDataParticipacao");
+
+
+    if (nome) {
+
+        nome.value = "";
+
+    }
+
+
+    if (telefone) {
+
+        telefone.value = "";
+
+    }
+
+
+    if (plataforma) {
+
+        plataforma.value = "";
+
+    }
+
+
+    if (data) {
+
+        data.value =
+            dataParaInput(
+                dataInicioConsulta
+            );
+
+    }
+
+
+    setTimeout(
+        () => {
+
+            if (nome) {
+
+                nome.focus();
 
             }
 
-        },90);
+        },
+        100
+    );
+
+}
+
+
+function fecharModalParticipacao() {
+
+    const modal =
+        $("modalParticipacao");
+
+
+    if (modal) {
+
+        modal.classList.remove(
+            "aberto"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   SALVAR PARTICIPAÇÃO
+========================================================= */
+
+async function salvarParticipacao() {
+
+    if (!supabaseClient) {
+
+        return;
+
+    }
+
+
+    const nomeInput =
+        $("novoNome");
+
+    const telefoneInput =
+        $("novoTelefone");
+
+    const plataformaInput =
+        $("novaPlataforma");
+
+    const dataInput =
+        $("novaDataParticipacao");
+
+    const botao =
+        $("btnSalvarParticipacao");
+
+
+    const nome =
+        nomeInput
+            ? nomeInput.value.trim()
+            : "";
+
+
+    const telefone =
+        telefoneInput
+            ? telefoneInput.value.trim()
+            : "";
+
+
+    const plataforma =
+        plataformaInput
+            ? plataformaInput.value.trim()
+            : "";
+
+
+    const data =
+        dataInput
+            ? dataInput.value
+            : "";
+
+
+    if (!nome) {
+
+        mostrarMensagem(
+            "Digite o nome do participante.",
+            "erro"
+        );
+
+
+        if (nomeInput) {
+
+            nomeInput.focus();
+
+        }
+
+
+        return;
+
+    }
+
+
+    if (!data) {
+
+        mostrarMensagem(
+            "Informe a data da participação.",
+            "erro"
+        );
+
+        return;
+
+    }
+
+
+    if (botao) {
+
+        botao.disabled =
+            true;
+
+        botao.textContent =
+            "SALVANDO...";
+
+    }
+
+
+    try {
+
+        const {
+            data: novaParticipacao,
+            error
+        } =
+            await supabaseClient
+                .from("divulgacoes")
+                .insert({
+
+                    nome,
+
+                    telefone:
+                        telefone ||
+                        null,
+
+                    plataforma:
+                        plataforma ||
+                        "Manual",
+
+                    data_participacao:
+                        data
+
+                })
+                .select()
+                .single();
+
+
+        if (error) {
+
+            throw error;
+
+        }
+
+
+        const dataNova =
+            inputParaData(
+                data
+            );
+
+
+        if (
+            modoConsulta === "semana"
+        ) {
+
+            dataInicioConsulta =
+                inicioSemanaDaData(
+                    dataNova
+                );
+
+            dataFimConsulta =
+                fimSemanaDaData(
+                    dataNova
+                );
+
+        }
+
+        else if (
+            modoConsulta === "dia"
+        ) {
+
+            dataInicioConsulta =
+                clonarData(
+                    dataNova
+                );
+
+            dataFimConsulta =
+                clonarData(
+                    dataNova
+                );
+
+        }
+
+
+        fecharModalParticipacao();
+
+
+        await carregarParticipantes();
+
+        atualizarInterface();
+
+
+        mostrarMensagem(
+            "✅ Participação adicionada com sucesso!",
+            "sucesso"
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        mostrarMensagem(
+            "❌ Erro ao adicionar participação.",
+            "erro"
+        );
+
+    }
+
+    finally {
+
+        if (botao) {
+
+            botao.disabled =
+                false;
+
+            botao.textContent =
+                "➕ SALVAR PARTICIPAÇÃO";
+
+        }
+
+    }
 
 }
 
@@ -2566,13 +5801,26 @@ async function sortearAniversariantes(){
    ZERAR GANHADORES
 ========================================================= */
 
-async function zerarGanhadores(){
+async function zerarGanhadores() {
 
-    const p =
-        periodo();
+    if (!supabaseClient) {
+
+        return;
+
+    }
 
 
-    if(!ganhadores.length){
+    const agora =
+        new Date();
+
+    const mes =
+        agora.getMonth() + 1;
+
+    const ano =
+        agora.getFullYear();
+
+
+    if (!ganhadores.length) {
 
         mostrarMensagem(
             "Não existem ganhadores neste mês."
@@ -2583,28 +5831,59 @@ async function zerarGanhadores(){
     }
 
 
-    if(
-        !confirm(
-            "Deseja realmente zerar TODOS os ganhadores deste mês?"
-        )
-    ){
+    const confirmou =
+        confirm(
+            "Deseja realmente zerar TODOS os ganhadores deste mês?\n\n" +
+            "As participações NÃO serão apagadas."
+        );
+
+
+    if (!confirmou) {
 
         return;
 
     }
 
 
-    const {
-        error
-    } =
-        await supabaseClient
-            .from("ganhadores")
-            .delete()
-            .eq("mes",p.mes)
-            .eq("ano",p.ano);
+    try {
+
+        const {
+            error
+        } =
+            await supabaseClient
+                .from("ganhadores")
+                .delete()
+                .eq(
+                    "mes",
+                    mes
+                )
+                .eq(
+                    "ano",
+                    ano
+                );
 
 
-    if(error){
+        if (error) {
+
+            throw error;
+
+        }
+
+
+        ganhadores = [];
+
+
+        atualizarInterface();
+
+
+        mostrarMensagem(
+            "🔄 Ganhadores do mês removidos.",
+            "sucesso"
+        );
+
+    }
+
+    catch (error) {
 
         console.error(error);
 
@@ -2613,21 +5892,7 @@ async function zerarGanhadores(){
             "erro"
         );
 
-        return;
-
     }
-
-
-    ganhadores = [];
-
-
-    atualizarInterface();
-
-
-    mostrarMensagem(
-        "🔄 Ganhadores do mês removidos.",
-        "sucesso"
-    );
 
 }
 
@@ -2636,57 +5901,650 @@ async function zerarGanhadores(){
    EVENTOS
 ========================================================= */
 
-$("btnSortear")
-    .addEventListener(
-        "click",
-        realizarSorteio
-    );
+function inicializarEventos() {
+
+    const btnLogin =
+        $("btnLogin");
+
+    const senha =
+        $("senha");
+
+    const btnSair =
+        $("btnSair");
+
+    const btnSortear =
+        $("btnSortear");
+
+    const btnSortearAniversariantes =
+        $("btnSortearAniversariantes");
+
+    const buscar =
+        $("buscar");
+
+    const btnAtualizar =
+        $("btnAtualizar");
+
+    const btnZerar =
+        $("btnZerar");
+
+    const btnAdicionar =
+        $("btnAdicionarParticipacao");
+
+    const btnFecharModal =
+        $("btnFecharModalParticipacao");
+
+    const btnSalvar =
+        $("btnSalvarParticipacao");
 
 
-$("btnSortearAniversariantes")
-    .addEventListener(
-        "click",
-        sortearAniversariantes
-    );
+    if (btnLogin) {
+
+        btnLogin.addEventListener(
+            "click",
+            login
+        );
+
+    }
 
 
-$("buscar")
-    .addEventListener(
-        "input",
-        renderizarParticipantes
-    );
+    if (senha) {
+
+        senha.addEventListener(
+            "keydown",
+            event => {
+
+                if (
+                    event.key === "Enter"
+                ) {
+
+                    event.preventDefault();
+
+                    login();
+
+                }
+
+            }
+        );
+
+    }
 
 
-$("btnAtualizar")
-    .addEventListener(
-        "click",
-        async () => {
+    if (btnSair) {
 
-            await carregarTudo();
+        btnSair.addEventListener(
+            "click",
+            sair
+        );
 
-            mostrarMensagem(
-                "🔄 Painel atualizado.",
-                "sucesso"
-            );
+    }
+
+
+    if (btnSortear) {
+
+        btnSortear.addEventListener(
+            "click",
+            realizarSorteio
+        );
+
+    }
+
+
+    if (btnSortearAniversariantes) {
+
+        btnSortearAniversariantes.addEventListener(
+            "click",
+            sortearAniversariantes
+        );
+
+    }
+
+
+    if (buscar) {
+
+        buscar.addEventListener(
+            "input",
+            renderizarParticipantes
+        );
+
+    }
+
+
+    if (btnAtualizar) {
+
+        btnAtualizar.addEventListener(
+            "click",
+            async () => {
+
+                btnAtualizar.disabled =
+                    true;
+
+                try {
+
+                    await carregarTudo();
+
+                    mostrarMensagem(
+                        "🔄 Painel atualizado.",
+                        "sucesso"
+                    );
+
+                }
+
+                finally {
+
+                    btnAtualizar.disabled =
+                        false;
+
+                }
+
+            }
+        );
+
+    }
+
+
+    if (btnZerar) {
+
+        btnZerar.addEventListener(
+            "click",
+            zerarGanhadores
+        );
+
+    }
+
+
+    if (btnAdicionar) {
+
+        btnAdicionar.addEventListener(
+            "click",
+            abrirModalParticipacao
+        );
+
+    }
+
+
+    if (btnFecharModal) {
+
+        btnFecharModal.addEventListener(
+            "click",
+            fecharModalParticipacao
+        );
+
+    }
+
+
+    if (btnSalvar) {
+
+        btnSalvar.addEventListener(
+            "click",
+            salvarParticipacao
+        );
+
+    }
+
+
+    /* =====================================================
+       BOTÕES DE CONSULTA
+    ===================================================== */
+
+    const btnPeriodo =
+        $("btnVerPeriodo");
+
+    const btnDia =
+        $("btnVerDia");
+
+    const btnSemana =
+        $("btnVerSemana");
+
+    const btnHoje =
+        $("btnHoje");
+
+    const btnAnterior =
+        $("btnDiaAnterior");
+
+    const btnProximo =
+        $("btnDiaProximo");
+
+
+    if (btnPeriodo) {
+
+        btnPeriodo.addEventListener(
+            "click",
+            verPeriodo
+        );
+
+    }
+
+
+    if (btnDia) {
+
+        btnDia.addEventListener(
+            "click",
+            verDia
+        );
+
+    }
+
+
+    if (btnSemana) {
+
+        btnSemana.addEventListener(
+            "click",
+            verSemana
+        );
+
+    }
+
+
+    if (btnHoje) {
+
+        btnHoje.addEventListener(
+            "click",
+            irParaHoje
+        );
+
+    }
+
+
+    if (btnAnterior) {
+
+        btnAnterior.addEventListener(
+            "click",
+            periodoAnterior
+        );
+
+    }
+
+
+    if (btnProximo) {
+
+        btnProximo.addEventListener(
+            "click",
+            periodoProximo
+        );
+
+    }
+
+
+    /* =====================================================
+       DATA INICIAL
+    ===================================================== */
+
+    const dataInicio =
+        $("dataInicioConsulta");
+
+
+    if (dataInicio) {
+
+        dataInicio.addEventListener(
+            "change",
+            () => {
+
+                const valor =
+                    dataInicio.value;
+
+
+                if (!valor) {
+
+                    return;
+
+                }
+
+
+                dataInicioConsulta =
+                    inputParaData(
+                        valor
+                    );
+
+
+                atualizarInterfacePeriodo();
+
+            }
+        );
+
+
+        dataInicio.addEventListener(
+            "keydown",
+            event => {
+
+                if (
+                    event.key === "Enter"
+                ) {
+
+                    event.preventDefault();
+
+                    verPeriodo();
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       DATA FINAL
+    ===================================================== */
+
+    const dataFim =
+        $("dataFimConsulta");
+
+
+    if (dataFim) {
+
+        dataFim.addEventListener(
+            "change",
+            () => {
+
+                const valor =
+                    dataFim.value;
+
+
+                if (!valor) {
+
+                    return;
+
+                }
+
+
+                dataFimConsulta =
+                    inputParaData(
+                        valor
+                    );
+
+
+                atualizarInterfacePeriodo();
+
+            }
+        );
+
+
+        dataFim.addEventListener(
+            "keydown",
+            event => {
+
+                if (
+                    event.key === "Enter"
+                ) {
+
+                    event.preventDefault();
+
+                    verPeriodo();
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       CLIQUE NOS PARTICIPANTES
+    ===================================================== */
+
+    const listaParticipantes =
+        $("listaParticipantes");
+
+
+    if (listaParticipantes) {
+
+        listaParticipantes.addEventListener(
+            "click",
+            event => {
+
+                /* -----------------------------------------
+                   BOTÃO REMOVER
+                ----------------------------------------- */
+
+                const botaoRemover =
+                    event.target.closest(
+                        ".btn-remover-participacao"
+                    );
+
+
+                if (botaoRemover) {
+
+                    const id =
+                        botaoRemover.dataset.id;
+
+
+                    if (!id) {
+
+                        return;
+
+                    }
+
+
+                    removerParticipacao(id);
+
+                    return;
+
+                }
+
+
+                /* -----------------------------------------
+                   NOME / WHATSAPP
+                ----------------------------------------- */
+
+                const botaoParticipante =
+                    event.target.closest(
+                        ".nome-participante-btn"
+                    );
+
+
+                if (!botaoParticipante) {
+
+                    return;
+
+                }
+
+
+                const id =
+                    botaoParticipante.dataset.id;
+
+
+                if (!id) {
+
+                    return;
+
+                }
+
+
+                abrirWhatsappParticipante(id);
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       MODAL
+    ===================================================== */
+
+    const modal =
+        $("modalParticipacao");
+
+
+    if (modal) {
+
+        modal.addEventListener(
+            "click",
+            event => {
+
+                if (
+                    event.target ===
+                    modal
+                ) {
+
+                    fecharModalParticipacao();
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       POPUP WHATSAPP
+    ===================================================== */
+
+    const whatsappPopup =
+        $("whatsappPopup");
+
+    const btnFecharWhatsapp =
+        $("btnFecharWhatsapp");
+
+
+    if (btnFecharWhatsapp) {
+
+        btnFecharWhatsapp.addEventListener(
+            "click",
+            fecharWhatsappParticipante
+        );
+
+    }
+
+
+    if (whatsappPopup) {
+
+        whatsappPopup.addEventListener(
+            "click",
+            event => {
+
+                if (
+                    event.target ===
+                    whatsappPopup
+                ) {
+
+                    fecharWhatsappParticipante();
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       ESC
+    ===================================================== */
+
+    document.addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key === "Escape"
+            ) {
+
+                fecharModalParticipacao();
+
+                fecharWhatsappParticipante();
+
+            }
 
         }
     );
 
-
-$("btnZerar")
-    .addEventListener(
-        "click",
-        zerarGanhadores
-    );
+}
 
 
 /* =========================================================
-   INICIAR
+   FUNÇÕES GLOBAIS
 ========================================================= */
 
-verificarSessao();
+window.login =
+    login;
+
+window.sair =
+    sair;
+
+window.verPeriodo =
+    verPeriodo;
+
+window.verDia =
+    verDia;
+
+window.verSemana =
+    verSemana;
+
+window.irParaHoje =
+    irParaHoje;
+
+window.periodoAnterior =
+    periodoAnterior;
+
+window.periodoProximo =
+    periodoProximo;
+
+window.removerParticipacao =
+    removerParticipacao;
+
+window.realizarSorteio =
+    realizarSorteio;
+
+window.sortearAniversariantes =
+    sortearAniversariantes;
+
+window.abrirModalParticipacao =
+    abrirModalParticipacao;
+
+window.fecharModalParticipacao =
+    fecharModalParticipacao;
+
+window.salvarParticipacao =
+    salvarParticipacao;
+
+window.zerarGanhadores =
+    zerarGanhadores;
+
+window.abrirWhatsappParticipante =
+    abrirWhatsappParticipante;
+
+window.fecharWhatsappParticipante =
+    fecharWhatsappParticipante;
+
+
+/* =========================================================
+   INICIALIZAÇÃO
+========================================================= */
+
+async function inicializar() {
+
+    inicializarEventos();
+
+    iniciarConsulta();
+
+    await verificarSessao();
+
+}
+
+
+if (
+    document.readyState ===
+    "loading"
+) {
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        inicializar
+    );
+
+}
+
+else {
+
+    inicializar();
+
+}
 
 </script>
+
 
 </body>
 

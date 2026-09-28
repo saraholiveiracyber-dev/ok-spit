@@ -1,373 +1,845 @@
 ﻿"use strict";
 
-/* ============================================================
-   OK.SPIT — PAINEL ADMINISTRATIVO
-   Controle de participações e ganhadores por mês
-============================================================ */
+/* =========================================================
+   OK.SPIT
+   PAINEL ADMINISTRATIVO
+   ADMIN.JS
+   ========================================================= */
 
 
-/* ============================================================
-   ELEMENTOS
-============================================================ */
+/* =========================================================
+   SUPABASE
+========================================================= */
 
-const totalMes =
-    document.getElementById("totalMes");
+const SUPABASE_URL =
+    "https://wiwvpqjlwmtmlexusiyd.supabase.co";
 
-const totalBloqueados =
-    document.getElementById("totalBloqueados");
+const SUPABASE_ANON_KEY =
+    "sb_publishable_LzX0GpaYAK2KNSu2eetEuw_tr5PKqSi";
 
-const totalAniversariantes =
-    document.getElementById("totalAniversariantes");
-
-const tabelaDivulgacoes =
-    document.getElementById("tabelaDivulgacoes");
-
-const busca =
-    document.getElementById("busca");
-
-const atualizar =
-    document.getElementById("atualizar");
-
-const listaGanhadores =
-    document.getElementById("listaGanhadores");
-
-const numeroGanhadores =
-    document.getElementById("numeroGanhadores");
-
-const nomeMesGanhadores =
-    document.getElementById("nomeMesGanhadores");
-
-const nomeMes =
-    document.getElementById("nomeMes");
-
-const zerarMes =
-    document.getElementById("zerarMes");
-
-const mensagemSorteio =
-    document.getElementById("mensagemSorteio");
-
-const ganhadorSelecionado =
-    document.getElementById("ganhadorSelecionado");
-
-const registrarGanhador =
-    document.getElementById("registrarGanhador");
-
-const limparSelecionado =
-    document.getElementById("limparSelecionado");
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+    );
 
 
-/* ============================================================
+/* =========================================================
    ESTADO
-============================================================ */
+========================================================= */
 
-let divulgacoes = [];
-
+let participantes = [];
 let ganhadores = [];
+let aniversariantes = [];
 
-let participanteSelecionado = null;
+let sorteando = false;
+
+let modoConsulta = "dia";
+
+let dataInicioConsulta = new Date();
+let dataFimConsulta = new Date();
+
+let resultadosSorteio = [];
+
+let toastTimer = null;
 
 
-/* ============================================================
-   CONFIGURAÇÃO SUPABASE
-============================================================
+/* =========================================================
+   UTILITÁRIOS
+========================================================= */
 
-   O sistema primeiro procura window.supabaseClient.
-
-   Caso você já tenha um supabase.js criando:
-
-   window.supabaseClient
-
-   ele será utilizado automaticamente.
-
-============================================================ */
-
-function verificarSupabase() {
-
-    if (!window.supabaseClient) {
-
-        throw new Error(
-            "Supabase não configurado. Verifique se o supabaseClient foi criado antes do admin.js."
-        );
-
-    }
-
+function $(id) {
+    return document.getElementById(id);
 }
 
 
-/* ============================================================
-   DATA ATUAL
-============================================================ */
-
-function obterMesAtual() {
-
-    return new Date().getMonth() + 1;
-
-}
-
-
-function obterAnoAtual() {
-
-    return new Date().getFullYear();
-
-}
-
-
-function inicioMes() {
-
-    const data =
-        new Date();
-
-    data.setDate(1);
-
-    data.setHours(
-        0,
-        0,
-        0,
-        0
-    );
-
-    return data.toISOString();
-
-}
-
-
-function inicioHoje() {
-
-    const data =
-        new Date();
-
-    data.setHours(
-        0,
-        0,
-        0,
-        0
-    );
-
-    return data.toISOString();
-
-}
-
-
-/* ============================================================
-   NOME DO MÊS
-============================================================ */
-
-function nomeDoMes(mes) {
-
-    const meses = [
-
-        "Janeiro",
-        "Fevereiro",
-        "Março",
-        "Abril",
-        "Maio",
-        "Junho",
-        "Julho",
-        "Agosto",
-        "Setembro",
-        "Outubro",
-        "Novembro",
-        "Dezembro"
-
-    ];
-
-    return meses[mes - 1];
-
-}
-
-
-/* ============================================================
-   ATUALIZAR NOME DO MÊS
-============================================================ */
-
-function atualizarNomeMes() {
-
-    const mes =
-        nomeDoMes(
-            obterMesAtual()
-        );
-
-    if (nomeMes) {
-
-        nomeMes.textContent =
-            mes;
-
-    }
-
-    if (nomeMesGanhadores) {
-
-        nomeMesGanhadores.textContent =
-            mes;
-
-    }
-
-}
-
-
-/* ============================================================
-   NORMALIZAR NOME
-============================================================ */
-
-function normalizarNome(nome) {
+function normalizar(nome) {
 
     return String(nome || "")
         .trim()
+        .toLowerCase()
         .normalize("NFD")
-        .replace(
-            /[\u0300-\u036f]/g,
-            ""
-        )
-        .replace(
-            /\s+/g,
-            " "
-        )
-        .toLowerCase();
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/\s+/g, " ");
 
 }
 
-
-/* ============================================================
-   ESCAPAR HTML
-============================================================ */
 
 function escapar(texto) {
 
-    return String(
-        texto ?? ""
-    )
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
-        );
+    const div =
+        document.createElement("div");
+
+    div.textContent =
+        String(texto ?? "");
+
+    return div.innerHTML;
 
 }
 
 
-/* ============================================================
-   FORMATAR DATA
-============================================================ */
+function nomeExibicao(nome) {
 
-function formatarData(data) {
+    const texto =
+        String(nome || "")
+            .trim()
+            .replace(/\s+/g, " ");
 
-    if (!data) {
+    if (!texto) {
+        return "Participante";
+    }
 
+    const partes =
+        texto.split(" ");
+
+    if (partes.length <= 2) {
+        return texto;
+    }
+
+    return (
+        partes[0] +
+        " " +
+        partes[partes.length - 1]
+    );
+
+}
+
+
+/* =========================================================
+   DATAS
+========================================================= */
+
+function clonarData(data) {
+
+    return new Date(
+        data.getFullYear(),
+        data.getMonth(),
+        data.getDate()
+    );
+
+}
+
+
+function inicioDia(data) {
+
+    const resultado =
+        clonarData(data);
+
+    resultado.setHours(
+        0,
+        0,
+        0,
+        0
+    );
+
+    return resultado;
+
+}
+
+
+function fimDia(data) {
+
+    const resultado =
+        clonarData(data);
+
+    resultado.setHours(
+        23,
+        59,
+        59,
+        999
+    );
+
+    return resultado;
+
+}
+
+
+function inicioSemanaDaData(data) {
+
+    const resultado =
+        clonarData(data);
+
+    const dia =
+        resultado.getDay();
+
+    const diferenca =
+        dia === 0
+            ? 6
+            : dia - 1;
+
+    resultado.setDate(
+        resultado.getDate() -
+        diferenca
+    );
+
+    resultado.setHours(
+        0,
+        0,
+        0,
+        0
+    );
+
+    return resultado;
+
+}
+
+
+function fimSemanaDaData(data) {
+
+    const resultado =
+        inicioSemanaDaData(data);
+
+    resultado.setDate(
+        resultado.getDate() + 6
+    );
+
+    resultado.setHours(
+        23,
+        59,
+        59,
+        999
+    );
+
+    return resultado;
+
+}
+
+
+function dataParaInput(data) {
+
+    if (!(data instanceof Date)) {
+        data = new Date(data);
+    }
+
+    return [
+        data.getFullYear(),
+        String(data.getMonth() + 1).padStart(2, "0"),
+        String(data.getDate()).padStart(2, "0")
+    ].join("-");
+
+}
+
+
+function inputParaData(valor) {
+
+    if (!valor) {
+        return new Date();
+    }
+
+    const partes =
+        String(valor).split("-");
+
+    if (partes.length !== 3) {
+        return new Date();
+    }
+
+    const ano =
+        Number(partes[0]);
+
+    const mes =
+        Number(partes[1]);
+
+    const dia =
+        Number(partes[2]);
+
+    return new Date(
+        ano,
+        mes - 1,
+        dia
+    );
+
+}
+
+
+function formatarData(valor) {
+
+    if (!valor) {
         return "-";
+    }
+
+    /*
+       Importante:
+       YYYY-MM-DD é tratado manualmente
+       para evitar deslocamento de fuso.
+    */
+
+    if (
+        typeof valor === "string" &&
+        /^\d{4}-\d{2}-\d{2}$/.test(valor)
+    ) {
+
+        const data =
+            inputParaData(valor);
+
+        return data.toLocaleDateString(
+            "pt-BR"
+        );
 
     }
 
-    return new Date(
-        data
-    ).toLocaleString(
+    const data =
+        new Date(valor);
+
+    if (
+        Number.isNaN(
+            data.getTime()
+        )
+    ) {
+        return "-";
+    }
+
+    return data.toLocaleDateString(
         "pt-BR"
     );
 
 }
 
 
-/* ============================================================
-   FORMATAR NASCIMENTO
-============================================================ */
+function formatarDataLonga(data) {
 
-function formatarNascimento(data) {
+    return data.toLocaleDateString(
+        "pt-BR",
+        {
+            weekday: "long",
+            day: "2-digit",
+            month: "long",
+            year: "numeric"
+        }
+    );
 
-    if (!data) {
+}
 
-        return "-";
+
+/* =========================================================
+   PERÍODO
+========================================================= */
+
+function obterPeriodoConsulta() {
+
+    let inicio;
+    let fim;
+
+    if (modoConsulta === "dia") {
+
+        inicio =
+            inicioDia(
+                dataInicioConsulta
+            );
+
+        fim =
+            fimDia(
+                dataInicioConsulta
+            );
 
     }
 
-    const partes =
-        String(data).split("-");
+    else if (modoConsulta === "semana") {
+
+        inicio =
+            inicioSemanaDaData(
+                dataInicioConsulta
+            );
+
+        fim =
+            fimSemanaDaData(
+                dataInicioConsulta
+            );
+
+    }
+
+    else {
+
+        inicio =
+            inicioDia(
+                dataInicioConsulta
+            );
+
+        fim =
+            fimDia(
+                dataFimConsulta
+            );
+
+    }
+
+    return {
+        inicio,
+        fim
+    };
+
+}
+
+
+function descricaoPeriodo() {
+
+    const periodo =
+        obterPeriodoConsulta();
+
+    const inicio =
+        formatarData(
+            periodo.inicio
+        );
+
+    const fim =
+        formatarData(
+            periodo.fim
+        );
 
     if (
-        partes.length !== 3
+        inicio === fim
     ) {
-
-        return data;
-
+        return inicio;
     }
 
     return (
-        partes[2] +
-        "/" +
-        partes[1] +
-        "/" +
-        partes[0]
+        inicio +
+        " até " +
+        fim
     );
 
 }
 
 
-/* ============================================================
-   VERIFICAR SE NOME JÁ GANHOU
-============================================================ */
+/* =========================================================
+   INTERFACE DO PERÍODO
+========================================================= */
 
-function jaGanhouEsteMes(nome) {
+function atualizarInterfacePeriodo() {
 
-    const nomeNormalizado =
-        normalizarNome(nome);
+    const periodo =
+        obterPeriodoConsulta();
 
-    return ganhadores.some(
-        ganhador =>
-            normalizarNome(
-                ganhador.nome
-            ) === nomeNormalizado
-    );
+    const inicio =
+        periodo.inicio;
+
+    const fim =
+        periodo.fim;
+
+
+    if ($("dataInicioConsulta")) {
+
+        $("dataInicioConsulta").value =
+            dataParaInput(
+                dataInicioConsulta
+            );
+
+    }
+
+
+    if ($("dataFimConsulta")) {
+
+        $("dataFimConsulta").value =
+            dataParaInput(
+                dataFimConsulta
+            );
+
+    }
+
+
+    if (
+        modoConsulta === "dia"
+    ) {
+
+        $("periodoSelecionado").textContent =
+            "📅 " +
+            formatarDataLonga(
+                inicio
+            );
+
+        $("periodoParticipacoes").textContent =
+            "📅 Participações de " +
+            formatarData(inicio);
+
+        $("periodoModo").textContent =
+            "📅 VISUALIZANDO DIA";
+
+        $("textoTotalParticipacoes").textContent =
+            "Participações no dia";
+
+    }
+
+
+    else if (
+        modoConsulta === "semana"
+    ) {
+
+        $("periodoSelecionado").textContent =
+            "📆 Semana: " +
+            formatarData(inicio) +
+            " até " +
+            formatarData(fim);
+
+        $("periodoParticipacoes").textContent =
+            "📆 Participações da semana de " +
+            formatarData(inicio) +
+            " até " +
+            formatarData(fim);
+
+        $("periodoModo").textContent =
+            "📆 VISUALIZANDO SEMANA";
+
+        $("textoTotalParticipacoes").textContent =
+            "Participações na semana";
+
+    }
+
+
+    else {
+
+        $("periodoSelecionado").textContent =
+            "📅 Período: " +
+            formatarData(inicio) +
+            " até " +
+            formatarData(fim);
+
+        $("periodoParticipacoes").textContent =
+            "📅 Participações de " +
+            formatarData(inicio) +
+            " até " +
+            formatarData(fim);
+
+        $("periodoModo").textContent =
+            "📅 VISUALIZANDO PERÍODO";
+
+        $("textoTotalParticipacoes").textContent =
+            "Participações no período";
+
+    }
+
+
+    atualizarBotoesPeriodo();
 
 }
 
 
-/* ============================================================
-   CARREGAR GANHADORES
-============================================================ */
+function atualizarBotoesPeriodo() {
+
+    $("btnVerDia")
+        ?.classList.toggle(
+            "ativo",
+            modoConsulta === "dia"
+        );
+
+    $("btnVerSemana")
+        ?.classList.toggle(
+            "ativo",
+            modoConsulta === "semana"
+        );
+
+    $("btnVerPeriodo")
+        ?.classList.toggle(
+            "ativo",
+            modoConsulta === "periodo"
+        );
+
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+function mostrarMensagem(
+    texto,
+    tipo = ""
+) {
+
+    const toast =
+        $("toast");
+
+    if (!toast) {
+        return;
+    }
+
+    toast.textContent =
+        texto;
+
+    toast.className =
+        "toast show " + tipo;
+
+    clearTimeout(
+        toastTimer
+    );
+
+    toastTimer =
+        setTimeout(
+            () => {
+
+                toast.className =
+                    "toast";
+
+            },
+            4000
+        );
+
+}
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+async function verificarSessao() {
+
+    try {
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .auth
+                .getSession();
+
+        if (error) {
+            console.error(error);
+            return;
+        }
+
+        if (
+            data &&
+            data.session
+        ) {
+
+            mostrarAdmin();
+
+        }
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Erro ao verificar sessão:",
+            error
+        );
+
+    }
+
+}
+
+
+async function login() {
+
+    const email =
+        $("email")
+            .value
+            .trim();
+
+    const senha =
+        $("senha")
+            .value;
+
+
+    $("loginError")
+        .textContent = "";
+
+
+    if (
+        !email ||
+        !senha
+    ) {
+
+        $("loginError")
+            .textContent =
+            "Digite seu e-mail e sua senha.";
+
+        return;
+
+    }
+
+
+    $("btnLogin").disabled =
+        true;
+
+    $("btnLogin").textContent =
+        "ENTRANDO...";
+
+
+    try {
+
+        const {
+            error
+        } =
+            await supabaseClient
+                .auth
+                .signInWithPassword({
+                    email,
+                    password: senha
+                });
+
+
+        if (error) {
+
+            console.error(error);
+
+            $("loginError")
+                .textContent =
+                "❌ E-mail ou senha inválidos.";
+
+            $("btnLogin")
+                .disabled = false;
+
+            $("btnLogin")
+                .textContent =
+                "ENTRAR NO PAINEL";
+
+            return;
+
+        }
+
+
+        mostrarAdmin();
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        $("loginError")
+            .textContent =
+            "❌ Não foi possível entrar.";
+
+        $("btnLogin")
+            .disabled = false;
+
+        $("btnLogin")
+            .textContent =
+            "ENTRAR NO PAINEL";
+
+    }
+
+}
+
+
+async function sair() {
+
+    try {
+
+        await supabaseClient
+            .auth
+            .signOut();
+
+    }
+
+    finally {
+
+        location.reload();
+
+    }
+
+}
+
+
+function mostrarAdmin() {
+
+    $("loginScreen")
+        .style
+        .display = "none";
+
+    $("admin")
+        .style
+        .display = "block";
+
+    iniciarConsulta();
+
+    carregarTudo();
+
+}
+
+
+/* =========================================================
+   INICIALIZAR CONSULTA
+========================================================= */
+
+function iniciarConsulta() {
+
+    const hoje =
+        new Date();
+
+    const dataHoje =
+        inicioDia(
+            hoje
+        );
+
+    dataInicioConsulta =
+        clonarData(
+            dataHoje
+        );
+
+    dataFimConsulta =
+        clonarData(
+            dataHoje
+        );
+
+    modoConsulta =
+        "dia";
+
+    atualizarInterfacePeriodo();
+
+}
+
+
+/* =========================================================
+   CARREGAR TUDO
+========================================================= */
+
+async function carregarTudo() {
+
+    try {
+
+        await carregarGanhadores();
+
+        await carregarAniversariantes();
+
+        await carregarParticipantes();
+
+        atualizarInterface();
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Erro geral:",
+            error
+        );
+
+        mostrarMensagem(
+            "❌ Erro ao carregar os dados.",
+            "erro"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   GANHADORES DO MÊS
+========================================================= */
 
 async function carregarGanhadores() {
 
-    verificarSupabase();
+    const agora =
+        new Date();
 
     const mes =
-        obterMesAtual();
+        agora.getMonth() + 1;
 
     const ano =
-        obterAnoAtual();
+        agora.getFullYear();
 
 
     const {
         data,
         error
     } =
-        await window.supabaseClient
-
+        await supabaseClient
             .from("ganhadores")
-
             .select("*")
-
-            .eq(
-                "mes",
-                mes
-            )
-
-            .eq(
-                "ano",
-                ano
-            )
-
+            .eq("mes", mes)
+            .eq("ano", ano)
             .order(
                 "created_at",
                 {
@@ -377,60 +849,311 @@ async function carregarGanhadores() {
 
 
     if (error) {
-
-        console.error(
-            "Erro ao carregar ganhadores:",
-            error
-        );
-
         throw error;
-
     }
 
 
     ganhadores =
         data || [];
 
+}
 
-    renderizarGanhadores();
 
-    renderizarDivulgacoes();
+/* =========================================================
+   PARTICIPAÇÕES
+========================================================= */
 
-    atualizarContadorBloqueados();
+async function carregarParticipantes() {
+
+    const periodo =
+        obterPeriodoConsulta();
+
+
+    const inicio =
+        inicioDia(
+            periodo.inicio
+        );
+
+    const fim =
+        fimDia(
+            periodo.fim
+        );
+
+
+    const inicioISO =
+        inicio.toISOString();
+
+
+    /*
+       Usamos < próximo dia
+       em vez de <= 23:59:59.
+
+       Assim qualquer horário do último
+       dia é incluído.
+    */
+
+    const proximoDia =
+        new Date(
+            fim.getTime() + 1
+        );
+
+    const fimExclusivoISO =
+        proximoDia.toISOString();
+
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("divulgacoes")
+            .select(
+                "id,nome,telefone,plataforma,data_participacao,criado_em"
+            )
+            .gte(
+                "data_participacao",
+                inicioISO
+            )
+            .lt(
+                "data_participacao",
+                fimExclusivoISO
+            )
+            .order(
+                "data_participacao",
+                {
+                    ascending: false
+                }
+            )
+            .limit(5000);
+
+
+    if (error) {
+        throw error;
+    }
+
+
+    participantes =
+        data || [];
+
+
+    atualizarInterfacePeriodo();
 
 }
 
 
-/* ============================================================
-   RENDERIZAR GANHADORES
-============================================================ */
+/* =========================================================
+   ANIVERSARIANTES
+========================================================= */
 
-function renderizarGanhadores() {
+async function carregarAniversariantes() {
 
-    if (!listaGanhadores) {
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("aniversariantes")
+            .select("*");
+
+
+    if (error) {
+
+        console.warn(
+            "Tabela aniversariantes:",
+            error.message
+        );
+
+        aniversariantes =
+            [];
 
         return;
 
     }
 
 
-    numeroGanhadores.textContent =
+    aniversariantes =
+        data || [];
+
+}
+
+
+/* =========================================================
+   PARTICIPANTES ÚNICOS
+========================================================= */
+
+function participantesUnicos(lista) {
+
+    const mapa =
+        new Map();
+
+    for (
+        const pessoa
+        of lista
+    ) {
+
+        const chave =
+            normalizar(
+                pessoa.nome
+            );
+
+        if (!chave) {
+            continue;
+        }
+
+        if (
+            !mapa.has(chave)
+        ) {
+
+            mapa.set(
+                chave,
+                pessoa
+            );
+
+        }
+
+    }
+
+    return [
+        ...mapa.values()
+    ];
+
+}
+
+
+/* =========================================================
+   GANHADORES BLOQUEADOS
+========================================================= */
+
+function nomesBloqueados() {
+
+    return new Set(
+        ganhadores.map(
+            g =>
+                normalizar(
+                    g.nome
+                )
+        )
+    );
+
+}
+
+
+/* =========================================================
+   DISPONÍVEIS PARA SORTEIO
+========================================================= */
+
+function disponiveis() {
+
+    const bloqueados =
+        nomesBloqueados();
+
+
+    const unicos =
+        participantesUnicos(
+            participantes
+        );
+
+
+    return unicos.filter(
+        pessoa => {
+
+            const nome =
+                normalizar(
+                    pessoa.nome
+                );
+
+            return (
+                nome &&
+                !bloqueados.has(nome)
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   INTERFACE
+========================================================= */
+
+function atualizarInterface() {
+
+    const disponiveisLista =
+        disponiveis();
+
+
+    $("totalMes").textContent =
+        participantes.length;
+
+    $("totalBloqueados").textContent =
         ganhadores.length;
 
+    $("totalDisponiveis").textContent =
+        disponiveisLista.length;
 
-    listaGanhadores.innerHTML =
-        "";
+
+    renderizarGanhadores();
+
+    renderizarParticipantes();
+
+
+    if (
+        !$("statusSorteio").textContent ||
+        $("statusSorteio").textContent ===
+        "PRONTO PARA SORTEAR"
+    ) {
+
+        atualizarStatusSorteio();
+
+    }
+
+}
+
+
+/* =========================================================
+   STATUS DO SORTEIO
+========================================================= */
+
+function atualizarStatusSorteio() {
+
+    const lista =
+        disponiveis();
+
+    const periodo =
+        descricaoPeriodo();
+
+
+    $("statusSorteio").textContent =
+        "🎲 " +
+        lista.length +
+        " PARTICIPANTE(S) DISPONÍVEL(IS) — " +
+        periodo;
+
+}
+
+
+/* =========================================================
+   RENDERIZAR GANHADORES
+========================================================= */
+
+function renderizarGanhadores() {
+
+    const container =
+        $("listaGanhadores");
+
+
+    if (!container) {
+        return;
+    }
 
 
     if (!ganhadores.length) {
 
-        listaGanhadores.innerHTML = `
+        container.innerHTML = `
 
             <div class="loading-card">
-
-                Nenhum ganhador registrado
-                neste mês.
-
+                🏆 Nenhum ganhador neste mês.
             </div>
 
         `;
@@ -440,208 +1163,99 @@ function renderizarGanhadores() {
     }
 
 
-    ganhadores.forEach(
-        ganhador => {
+    container.innerHTML =
+        ganhadores
+            .map(
+                g => `
 
-            const card =
-                document.createElement(
-                    "div"
-                );
+                    <div class="ganhador-card">
 
-            card.className =
-                "ganhador-card";
+                        <div class="ganhador-card-icon">
+                            🏆
+                        </div>
 
+                        <div class="ganhador-card-info">
 
-            card.innerHTML = `
+                            <strong>
+                                ${escapar(
+                                    nomeExibicao(
+                                        g.nome
+                                    )
+                                )}
+                            </strong>
 
-                <div class="ganhador-icon">
-                    🏆
-                </div>
+                            <span>
+                                Já ganhou este mês
+                            </span>
 
-                <div class="ganhador-info">
+                        </div>
 
-                    <span>
-                        GANHADOR
-                    </span>
+                    </div>
 
-                    <strong>
-                        ${escapar(
-                            ganhador.nome
-                        )}
-                    </strong>
-
-                </div>
-
-                <button
-                    type="button"
-                    class="ganhador-remover"
-                    data-nome="${escapar(
-                        ganhador.nome
-                    )}"
-                >
-                    ↩ Remover bloqueio
-                </button>
-
-            `;
-
-
-            const botao =
-                card.querySelector(
-                    ".ganhador-remover"
-                );
-
-
-            botao.addEventListener(
-                "click",
-                () => {
-
-                    removerGanhador(
-                        ganhador
-                    );
-
-                }
-            );
-
-
-            listaGanhadores.appendChild(
-                card
-            );
-
-        }
-    );
-
-}
-
-
-/* ============================================================
-   CONTADOR DE BLOQUEADOS
-============================================================ */
-
-function atualizarContadorBloqueados() {
-
-    if (!totalBloqueados) {
-
-        return;
-
-    }
-
-    totalBloqueados.textContent =
-        ganhadores.length;
-
-}
-
-
-/* ============================================================
-   CARREGAR DIVULGAÇÕES
-============================================================ */
-
-async function carregarDivulgacoes() {
-
-    verificarSupabase();
-
-
-    const {
-        data,
-        error
-    } =
-        await window.supabaseClient
-
-            .from("divulgacoes")
-
-            .select("*")
-
-            .order(
-                "data_participacao",
-                {
-                    ascending: false
-                }
+                `
             )
-
-            .limit(500);
-
-
-    if (error) {
-
-        throw error;
-
-    }
-
-
-    divulgacoes =
-        data || [];
-
-
-    renderizarDivulgacoes();
+            .join("");
 
 }
 
 
-/* ============================================================
-   RENDERIZAR DIVULGAÇÕES
-============================================================ */
+/* =========================================================
+   RENDERIZAR PARTICIPAÇÕES
+========================================================= */
 
-function renderizarDivulgacoes() {
+function renderizarParticipantes() {
 
-    if (!tabelaDivulgacoes) {
+    const tbody =
+        $("listaParticipantes");
 
+    if (!tbody) {
         return;
-
     }
 
 
-    const termo =
-        busca
-            ? busca.value
-                .toLowerCase()
-                .trim()
-            : "";
+    const busca =
+        normalizar(
+            $("buscar")?.value || ""
+        );
 
 
     const lista =
-        divulgacoes.filter(
-            item => {
+        participantes.filter(
+            pessoa => {
 
                 const nome =
-                    String(
-                        item.nome || ""
-                    )
-                        .toLowerCase();
-
+                    normalizar(
+                        pessoa.nome
+                    );
 
                 const telefone =
-                    String(
-                        item.telefone || ""
-                    )
-                        .toLowerCase();
-
+                    normalizar(
+                        pessoa.telefone
+                    );
 
                 return (
-                    nome.includes(termo) ||
-                    telefone.includes(termo)
+                    nome.includes(busca) ||
+                    telefone.includes(busca)
                 );
 
             }
         );
 
 
-    tabelaDivulgacoes.innerHTML =
-        "";
-
-
     if (!lista.length) {
 
-        tabelaDivulgacoes.innerHTML = `
+        tbody.innerHTML = `
 
             <tr>
 
-                <td
-                    colspan="4"
-                    style="
-                        text-align:center;
-                        padding:30px
-                    "
-                >
-                    Nenhuma participação encontrada.
+                <td colspan="4">
+
+                    <div class="loading">
+
+                        👥 Nenhuma participação
+                        encontrada no período selecionado.
+
+                    </div>
 
                 </td>
 
@@ -654,299 +1268,1353 @@ function renderizarDivulgacoes() {
     }
 
 
-    lista.forEach(
-        item => {
+    tbody.innerHTML =
+        lista
+            .map(
+                pessoa => `
 
-            const tr =
-                document.createElement(
-                    "tr"
-                );
+                    <tr>
 
+                        <td>
 
-            const nome =
-                item.nome || "";
+                            <strong>
 
+                                ${escapar(
+                                    nomeExibicao(
+                                        pessoa.nome
+                                    )
+                                )}
 
-            const ganhou =
-                jaGanhouEsteMes(
-                    nome
-                );
+                            </strong>
 
-
-            tr.innerHTML = `
-
-                <td>
-
-                    <strong>
-                        ${escapar(nome)}
-                    </strong>
-
-                </td>
+                        </td>
 
 
-                <td>
-                    ${escapar(
-                        item.plataforma ||
-                        item.telefone ||
-                        "-"
-                    )}
-                </td>
+                        <td>
+
+                            ${escapar(
+                                pessoa.plataforma ||
+                                "Participante"
+                            )}
+
+                        </td>
 
 
-                <td>
-                    ${formatarData(
-                        item.data_participacao
-                    )}
-                </td>
+                        <td>
 
-
-                <td>
-
-                    <div
-                        class="status-ganhador"
-                    >
-
-                        ${
-                            ganhou
-
-                            ?
-
-                            `
                             <span
-                                class="badge-ganhador"
+                                class="data-participacao"
                             >
-                                🏆 Já ganhou
+
+                                📅
+
+                                ${formatarData(
+                                    pessoa.data_participacao ||
+                                    pessoa.criado_em
+                                )}
+
                             </span>
-                            `
 
-                            :
+                        </td>
 
-                            `
-                            <label
-                                class="checkbox-ganhador"
+
+                        <td>
+
+                            <button
+                                type="button"
+                                class="btn-remover-participacao"
+                                onclick="removerParticipacao('${escapar(String(pessoa.id))}')"
+                                title="Remover participação"
                             >
+                                ×
+                            </button>
 
-                                <input
-                                    type="checkbox"
-                                    class="marcar-ganhador"
-                                    data-nome="${escapar(
-                                        nome
-                                    )}"
-                                >
+                        </td>
 
-                                <span>
-                                    Já ganhou este mês
-                                </span>
+                    </tr>
 
-                            </label>
-                            `
-                        }
+                `
+            )
+            .join("");
 
+}
+
+
+/* =========================================================
+   CONSULTA
+========================================================= */
+
+async function aplicarConsulta() {
+
+    try {
+
+        atualizarInterfacePeriodo();
+
+
+        $("listaParticipantes").innerHTML = `
+
+            <tr>
+
+                <td colspan="4">
+
+                    <div class="loading">
+                        🔄 Carregando participações...
                     </div>
 
                 </td>
 
-            `;
+            </tr>
+
+        `;
 
 
-            const checkbox =
-                tr.querySelector(
-                    ".marcar-ganhador"
+        await carregarParticipantes();
+
+        atualizarInterface();
+
+        atualizarStatusSorteio();
+
+
+        if (
+            modoConsulta === "dia"
+        ) {
+
+            mostrarMensagem(
+                "📅 Dia atualizado.",
+                "sucesso"
+            );
+
+        }
+
+        else if (
+            modoConsulta === "semana"
+        ) {
+
+            mostrarMensagem(
+                "📆 Semana atualizada.",
+                "sucesso"
+            );
+
+        }
+
+        else {
+
+            mostrarMensagem(
+                "📅 Período atualizado.",
+                "sucesso"
+            );
+
+        }
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Erro na consulta:",
+            error
+        );
+
+        mostrarMensagem(
+            "❌ Erro ao consultar as participações.",
+            "erro"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   VER PERÍODO
+========================================================= */
+
+async function verPeriodo() {
+
+    const inicio =
+        $("dataInicioConsulta").value;
+
+    const fim =
+        $("dataFimConsulta").value;
+
+
+    if (
+        !inicio ||
+        !fim
+    ) {
+
+        mostrarMensagem(
+            "Informe a data inicial e a data final.",
+            "erro"
+        );
+
+        return;
+
+    }
+
+
+    const novaInicio =
+        inputParaData(inicio);
+
+    const novoFim =
+        inputParaData(fim);
+
+
+    if (
+        novaInicio >
+        novoFim
+    ) {
+
+        mostrarMensagem(
+            "A data inicial não pode ser maior que a data final.",
+            "erro"
+        );
+
+        return;
+
+    }
+
+
+    dataInicioConsulta =
+        novaInicio;
+
+    dataFimConsulta =
+        novoFim;
+
+    modoConsulta =
+        "periodo";
+
+
+    await aplicarConsulta();
+
+}
+
+
+/* =========================================================
+   VER DIA
+========================================================= */
+
+async function verDia() {
+
+    const valor =
+        $("dataInicioConsulta").value ||
+        $("dataFimConsulta").value;
+
+
+    if (!valor) {
+
+        mostrarMensagem(
+            "Escolha uma data.",
+            "erro"
+        );
+
+        return;
+
+    }
+
+
+    dataInicioConsulta =
+        inputParaData(valor);
+
+    dataFimConsulta =
+        clonarData(
+            dataInicioConsulta
+        );
+
+    modoConsulta =
+        "dia";
+
+
+    await aplicarConsulta();
+
+}
+
+
+/* =========================================================
+   VER SEMANA
+========================================================= */
+
+async function verSemana() {
+
+    const valor =
+        $("dataInicioConsulta").value ||
+        $("dataFimConsulta").value;
+
+
+    if (!valor) {
+
+        mostrarMensagem(
+            "Escolha uma data.",
+            "erro"
+        );
+
+        return;
+
+    }
+
+
+    const data =
+        inputParaData(valor);
+
+
+    dataInicioConsulta =
+        inicioSemanaDaData(data);
+
+    dataFimConsulta =
+        fimSemanaDaData(data);
+
+    modoConsulta =
+        "semana";
+
+
+    await aplicarConsulta();
+
+}
+
+
+/* =========================================================
+   ANTERIOR
+========================================================= */
+
+async function diaAnterior() {
+
+    if (
+        modoConsulta === "dia"
+    ) {
+
+        dataInicioConsulta =
+            clonarData(
+                dataInicioConsulta
+            );
+
+        dataInicioConsulta.setDate(
+            dataInicioConsulta.getDate() - 1
+        );
+
+        dataFimConsulta =
+            clonarData(
+                dataInicioConsulta
+            );
+
+    }
+
+
+    else if (
+        modoConsulta === "semana"
+    ) {
+
+        const novaData =
+            clonarData(
+                dataInicioConsulta
+            );
+
+        novaData.setDate(
+            novaData.getDate() - 7
+        );
+
+        dataInicioConsulta =
+            inicioSemanaDaData(
+                novaData
+            );
+
+        dataFimConsulta =
+            fimSemanaDaData(
+                novaData
+            );
+
+    }
+
+
+    else {
+
+        const quantidadeDias =
+            Math.max(
+                1,
+                Math.round(
+                    (
+                        dataFimConsulta -
+                        dataInicioConsulta
+                    ) /
+                    86400000
+                ) + 1
+            );
+
+
+        const novaInicio =
+            clonarData(
+                dataInicioConsulta
+            );
+
+        novaInicio.setDate(
+            novaInicio.getDate() -
+            quantidadeDias
+        );
+
+
+        const novoFim =
+            clonarData(
+                dataFimConsulta
+            );
+
+        novoFim.setDate(
+            novoFim.getDate() -
+            quantidadeDias
+        );
+
+
+        dataInicioConsulta =
+            novaInicio;
+
+        dataFimConsulta =
+            novoFim;
+
+    }
+
+
+    await aplicarConsulta();
+
+}
+
+
+/* =========================================================
+   PRÓXIMO
+========================================================= */
+
+async function diaProximo() {
+
+    if (
+        modoConsulta === "dia"
+    ) {
+
+        dataInicioConsulta =
+            clonarData(
+                dataInicioConsulta
+            );
+
+        dataInicioConsulta.setDate(
+            dataInicioConsulta.getDate() + 1
+        );
+
+        dataFimConsulta =
+            clonarData(
+                dataInicioConsulta
+            );
+
+    }
+
+
+    else if (
+        modoConsulta === "semana"
+    ) {
+
+        const novaData =
+            clonarData(
+                dataInicioConsulta
+            );
+
+        novaData.setDate(
+            novaData.getDate() + 7
+        );
+
+        dataInicioConsulta =
+            inicioSemanaDaData(
+                novaData
+            );
+
+        dataFimConsulta =
+            fimSemanaDaData(
+                novaData
+            );
+
+    }
+
+
+    else {
+
+        const quantidadeDias =
+            Math.max(
+                1,
+                Math.round(
+                    (
+                        dataFimConsulta -
+                        dataInicioConsulta
+                    ) /
+                    86400000
+                ) + 1
+            );
+
+
+        const novaInicio =
+            clonarData(
+                dataInicioConsulta
+            );
+
+        novaInicio.setDate(
+            novaInicio.getDate() +
+            quantidadeDias
+        );
+
+
+        const novoFim =
+            clonarData(
+                dataFimConsulta
+            );
+
+        novoFim.setDate(
+            novoFim.getDate() +
+            quantidadeDias
+        );
+
+
+        dataInicioConsulta =
+            novaInicio;
+
+        dataFimConsulta =
+            novoFim;
+
+    }
+
+
+    await aplicarConsulta();
+
+}
+
+
+/* =========================================================
+   HOJE
+========================================================= */
+
+async function irParaHoje() {
+
+    const hoje =
+        inicioDia(
+            new Date()
+        );
+
+
+    dataInicioConsulta =
+        clonarData(hoje);
+
+    dataFimConsulta =
+        clonarData(hoje);
+
+    modoConsulta =
+        "dia";
+
+
+    await aplicarConsulta();
+
+}
+
+
+/* =========================================================
+   REMOVER PARTICIPAÇÃO
+========================================================= */
+
+async function removerParticipacao(id) {
+
+    const pessoa =
+        participantes.find(
+            participante =>
+                String(participante.id) ===
+                String(id)
+        );
+
+
+    if (!pessoa) {
+        return;
+    }
+
+
+    const confirmou =
+        confirm(
+            "Remover a participação de " +
+            nomeExibicao(
+                pessoa.nome
+            ) +
+            "?\n\n" +
+            "Essa ação excluirá somente esta participação."
+        );
+
+
+    if (!confirmou) {
+        return;
+    }
+
+
+    try {
+
+        const {
+            error
+        } =
+            await supabaseClient
+                .from("divulgacoes")
+                .delete()
+                .eq(
+                    "id",
+                    id
                 );
 
 
-            if (checkbox) {
+        if (error) {
+            throw error;
+        }
 
-                checkbox.addEventListener(
-                    "change",
-                    async event => {
 
-                        if (
-                            event.target.checked
-                        ) {
+        participantes =
+            participantes.filter(
+                participante =>
+                    String(participante.id) !==
+                    String(id)
+            );
 
-                            await marcarGanhador(
-                                nome
-                            );
 
-                        }
+        atualizarInterface();
 
-                    }
+        atualizarStatusSorteio();
+
+
+        mostrarMensagem(
+            "🗑️ Participação removida com sucesso.",
+            "sucesso"
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        mostrarMensagem(
+            "❌ Não foi possível remover a participação.",
+            "erro"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   SORTEIO
+========================================================= */
+
+async function realizarSorteio() {
+
+    if (sorteando) {
+        return;
+    }
+
+
+    const lista =
+        disponiveis();
+
+
+    if (!lista.length) {
+
+        mostrarMensagem(
+            "❌ Todos os participantes deste período já estão bloqueados ou não existem participantes.",
+            "erro"
+        );
+
+        return;
+
+    }
+
+
+    let quantidade =
+        parseInt(
+            $("quantidade").value,
+            10
+        ) || 1;
+
+
+    quantidade =
+        Math.max(
+            1,
+            Math.min(
+                quantidade,
+                lista.length,
+                50
+            )
+        );
+
+
+    $("quantidade").value =
+        quantidade;
+
+
+    sorteando =
+        true;
+
+
+    $("btnSortear").disabled =
+        true;
+
+    $("btnSortear").textContent =
+        "🎲 SORTEANDO...";
+
+    $("statusSorteio").textContent =
+        "🎲 SORTEANDO ENTRE " +
+        lista.length +
+        " PARTICIPANTE(S)";
+
+
+    $("resultadoSorteio")
+        .classList
+        .remove("vencedor");
+
+
+    $("resultadoSorteio")
+        .classList
+        .add("animando");
+
+
+    $("resultadosSorteio")
+        .innerHTML = "";
+
+
+    /*
+       Sorteio sem repetir participante
+       dentro do mesmo sorteio.
+    */
+
+    const embaralhados =
+        [...lista].sort(
+            () =>
+                Math.random() - 0.5
+        );
+
+
+    const escolhidos =
+        embaralhados.slice(
+            0,
+            quantidade
+        );
+
+
+    let contador = 0;
+
+    const duracao =
+        quantidade === 1
+            ? 35
+            : 28;
+
+
+    const intervalo =
+        setInterval(
+            () => {
+
+                const pessoa =
+                    lista[
+                        Math.floor(
+                            Math.random() *
+                            lista.length
+                        )
+                    ];
+
+
+                $("resultadoSorteio")
+                    .textContent =
+                    nomeExibicao(
+                        pessoa.nome
+                    );
+
+
+                contador++;
+
+
+                if (
+                    contador >= duracao
+                ) {
+
+                    clearInterval(
+                        intervalo
+                    );
+
+                    finalizarSorteio(
+                        escolhidos
+                    );
+
+                }
+
+            },
+            90
+        );
+
+}
+
+
+/* =========================================================
+   FINALIZAR SORTEIO
+========================================================= */
+
+async function finalizarSorteio(
+    escolhidos
+) {
+
+    const resultado =
+        $("resultadoSorteio");
+
+
+    resultado.classList.remove(
+        "animando"
+    );
+
+    resultado.classList.add(
+        "vencedor"
+    );
+
+
+    if (
+        escolhidos.length === 1
+    ) {
+
+        resultado.textContent =
+            nomeExibicao(
+                escolhidos[0].nome
+            );
+
+    }
+
+    else {
+
+        resultado.textContent =
+            escolhidos.length +
+            " GANHADORES";
+
+    }
+
+
+    const agora =
+        new Date();
+
+    const mes =
+        agora.getMonth() + 1;
+
+    const ano =
+        agora.getFullYear();
+
+
+    const novos =
+        [];
+
+
+    try {
+
+        for (
+            const pessoa
+            of escolhidos
+        ) {
+
+            const nome =
+                String(
+                    pessoa.nome || ""
+                ).trim();
+
+
+            const jaExiste =
+                ganhadores.some(
+                    g =>
+                        normalizar(g.nome) ===
+                        normalizar(nome)
                 );
+
+
+            if (jaExiste) {
+                continue;
+            }
+
+
+            const {
+                data,
+                error
+            } =
+                await supabaseClient
+                    .from("ganhadores")
+                    .insert({
+                        nome,
+                        mes,
+                        ano
+                    })
+                    .select()
+                    .single();
+
+
+            if (error) {
+
+                console.error(
+                    "Erro ao gravar ganhador:",
+                    error
+                );
+
+                mostrarMensagem(
+                    "❌ Erro ao registrar " +
+                    nome +
+                    ".",
+                    "erro"
+                );
+
+                continue;
 
             }
 
 
-            tabelaDivulgacoes.appendChild(
-                tr
+            novos.push(data);
+
+            ganhadores.unshift(data);
+
+
+            $("resultadosSorteio")
+                .insertAdjacentHTML(
+                    "beforeend",
+                    `
+
+                        <span
+                            class="resultado-premium"
+                        >
+
+                            🏆
+                            ${escapar(
+                                nomeExibicao(nome)
+                            )}
+
+                        </span>
+
+                    `
+                );
+
+        }
+
+
+        if (novos.length) {
+
+            criarConfetes();
+
+            mostrarMensagem(
+                "🏆 Sorteio realizado com sucesso!",
+                "sucesso"
             );
 
         }
-    );
+
+
+        resultadosSorteio =
+            novos;
+
+
+        atualizarInterface();
+
+        atualizarStatusSorteio();
+
+    }
+
+    finally {
+
+        sorteando =
+            false;
+
+        $("btnSortear")
+            .disabled = false;
+
+        $("btnSortear")
+            .textContent =
+            "🎁 REALIZAR NOVO SORTEIO";
+
+    }
 
 }
 
 
-/* ============================================================
-   MARCAR GANHADOR
-============================================================ */
+/* =========================================================
+   CONFETES
+========================================================= */
 
-async function marcarGanhador(nome) {
+function criarConfetes() {
 
-    if (!nome || !nome.trim()) {
+    for (
+        let i = 0;
+        i < 80;
+        i++
+    ) {
 
-        return;
-
-    }
-
-
-    verificarSupabase();
-
-
-    const mes =
-        obterMesAtual();
-
-    const ano =
-        obterAnoAtual();
-
-
-    const jaExiste =
-        jaGanhouEsteMes(
-            nome
-        );
-
-
-    if (jaExiste) {
-
-        return;
-
-    }
-
-
-    const {
-        data,
-        error
-    } =
-        await window.supabaseClient
-
-            .from("ganhadores")
-
-            .insert({
-
-                nome:
-                    nome.trim(),
-
-                mes:
-                    mes,
-
-                ano:
-                    ano
-
-            })
-
-            .select()
-            
-            .single();
-
-
-    if (error) {
-
-        console.error(
-            "Erro ao registrar ganhador:",
-            error
-        );
-
-
-        alert(
-            "Não foi possível registrar o ganhador.\n\n" +
-            error.message
-        );
-
-
-        renderizarDivulgacoes();
-
-        return;
-
-    }
-
-
-    ganhadores.unshift(
-        data
-    );
-
-
-    atualizarContadorBloqueados();
-
-    renderizarGanhadores();
-
-    renderizarDivulgacoes();
-
-
-    mostrarMensagem(
-        "🏆 Ganhador registrado com sucesso!",
-        "sucesso"
-    );
-
-}
-
-
-/* ============================================================
-   REMOVER GANHADOR
-============================================================ */
-
-async function removerGanhador(
-    ganhador
-) {
-
-    if (!ganhador) {
-
-        return;
-
-    }
-
-
-    const confirmar =
-        confirm(
-            `Deseja remover "${ganhador.nome}" dos ganhadores deste mês?`
-        );
-
-
-    if (!confirmar) {
-
-        return;
-
-    }
-
-
-    verificarSupabase();
-
-
-    const {
-        error
-    } =
-        await window.supabaseClient
-
-            .from("ganhadores")
-
-            .delete()
-
-            .eq(
-                "id",
-                ganhador.id
+        const confete =
+            document.createElement(
+                "div"
             );
 
 
-    if (error) {
+        confete.className =
+            "confete";
 
-        console.error(
-            "Erro ao remover ganhador:",
-            error
+
+        confete.style.left =
+            Math.random() *
+            100 +
+            "vw";
+
+
+        confete.style.animationDelay =
+            Math.random() *
+            0.8 +
+            "s";
+
+
+        confete.style.background =
+            Math.random() > 0.5
+                ? "#ff6a00"
+                : "#ffffff";
+
+
+        document.body
+            .appendChild(
+                confete
+            );
+
+
+        setTimeout(
+            () =>
+                confete.remove(),
+            3500
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   ANIVERSARIANTES
+========================================================= */
+
+function obterMesNascimento(valor) {
+
+    if (!valor) {
+        return null;
+    }
+
+
+    if (
+        typeof valor === "string" &&
+        /^\d{4}-\d{2}-\d{2}$/.test(valor)
+    ) {
+
+        return Number(
+            valor.split("-")[1]
+        );
+
+    }
+
+
+    const data =
+        new Date(valor);
+
+
+    if (
+        Number.isNaN(
+            data.getTime()
+        )
+    ) {
+
+        return null;
+
+    }
+
+
+    return data.getMonth() + 1;
+
+}
+
+
+async function sortearAniversariantes() {
+
+    const botao =
+        $("btnSortearAniversariantes");
+
+
+    const agora =
+        new Date();
+
+    const mesAtual =
+        agora.getMonth() + 1;
+
+
+    const lista =
+        aniversariantes.filter(
+            pessoa => {
+
+                const nascimento =
+                    pessoa.nascimento ||
+                    pessoa.data_nascimento ||
+                    pessoa.dataNascimento ||
+                    pessoa.data_aniversario ||
+                    pessoa.birthday;
+
+
+                return (
+                    obterMesNascimento(
+                        nascimento
+                    ) ===
+                    mesAtual
+                );
+
+            }
         );
 
 
-        alert(
-            "Não foi possível remover o bloqueio.\n\n" +
-            error.message
+    if (!lista.length) {
+
+        $("resultadoAniversariantes")
+            .innerHTML = `
+
+                <span>
+                    🎂 Nenhum aniversariante
+                    encontrado neste mês.
+                </span>
+
+            `;
+
+        return;
+
+    }
+
+
+    let quantidade =
+        parseInt(
+            $("quantidadeAniversariantes").value,
+            10
+        ) || 1;
+
+
+    quantidade =
+        Math.max(
+            1,
+            Math.min(
+                quantidade,
+                lista.length,
+                50
+            )
+        );
+
+
+    $("quantidadeAniversariantes")
+        .value =
+        quantidade;
+
+
+    botao.disabled =
+        true;
+
+    botao.textContent =
+        "🎂 SORTEANDO...";
+
+
+    const container =
+        $("resultadoAniversariantes");
+
+
+    let contador = 0;
+
+
+    const intervalo =
+        setInterval(
+            () => {
+
+                const pessoa =
+                    lista[
+                        Math.floor(
+                            Math.random() *
+                            lista.length
+                        )
+                    ];
+
+
+                container.innerHTML = `
+
+                    <span
+                        class="aniversariante-vencedor"
+                    >
+
+                        🎂
+
+                        ${escapar(
+                            nomeExibicao(
+                                pessoa.nome
+                            )
+                        )}
+
+                    </span>
+
+                `;
+
+
+                contador++;
+
+
+                if (
+                    contador >= 25
+                ) {
+
+                    clearInterval(
+                        intervalo
+                    );
+
+
+                    const escolhidos =
+                        [...lista]
+                            .sort(
+                                () =>
+                                    Math.random() - 0.5
+                            )
+                            .slice(
+                                0,
+                                quantidade
+                            );
+
+
+                    container.innerHTML =
+                        escolhidos
+                            .map(
+                                pessoa => `
+
+                                    <span
+                                        class="aniversariante-vencedor"
+                                    >
+
+                                        🎂
+
+                                        ${escapar(
+                                            nomeExibicao(
+                                                pessoa.nome
+                                            )
+                                        )}
+
+                                    </span>
+
+                                `
+                            )
+                            .join("");
+
+
+                    criarConfetes();
+
+
+                    botao.disabled =
+                        false;
+
+                    botao.textContent =
+                        "🎂 SORTEAR NOVAMENTE";
+
+
+                    mostrarMensagem(
+                        "🎂 Aniversariante sorteado!",
+                        "sucesso"
+                    );
+
+                }
+
+            },
+            90
+        );
+
+}
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+function abrirModalParticipacao() {
+
+    $("modalParticipacao")
+        .classList
+        .add("aberto");
+
+
+    $("novoNome").value =
+        "";
+
+    $("novoTelefone").value =
+        "";
+
+    $("novaPlataforma").value =
+        "";
+
+
+    /*
+       Se o modo for período, usamos
+       a data inicial selecionada.
+    */
+
+    $("novaDataParticipacao").value =
+        dataParaInput(
+            dataInicioConsulta
+        );
+
+
+    setTimeout(
+        () =>
+            $("novoNome").focus(),
+        100
+    );
+
+}
+
+
+function fecharModalParticipacao() {
+
+    $("modalParticipacao")
+        .classList
+        .remove("aberto");
+
+}
+
+
+/* =========================================================
+   SALVAR PARTICIPAÇÃO
+========================================================= */
+
+async function salvarParticipacao() {
+
+    const nome =
+        $("novoNome")
+            .value
+            .trim();
+
+    const telefone =
+        $("novoTelefone")
+            .value
+            .trim();
+
+    const plataforma =
+        $("novaPlataforma")
+            .value
+            .trim();
+
+    const data =
+        $("novaDataParticipacao")
+            .value;
+
+
+    if (!nome) {
+
+        mostrarMensagem(
+            "Digite o nome do participante.",
+            "erro"
+        );
+
+        $("novoNome").focus();
+
+        return;
+
+    }
+
+
+    if (!data) {
+
+        mostrarMensagem(
+            "Informe a data da participação.",
+            "erro"
         );
 
         return;
@@ -954,49 +2622,154 @@ async function removerGanhador(
     }
 
 
-    ganhadores =
-        ganhadores.filter(
-            item =>
-                item.id !==
-                ganhador.id
+    const botao =
+        $("btnSalvarParticipacao");
+
+
+    botao.disabled =
+        true;
+
+    botao.textContent =
+        "SALVANDO...";
+
+
+    try {
+
+        const {
+            data: novaParticipacao,
+            error
+        } =
+            await supabaseClient
+                .from("divulgacoes")
+                .insert({
+                    nome,
+                    telefone:
+                        telefone || null,
+                    plataforma:
+                        plataforma || "Manual",
+                    data_participacao:
+                        data
+                })
+                .select()
+                .single();
+
+
+        if (error) {
+            throw error;
+        }
+
+
+        const dataNova =
+            inputParaData(data);
+
+
+        /*
+           Depois de cadastrar, o período
+           acompanha a data cadastrada quando
+           estamos no modo DIA.
+
+           Nos modos SEMANA e PERÍODO,
+           mantemos a consulta atual.
+        */
+
+        if (
+            modoConsulta === "dia"
+        ) {
+
+            dataInicioConsulta =
+                clonarData(
+                    dataNova
+                );
+
+            dataFimConsulta =
+                clonarData(
+                    dataNova
+                );
+
+        }
+
+
+        else if (
+            modoConsulta === "semana"
+        ) {
+
+            dataInicioConsulta =
+                inicioSemanaDaData(
+                    dataNova
+                );
+
+            dataFimConsulta =
+                fimSemanaDaData(
+                    dataNova
+                );
+
+        }
+
+
+        fecharModalParticipacao();
+
+
+        await carregarParticipantes();
+
+        atualizarInterface();
+
+        atualizarStatusSorteio();
+
+
+        mostrarMensagem(
+            "✅ Participação adicionada com sucesso!",
+            "sucesso"
         );
 
+    }
 
-    atualizarContadorBloqueados();
+    catch (error) {
 
-    renderizarGanhadores();
+        console.error(
+            "Erro ao salvar participação:",
+            error
+        );
 
-    renderizarDivulgacoes();
+        mostrarMensagem(
+            "❌ Erro ao adicionar participação.",
+            "erro"
+        );
 
+    }
 
-    mostrarMensagem(
-        "↩ Bloqueio removido. O participante pode concorrer novamente.",
-        "sucesso"
-    );
+    finally {
+
+        botao.disabled =
+            false;
+
+        botao.textContent =
+            "➕ SALVAR PARTICIPAÇÃO";
+
+    }
 
 }
 
 
-/* ============================================================
-   ZERAR MÊS
-============================================================ */
+/* =========================================================
+   ZERAR GANHADORES
+========================================================= */
 
-async function executarZerarMes() {
+async function zerarGanhadores() {
 
-    verificarSupabase();
-
+    const agora =
+        new Date();
 
     const mes =
-        obterMesAtual();
+        agora.getMonth() + 1;
 
     const ano =
-        obterAnoAtual();
+        agora.getFullYear();
 
 
     if (!ganhadores.length) {
 
-        alert(
-            `Não existem ganhadores registrados em ${nomeDoMes(mes)} de ${ano}.`
+        mostrarMensagem(
+            "Não existem ganhadores neste mês."
         );
 
         return;
@@ -1004,601 +2777,58 @@ async function executarZerarMes() {
     }
 
 
-    const confirmar =
+    const confirmou =
         confirm(
-
-            `⚠️ ZERAR MÊS\n\n` +
-
-            `Isso irá remover ${ganhadores.length} ` +
-            `ganhador(es) de ${nomeDoMes(mes)} de ${ano}.\n\n` +
-
-            `As PARTICIPAÇÕES serão mantidas.\n\n` +
-
-            `Somente os bloqueios de ganhadores serão removidos.\n\n` +
-
-            `Deseja continuar?`
-
+            "Deseja realmente zerar TODOS os ganhadores deste mês?\n\n" +
+            "As participações NÃO serão apagadas."
         );
 
 
-    if (!confirmar) {
-
+    if (!confirmou) {
         return;
-
     }
 
-
-    zerarMes.disabled =
-        true;
-
-    zerarMes.textContent =
-        "⏳ Zerando...";
-
-
-    const {
-        error
-    } =
-        await window.supabaseClient
-
-            .from("ganhadores")
-
-            .delete()
-
-            .eq(
-                "mes",
-                mes
-            )
-
-            .eq(
-                "ano",
-                ano
-            );
-
-
-    if (error) {
-
-        console.error(
-            "Erro ao zerar mês:",
-            error
-        );
-
-
-        alert(
-            "Não foi possível zerar o mês.\n\n" +
-            error.message
-        );
-
-
-        zerarMes.disabled =
-            false;
-
-        zerarMes.textContent =
-            "🔄 Zerar mês";
-
-        return;
-
-    }
-
-
-    ganhadores =
-        [];
-
-
-    participanteSelecionado =
-        null;
-
-
-    atualizarSelecionado();
-
-    atualizarContadorBloqueados();
-
-    renderizarGanhadores();
-
-    renderizarDivulgacoes();
-
-
-    mostrarMensagem(
-        `🔄 ${nomeDoMes(mes)} zerado com sucesso! Todos os participantes estão disponíveis novamente.`,
-        "sucesso"
-    );
-
-
-    zerarMes.disabled =
-        false;
-
-    zerarMes.textContent =
-        "🔄 Zerar mês";
-
-}
-
-
-/* ============================================================
-   MENSAGEM
-============================================================ */
-
-function mostrarMensagem(
-    texto,
-    tipo = ""
-) {
-
-    if (!mensagemSorteio) {
-
-        return;
-
-    }
-
-
-    mensagemSorteio.textContent =
-        texto;
-
-
-    mensagemSorteio.className =
-        "mensagem " +
-        tipo;
-
-
-    setTimeout(
-        () => {
-
-            mensagemSorteio.textContent =
-                "";
-
-            mensagemSorteio.className =
-                "mensagem";
-
-        },
-        5000
-    );
-
-}
-
-
-/* ============================================================
-   SELEÇÃO DE GANHADOR
-============================================================ */
-
-function selecionarParticipante(nome) {
-
-    participanteSelecionado =
-        nome;
-
-
-    atualizarSelecionado();
-
-}
-
-
-function atualizarSelecionado() {
-
-    if (!ganhadorSelecionado) {
-
-        return;
-
-    }
-
-
-    if (!participanteSelecionado) {
-
-        ganhadorSelecionado.textContent =
-            "Nenhum ganhador selecionado";
-
-
-        registrarGanhador.disabled =
-            true;
-
-
-        return;
-
-    }
-
-
-    ganhadorSelecionado.textContent =
-        participanteSelecionado;
-
-
-    registrarGanhador.disabled =
-        false;
-
-}
-
-
-/* ============================================================
-   REGISTRAR PELO GANHADOR SELECIONADO
-============================================================ */
-
-async function registrarGanhadorSelecionado() {
-
-    if (!participanteSelecionado) {
-
-        return;
-
-    }
-
-
-    await marcarGanhador(
-        participanteSelecionado
-    );
-
-
-    participanteSelecionado =
-        null;
-
-
-    atualizarSelecionado();
-
-}
-
-
-/* ============================================================
-   ESTATÍSTICAS
-============================================================ */
-
-async function carregarEstatisticas() {
-
-    verificarSupabase();
-
-
-    const hoje =
-        await window.supabaseClient
-
-            .from("divulgacoes")
-
-            .select(
-                "id",
-                {
-                    count: "exact",
-                    head: true
-                }
-            )
-
-            .gte(
-                "data_participacao",
-                inicioHoje()
-            );
-
-
-    const mes =
-        await window.supabaseClient
-
-            .from("divulgacoes")
-
-            .select(
-                "id",
-                {
-                    count: "exact",
-                    head: true
-                }
-            )
-
-            .gte(
-                "data_participacao",
-                inicioMes()
-            );
-
-
-    const aniversariantes =
-        await window.supabaseClient
-
-            .from("aniversariantes")
-
-            .select(
-                "id",
-                {
-                    count: "exact",
-                    head: true
-                }
-            );
-
-
-    if (hoje.error) {
-
-        throw hoje.error;
-
-    }
-
-
-    if (mes.error) {
-
-        throw mes.error;
-
-    }
-
-
-    if (aniversariantes.error) {
-
-        throw aniversariantes.error;
-
-    }
-
-
-    totalMes.textContent =
-        mes.count || 0;
-
-
-    totalAniversariantes.textContent =
-        aniversariantes.count || 0;
-
-
-    atualizarContadorBloqueados();
-
-}
-
-
-/* ============================================================
-   ANIVERSARIANTES
-============================================================ */
-
-async function carregarAniversariantes() {
-
-    verificarSupabase();
-
-
-    const {
-        data,
-        error
-    } =
-        await window.supabaseClient
-
-            .from(
-                "aniversariantes"
-            )
-
-            .select("*")
-
-            .order(
-                "nascimento",
-                {
-                    ascending: true
-                }
-            );
-
-
-    if (error) {
-
-        throw error;
-
-    }
-
-
-    renderizarAniversariantes(
-        data || []
-    );
-
-}
-
-
-/* ============================================================
-   RENDERIZAR ANIVERSARIANTES
-============================================================ */
-
-function renderizarAniversariantes(
-    dados
-) {
-
-    const hojeContainer =
-        document.getElementById(
-            "aniversariantesHoje"
-        );
-
-    const mesContainer =
-        document.getElementById(
-            "aniversariantesMes"
-        );
-
-    const numero =
-        document.getElementById(
-            "numeroAniversariantes"
-        );
-
-
-    if (!mesContainer) {
-
-        return;
-
-    }
-
-
-    const mesAtual =
-        obterMesAtual();
-
-
-    const aniversariantesMes =
-        dados.filter(
-            item => {
-
-                if (!item.nascimento) {
-
-                    return false;
-
-                }
-
-                const partes =
-                    String(
-                        item.nascimento
-                    ).split("-");
-
-                return (
-                    Number(
-                        partes[1]
-                    ) === mesAtual
-                );
-
-            }
-        );
-
-
-    if (numero) {
-
-        numero.textContent =
-            aniversariantesMes.length;
-
-    }
-
-
-    if (mesContainer) {
-
-        mesContainer.innerHTML =
-            "";
-
-        if (
-            !aniversariantesMes.length
-        ) {
-
-            mesContainer.innerHTML = `
-
-                <div class="loading-card">
-                    Nenhum aniversariante neste mês.
-                </div>
-
-            `;
-
-        } else {
-
-            aniversariantesMes.forEach(
-                item => {
-
-                    mesContainer.innerHTML += `
-
-                        <div class="birthday-card">
-
-                            <strong>
-                                ${escapar(
-                                    item.nome
-                                )}
-                            </strong>
-
-                            <span>
-                                🎂 ${formatarNascimento(
-                                    item.nascimento
-                                )}
-                            </span>
-
-                        </div>
-
-                    `;
-
-                }
-            );
-
-        }
-
-    }
-
-
-    if (hojeContainer) {
-
-        const hoje =
-            new Date();
-
-
-        const diaAtual =
-            hoje.getDate();
-
-
-        const aniversariantesHoje =
-            aniversariantesMes.filter(
-                item => {
-
-                    const partes =
-                        String(
-                            item.nascimento
-                        ).split("-");
-
-                    return (
-                        Number(
-                            partes[2]
-                        ) === diaAtual
-                    );
-
-                }
-            );
-
-
-        hojeContainer.innerHTML =
-            "";
-
-
-        if (
-            !aniversariantesHoje.length
-        ) {
-
-            hojeContainer.innerHTML = `
-
-                <div class="loading-card">
-                    Nenhum aniversariante hoje.
-                </div>
-
-            `;
-
-        } else {
-
-            aniversariantesHoje.forEach(
-                item => {
-
-                    hojeContainer.innerHTML += `
-
-                        <div class="birthday-card">
-
-                            <strong>
-                                ${escapar(
-                                    item.nome
-                                )}
-                            </strong>
-
-                            <span>
-                                🎂 Feliz aniversário!
-                            </span>
-
-                        </div>
-
-                    `;
-
-                }
-            );
-
-        }
-
-    }
-
-}
-
-
-/* ============================================================
-   CARREGAR TUDO
-============================================================ */
-
-async function carregarTudo() {
 
     try {
 
-        atualizarNomeMes();
+        const {
+            error
+        } =
+            await supabaseClient
+                .from("ganhadores")
+                .delete()
+                .eq("mes", mes)
+                .eq("ano", ano);
 
 
-        await Promise.all([
-
-            carregarEstatisticas(),
-
-            carregarDivulgacoes(),
-
-            carregarGanhadores(),
-
-            carregarAniversariantes()
-
-        ]);
+        if (error) {
+            throw error;
+        }
 
 
-    } catch (erro) {
+        ganhadores =
+            [];
 
-        console.error(
-            "Erro no painel:",
-            erro
+
+        atualizarInterface();
+
+        atualizarStatusSorteio();
+
+
+        mostrarMensagem(
+            "🔄 Ganhadores do mês removidos.",
+            "sucesso"
         );
 
+    }
 
-        alert(
-            "❌ Erro ao carregar os dados.\n\n" +
-            "Verifique as tabelas e as permissões do Supabase.\n\n" +
-            erro.message
+    catch (error) {
+
+        console.error(error);
+
+        mostrarMensagem(
+            "❌ Erro ao zerar ganhadores.",
+            "erro"
         );
 
     }
@@ -1606,110 +2836,311 @@ async function carregarTudo() {
 }
 
 
-/* ============================================================
-   BUSCA
-============================================================ */
+/* =========================================================
+   EVENTOS
+========================================================= */
 
-if (busca) {
-
-    busca.addEventListener(
-        "input",
-        renderizarDivulgacoes
+$("btnLogin")
+    ?.addEventListener(
+        "click",
+        login
     );
 
-}
+
+$("senha")
+    ?.addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key === "Enter"
+            ) {
+
+                login();
+
+            }
+
+        }
+    );
 
 
-/* ============================================================
-   ATUALIZAR
-============================================================ */
+$("btnSair")
+    ?.addEventListener(
+        "click",
+        sair
+    );
 
-if (atualizar) {
 
-    atualizar.addEventListener(
+$("btnSortear")
+    ?.addEventListener(
+        "click",
+        realizarSorteio
+    );
+
+
+$("btnSortearAniversariantes")
+    ?.addEventListener(
+        "click",
+        sortearAniversariantes
+    );
+
+
+$("buscar")
+    ?.addEventListener(
+        "input",
+        renderizarParticipantes
+    );
+
+
+$("btnAtualizar")
+    ?.addEventListener(
         "click",
         async () => {
 
-            atualizar.disabled =
+            const botao =
+                $("btnAtualizar");
+
+            botao.disabled =
                 true;
 
-            atualizar.textContent =
-                "⏳ Atualizando...";
+            try {
 
+                await carregarTudo();
 
-            await carregarTudo();
+                atualizarStatusSorteio();
 
+                mostrarMensagem(
+                    "🔄 Painel atualizado.",
+                    "sucesso"
+                );
 
-            atualizar.disabled =
-                false;
+            }
 
-            atualizar.textContent =
-                "🔄 Atualizar";
+            finally {
+
+                botao.disabled =
+                    false;
+
+            }
 
         }
     );
 
-}
 
-
-/* ============================================================
-   ZERAR MÊS
-============================================================ */
-
-if (zerarMes) {
-
-    zerarMes.addEventListener(
+$("btnZerar")
+    ?.addEventListener(
         "click",
-        executarZerarMes
+        zerarGanhadores
     );
 
-}
 
-
-/* ============================================================
-   REGISTRAR GANHADOR
-============================================================ */
-
-if (registrarGanhador) {
-
-    registrarGanhador.addEventListener(
+$("btnAdicionarParticipacao")
+    ?.addEventListener(
         "click",
-        registrarGanhadorSelecionado
+        abrirModalParticipacao
     );
 
-}
 
-
-/* ============================================================
-   LIMPAR SELEÇÃO
-============================================================ */
-
-if (limparSelecionado) {
-
-    limparSelecionado.addEventListener(
+$("btnFecharModalParticipacao")
+    ?.addEventListener(
         "click",
+        fecharModalParticipacao
+    );
+
+
+$("btnSalvarParticipacao")
+    ?.addEventListener(
+        "click",
+        salvarParticipacao
+    );
+
+
+/* =========================================================
+   BOTÕES DE PERÍODO
+========================================================= */
+
+$("btnVerPeriodo")
+    ?.addEventListener(
+        "click",
+        verPeriodo
+    );
+
+
+$("btnVerDia")
+    ?.addEventListener(
+        "click",
+        verDia
+    );
+
+
+$("btnVerSemana")
+    ?.addEventListener(
+        "click",
+        verSemana
+    );
+
+
+$("btnHoje")
+    ?.addEventListener(
+        "click",
+        irParaHoje
+    );
+
+
+$("btnDiaAnterior")
+    ?.addEventListener(
+        "click",
+        diaAnterior
+    );
+
+
+$("btnDiaProximo")
+    ?.addEventListener(
+        "click",
+        diaProximo
+    );
+
+
+/* =========================================================
+   DATA INICIAL
+========================================================= */
+
+$("dataInicioConsulta")
+    ?.addEventListener(
+        "change",
         () => {
 
-            participanteSelecionado =
-                null;
+            const valor =
+                $("dataInicioConsulta").value;
 
-            atualizarSelecionado();
+            if (!valor) {
+                return;
+            }
+
+            dataInicioConsulta =
+                inputParaData(valor);
+
+            atualizarInterfacePeriodo();
 
         }
     );
 
-}
+
+/* =========================================================
+   DATA FINAL
+========================================================= */
+
+$("dataFimConsulta")
+    ?.addEventListener(
+        "change",
+        () => {
+
+            const valor =
+                $("dataFimConsulta").value;
+
+            if (!valor) {
+                return;
+            }
+
+            dataFimConsulta =
+                inputParaData(valor);
+
+            atualizarInterfacePeriodo();
+
+        }
+    );
 
 
-/* ============================================================
-   INICIAR
-============================================================ */
+/* =========================================================
+   ENTER NAS DATAS
+========================================================= */
+
+$("dataInicioConsulta")
+    ?.addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key === "Enter"
+            ) {
+
+                verPeriodo();
+
+            }
+
+        }
+    );
+
+
+$("dataFimConsulta")
+    ?.addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key === "Enter"
+            ) {
+
+                verPeriodo();
+
+            }
+
+        }
+    );
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+$("modalParticipacao")
+    ?.addEventListener(
+        "click",
+        event => {
+
+            if (
+                event.target ===
+                $("modalParticipacao")
+            ) {
+
+                fecharModalParticipacao();
+
+            }
+
+        }
+    );
+
+
+/* =========================================================
+   ESC
+========================================================= */
 
 document.addEventListener(
-    "DOMContentLoaded",
-    () => {
+    "keydown",
+    event => {
 
-        carregarTudo();
+        if (
+            event.key === "Escape"
+        ) {
+
+            fecharModalParticipacao();
+
+        }
 
     }
 );
+
+
+/* =========================================================
+   EXPOR FUNÇÃO
+========================================================= */
+
+window.removerParticipacao =
+    removerParticipacao;
+
+
+/* =========================================================
+   INICIALIZAÇÃO
+========================================================= */
+
+verificarSessao();
